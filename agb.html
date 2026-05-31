@@ -115,6 +115,7 @@
         color: #1a3a34;
       }
     </style>
+    <link rel="stylesheet" href="css/cookie-consent.css" />
   </head>
   <body class="overflow-x-hidden bg-stone-50 font-sans text-slate-ink antialiased">
     <header id="home" class="fixed inset-x-0 top-0 z-[100]">
@@ -292,10 +293,18 @@
       <div class="mx-auto flex max-w-3xl flex-col items-center justify-between gap-4 text-center sm:flex-row sm:text-left">
         <p class="text-xs text-white/50">© 2026 ARNDSGN. Alle Rechte vorbehalten.</p>
         <div class="flex flex-wrap items-center justify-center gap-4 sm:justify-end">
+          <button
+            type="button"
+            data-cookie-settings
+            class="cookie-settings-link text-sm text-white/70 transition-colors hover:text-white"
+          >
+            Cookie-Einstellungen
+          </button>
           <a href="datenschutz.html" class="text-sm text-white/70 transition-colors hover:text-white">Datenschutz</a>
           <a href="index.html" class="text-sm text-white/70 transition-colors hover:text-white">← Zurück zur Startseite</a>
         </div>
       </div>
     </footer>
+    <script src="js/cookie-consent.js" defer></script>
   </body>
 </html>

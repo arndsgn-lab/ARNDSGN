@@ -233,6 +233,7 @@
         text-decoration: underline;
       }
     </style>
+    <link rel="stylesheet" href="css/cookie-consent.css" />
   </head>
   <body class="overflow-x-hidden bg-[#fbfbfd] font-sans text-[#1d1d1f] antialiased">
     <header id="home" class="fixed inset-x-0 top-0 z-[100]">
@@ -271,8 +272,14 @@
     <footer class="site-footer">
       <div class="site-footer__inner">
         <p class="site-footer__copy">© 2026 ARNDSGN. Alle Rechte vorbehalten.</p>
-        <a href="index.html" class="site-footer__link">Zurück zur Startseite</a>
+        <div class="flex flex-wrap items-center justify-center gap-4 sm:justify-end">
+          <button type="button" data-cookie-settings class="cookie-settings-link site-footer__link">
+            Cookie-Einstellungen
+          </button>
+          <a href="index.html" class="site-footer__link">Zurück zur Startseite</a>
+        </div>
       </div>
     </footer>
+    <script src="js/cookie-consent.js" defer></script>
   </body>
 </html>
