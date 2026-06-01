@@ -1079,6 +1079,160 @@
         width: 1.125rem;
         height: 1.125rem;
       }
+      .projekt-cta {
+        position: relative;
+        isolation: isolate;
+        padding: 4.5rem 0 5rem;
+      }
+      @media (min-width: 640px) {
+        .projekt-cta {
+          padding: 6rem 0 7rem;
+        }
+      }
+      .projekt-cta__inner {
+        position: relative;
+        overflow: hidden;
+        border-radius: 1.75rem;
+        background:
+          radial-gradient(ellipse 80% 70% at 12% 20%, rgba(45, 90, 80, 0.45), transparent 58%),
+          radial-gradient(ellipse 65% 55% at 88% 78%, rgba(255, 255, 255, 0.08), transparent 52%),
+          linear-gradient(145deg, #1a3a34 0%, #142e29 48%, #0f2420 100%);
+        padding: 3rem 1.75rem;
+        text-align: center;
+        box-shadow: 0 28px 80px rgba(26, 58, 52, 0.28);
+      }
+      @media (min-width: 640px) {
+        .projekt-cta__inner {
+          border-radius: 2rem;
+          padding: 4.5rem 3rem;
+        }
+      }
+      @media (min-width: 1024px) {
+        .projekt-cta__inner {
+          padding: 5.5rem 4rem;
+        }
+      }
+      .projekt-cta__label {
+        margin-bottom: 1rem;
+        font-size: 0.6875rem;
+        font-weight: 600;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.55);
+      }
+      .projekt-cta__title {
+        margin: 0 auto;
+        max-width: 16ch;
+        font-size: clamp(2rem, 5vw, 3.25rem);
+        font-weight: 700;
+        line-height: 1.08;
+        letter-spacing: -0.03em;
+        color: #fff;
+      }
+      .projekt-cta__text {
+        margin: 1.25rem auto 0;
+        max-width: 36rem;
+        font-size: 1rem;
+        line-height: 1.65;
+        color: rgba(255, 255, 255, 0.72);
+      }
+      @media (min-width: 640px) {
+        .projekt-cta__text {
+          margin-top: 1.5rem;
+          font-size: 1.125rem;
+        }
+      }
+      .projekt-cta__actions {
+        margin-top: 2.25rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+      }
+      @media (min-width: 640px) {
+        .projekt-cta__actions {
+          margin-top: 2.75rem;
+          flex-direction: row;
+          gap: 1.25rem;
+        }
+      }
+      .projekt-cta__btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.65rem;
+        min-width: min(100%, 18rem);
+        border-radius: 9999px;
+        background: #fff;
+        padding: 1.125rem 2.5rem;
+        font-size: 1.0625rem;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+        color: #1a3a34;
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.18);
+        transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+      }
+      @media (min-width: 640px) {
+        .projekt-cta__btn {
+          min-width: 15rem;
+          padding: 1.25rem 3rem;
+          font-size: 1.125rem;
+        }
+      }
+      .projekt-cta__btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 16px 48px rgba(0, 0, 0, 0.22);
+      }
+      .projekt-cta__btn:active {
+        transform: scale(0.98);
+      }
+      .projekt-cta__btn svg {
+        width: 1.125rem;
+        height: 1.125rem;
+        transition: transform 0.2s ease;
+      }
+      .projekt-cta__btn:hover svg {
+        transform: translateX(3px);
+      }
+      .projekt-cta__link {
+        font-size: 0.9375rem;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.72);
+        transition: color 0.2s ease;
+      }
+      .projekt-cta__link:hover {
+        color: #fff;
+      }
+      .nav-cta {
+        display: none;
+        align-items: center;
+        justify-content: center;
+        border-radius: 9999px;
+        background: #1a3a34;
+        padding: 0.75rem 1.5rem;
+        font-size: 0.9375rem;
+        font-weight: 700;
+        color: #fff;
+        box-shadow: 0 4px 24px rgba(28, 25, 23, 0.06);
+        transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+      }
+      @media (min-width: 768px) {
+        .nav-cta {
+          display: inline-flex;
+        }
+      }
+      .nav-cta:hover {
+        background: #142e29;
+        box-shadow: 0 8px 40px rgba(28, 25, 23, 0.08);
+      }
+      #home.is-over-dark .nav-cta {
+        background: #fff;
+        color: #1a3a34;
+      }
+      #home.is-over-dark .nav-cta:hover {
+        background: rgba(255, 255, 255, 0.92);
+      }
     </style>
     <link rel="stylesheet" href="css/cookie-consent.css" />
   </head>
@@ -1144,9 +1298,9 @@
         <div class="flex items-center gap-3">
           <a
             href="projekt.html"
-            class="hidden rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-white shadow-soft transition-all hover:bg-accent-hover hover:shadow-card sm:inline-flex"
+            class="nav-cta"
           >
-            Start Project
+            Projekt starten
           </a>
           <button
             id="menu-toggle"
@@ -1172,9 +1326,9 @@
           <li>
             <a
               href="projekt.html"
-              class="mobile-link mt-2 inline-flex rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-white"
+              class="mobile-link mt-2 inline-flex rounded-full bg-accent px-6 py-3 text-base font-bold text-white"
             >
-              Start Project
+              Projekt starten
             </a>
           </li>
         </ul>
@@ -1217,18 +1371,24 @@
                 Besucher in Kunden verwandeln — mit Liebe zum Detail und Fokus auf messbare
                 Ergebnisse.
               </p>
-              <div class="mt-10 flex flex-wrap items-center gap-5">
+              <div class="mt-10 flex flex-wrap items-center gap-4 sm:gap-5">
+                <a
+                  href="projekt.html"
+                  class="inline-flex rounded-full bg-accent px-8 py-4 text-base font-bold text-white shadow-soft transition-all hover:bg-accent-hover hover:shadow-card active:scale-[0.98] sm:px-9 sm:py-4 sm:text-lg"
+                >
+                  Projekt starten
+                </a>
                 <a
                   href="#portfolio"
-                  class="inline-flex rounded-full bg-accent px-7 py-3.5 text-sm font-semibold text-white shadow-soft transition-all hover:bg-accent-hover hover:shadow-card active:scale-[0.98]"
+                  class="inline-flex rounded-full border border-white/35 bg-white/10 px-7 py-3.5 text-sm font-semibold text-white backdrop-blur-sm transition-all hover:border-white/55 hover:bg-white/15 sm:px-8 sm:py-4 sm:text-base"
                 >
-                  View Portfolio
+                  Portfolio ansehen
                 </a>
                 <a
                   href="#services"
-                  class="group inline-flex items-center gap-2 text-sm font-semibold text-white transition-colors hover:text-white/80"
+                  class="group inline-flex items-center gap-2 px-1 text-sm font-semibold text-white/85 transition-colors hover:text-white sm:text-base"
                 >
-                  Our Services
+                  Services
                   <span
                     class="inline-block transition-transform group-hover:translate-x-1"
                     aria-hidden="true"
@@ -1668,6 +1828,33 @@
         </div>
       </section>
       </div>
+
+      <!-- Projekt CTA -->
+      <section id="projekt-cta" class="projekt-cta section-mesh px-5 sm:px-8" aria-labelledby="projekt-cta-title">
+        <div class="mx-auto max-w-5xl">
+          <div class="projekt-cta__inner">
+            <p class="projekt-cta__label">Nächster Schritt</p>
+            <h2 id="projekt-cta-title" class="projekt-cta__title">
+              Bereit, Ihr Projekt zu starten?
+            </h2>
+            <p class="projekt-cta__text">
+              Erzählen Sie uns von Ihrer Idee — wir melden uns mit einem klaren Plan, transparentem
+              Zeitrahmen und einem individuellen Angebot. Unverbindlich und persönlich.
+            </p>
+            <div class="projekt-cta__actions">
+              <a href="projekt.html" class="projekt-cta__btn">
+                Projekt starten
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 6l6 6-6 6" />
+                </svg>
+              </a>
+              <a href="mailto:arndsgn@arndsgn.com" class="projekt-cta__link">
+                Oder direkt schreiben →
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
 
       <div class="portfolio-faq-bridge" aria-hidden="true"></div>
 
