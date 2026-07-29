@@ -2,8 +2,8 @@
 <html lang="de" class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/png" sizes="512x512" href="images/favicon-512.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png" />
@@ -27,12 +27,42 @@
     <meta name="twitter:description" content="Premium Webdesign für Marken, die Vertrauen schaffen und konvertieren. Individuelle Websites, E-Commerce und SEO." />
     <meta name="twitter:image" content="https://arndsgn.com/images/og-image.png" />
     <meta name="twitter:image:alt" content="ARNDSGN — Premium Webdesign Agentur" />
+    <!-- Critical image for LCP -->
+    <link
+      rel="preload"
+      as="image"
+      href="images/hero-poster-mobile.jpg"
+      type="image/jpeg"
+      media="(max-width: 639px)"
+    />
+    <link
+      rel="preload"
+      as="image"
+      href="images/hero-poster.jpg"
+      type="image/jpeg"
+      media="(min-width: 640px)"
+    />
+    <link rel="dns-prefetch" href="https://cdn.tailwindcss.com" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Fewer weights = faster font download; non-blocking load -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap"
-      rel="stylesheet"
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;700&display=swap"
     />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;700&display=swap"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;700&display=swap"
+      />
+    </noscript>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
@@ -64,11 +94,49 @@
       };
     </script>
     <style>
+      html {
+        overflow-x: clip;
+        max-width: 100%;
+        background-color: #3a454c;
+      }
+      body {
+        overflow-x: clip;
+        max-width: 100%;
+        position: relative;
+        background-color: #3a454c;
+        margin: 0;
+      }
+      /* Below-fold: defer layout/paint work */
+      #services,
+      #portfolio,
+      #projekt-cta,
+      #faq,
+      #contact {
+        content-visibility: auto;
+        contain-intrinsic-size: auto 480px;
+      }
+      @media (max-width: 639px) {
+        .about-feature-card,
+        .about-feature-card--1,
+        .about-feature-card--2,
+        .about-feature-card--3,
+        #hero-content,
+        #about {
+          will-change: auto !important;
+        }
+        .section-mesh::after {
+          animation: none !important;
+        }
+      }
       #home,
       #home nav {
         background: transparent;
       }
+      /* Header starts BELOW the status bar so video fills the top safe-area */
       #home {
+        top: env(safe-area-inset-top, 0px);
+        padding-top: 0;
+        overflow: visible;
         border: none;
         box-shadow: none;
         transition: transform 0.35s ease, background-color 0.3s ease, border-color 0.3s ease,
@@ -77,6 +145,19 @@
       #home.is-hidden {
         transform: translateY(-110%);
         pointer-events: none;
+      }
+      @media (max-width: 639px) {
+        /* Logo/header stay pinned — no slide-away on scroll */
+        #home.is-hidden {
+          transform: none !important;
+          pointer-events: auto !important;
+        }
+        #home {
+          transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        #home .site-logo {
+          transition: filter 0.25s ease;
+        }
       }
       #home .nav-link {
         color: rgba(255, 255, 255, 0.75);
@@ -90,10 +171,10 @@
         transition: color 0.3s ease;
       }
       #home.is-scrolled {
-        background: rgba(250, 250, 249, 0.92);
-        backdrop-filter: blur(12px);
-        border-bottom: 1px solid rgba(28, 25, 23, 0.08);
-        box-shadow: 0 4px 24px rgba(28, 25, 23, 0.06);
+        background: transparent;
+        backdrop-filter: none;
+        border-bottom: none;
+        box-shadow: none;
       }
       #home.is-scrolled .nav-link {
         color: #57534e;
@@ -105,10 +186,10 @@
         color: #1c1917;
       }
       #home.is-over-dark {
-        background: rgba(0, 0, 0, 0.85);
-        backdrop-filter: blur(12px);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+        background: transparent;
+        backdrop-filter: none;
+        border-bottom: none;
+        box-shadow: none;
       }
       #home.is-over-dark .nav-link {
         color: rgba(255, 255, 255, 0.75);
@@ -121,29 +202,85 @@
       }
       #home nav {
         overflow: visible;
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+        align-items: center;
+        min-height: 3.25rem;
       }
+      @media (min-width: 640px) {
+        #home nav {
+          padding-left: 1.25rem;
+          padding-right: 1.25rem;
+        }
+      }
+      @media (min-width: 1024px) {
+        #home nav {
+          padding-left: 2rem;
+          padding-right: 2rem;
+        }
+      }
+      /* Logo: large, left, visible in frame, aligned with hamburger */
       #home .site-logo-wrap {
         position: relative;
         flex-shrink: 0;
-        width: 3.875rem;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        width: 2.5rem;
         height: 2.5rem;
+        overflow: visible;
+        line-height: 0;
+        z-index: 2;
       }
       #home .site-logo {
         position: absolute;
-        left: -5rem;
+        /* Markierung über „Premium“ (Hero-Text links) */
+        left: -10.5rem;
         top: 50%;
-        height: 15rem;
+        display: block;
+        height: 17rem;
         width: auto;
         max-width: none;
-        transform: translateY(calc(-50% + 2.5rem));
+        /* PNG-Motiv oben → auf Höhe der 3 Striche */
+        transform: translateY(calc(-50% + 5.25rem));
         object-fit: contain;
-        display: block;
+        object-position: left center;
+        pointer-events: none;
         filter: brightness(0) invert(1)
           drop-shadow(0 0 4px rgba(255, 255, 255, 1))
           drop-shadow(0 0 14px rgba(255, 255, 255, 0.75))
           drop-shadow(0 0 28px rgba(255, 255, 255, 0.45))
           drop-shadow(0 0 48px rgba(255, 255, 255, 0.2));
-        transition: filter 0.35s ease;
+        transition: filter 0.35s ease, height 0.3s ease, left 0.3s ease, transform 0.3s ease;
+      }
+      /* Shrink logo when leaving hero — otherwise it covers Services */
+      #home.is-scrolled .site-logo,
+      #home.is-over-dark .site-logo {
+        left: 0;
+        height: 2.5rem;
+        max-width: 7rem;
+        transform: translateY(-50%);
+      }
+      @media (min-width: 768px) {
+        #home .site-logo-wrap {
+          width: 3.875rem;
+          height: 2.5rem;
+        }
+        #home .site-logo {
+          position: absolute;
+          left: -5rem;
+          top: 50%;
+          height: 15rem;
+          max-width: none;
+          transform: translateY(calc(-50% + 2.5rem));
+        }
+        #home.is-scrolled .site-logo,
+        #home.is-over-dark .site-logo {
+          left: 0;
+          height: 2.5rem;
+          max-width: 7rem;
+          transform: translateY(-50%);
+        }
       }
       #home.is-scrolled .site-logo {
         filter: none;
@@ -151,9 +288,7 @@
       #home.is-over-dark .site-logo {
         filter: brightness(0) invert(1)
           drop-shadow(0 0 4px rgba(255, 255, 255, 1))
-          drop-shadow(0 0 14px rgba(255, 255, 255, 0.75))
-          drop-shadow(0 0 28px rgba(255, 255, 255, 0.45))
-          drop-shadow(0 0 48px rgba(255, 255, 255, 0.2));
+          drop-shadow(0 0 14px rgba(255, 255, 255, 0.75));
       }
       .about-feature-card {
         --reveal: 0;
@@ -322,10 +457,11 @@
         }
       }
       .about-marquee {
-        width: 100vw;
-        max-width: 100vw;
-        margin-left: calc(50% - 50vw);
+        width: 100%;
+        max-width: 100%;
+        margin-left: 0;
         margin-top: 0;
+        overflow: hidden;
       }
       .about-marquee__viewport {
         overflow: hidden;
@@ -582,45 +718,73 @@
         transform: scaleY(1.05);
         transform-origin: bottom center;
       }
+      /* No sticky card-stack — keeps Services always visible */
       #services {
         --stack-depth: 0;
-        position: sticky;
-        top: 0;
-        z-index: 30;
-        min-height: 100vh;
+        position: relative !important;
+        top: auto !important;
+        z-index: 5;
+        min-height: 0 !important;
         margin-top: 0;
-        padding-top: 8rem;
-        padding-bottom: 5rem;
-        background: linear-gradient(
+        padding-top: 3rem;
+        padding-bottom: 3.5rem;
+        background-color: #000;
+        background-image: linear-gradient(
           180deg,
           #f0ece6 0%,
-          #b8c0b8 2.5rem,
-          #8f9892 5rem,
-          #5c6360 7.5rem,
-          #343638 10rem,
-          #141416 12.5rem,
-          #000 15rem
+          #8f9892 1.25rem,
+          #343638 2.75rem,
+          #000 4.5rem
         );
+        opacity: 1 !important;
+        visibility: visible !important;
+        transform: none !important;
+        filter: none !important;
       }
       #services > .mx-auto {
-        transform: scale(calc(1 - var(--stack-depth) * 0.05));
-        transform-origin: center top;
-        filter: brightness(calc(1 - var(--stack-depth) * 0.22));
-        transition: transform 0.15s ease-out, filter 0.15s ease-out;
+        transform: none !important;
+        filter: none !important;
+        transition: none !important;
+        opacity: 1 !important;
       }
       #portfolio {
-        position: sticky;
-        top: 0;
-        z-index: 31;
-        min-height: 100vh;
-        border-radius: 2rem 2rem 0 0;
-        box-shadow: 0 -28px 90px rgba(0, 0, 0, 0.22);
-        padding-bottom: 4rem;
+        position: relative !important;
+        top: auto !important;
+        z-index: 6;
+        min-height: 0 !important;
+        border-radius: 1.5rem 1.5rem 0 0;
+        box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.14);
+        padding-top: 3rem;
+        padding-bottom: 3rem;
       }
       @media (min-width: 640px) {
+        #services {
+          padding-top: 4rem;
+          padding-bottom: 4.5rem;
+          background-image: linear-gradient(
+            180deg,
+            #f0ece6 0%,
+            #8f9892 1.75rem,
+            #343638 3.5rem,
+            #000 5.5rem
+          );
+        }
         #portfolio {
           border-radius: 2.5rem 2.5rem 0 0;
-          padding-bottom: 5.5rem;
+          box-shadow: 0 -20px 60px rgba(0, 0, 0, 0.18);
+          padding-top: 4rem;
+          padding-bottom: 5rem;
+        }
+      }
+      @media (max-width: 1023px) {
+        .portfolio-stack::after {
+          height: 1rem;
+          margin-top: -0.35rem;
+          filter: blur(8px);
+        }
+        .about-feature-card-spacer {
+          display: none;
+          min-height: 0;
         }
       }
       #contact {
@@ -642,25 +806,25 @@
       #services::before {
         content: '';
         position: absolute;
-        top: -7rem;
+        top: -2.5rem;
         left: 0;
         right: 0;
         width: 100%;
-        height: 16rem;
+        height: 7rem;
         z-index: 0;
         pointer-events: none;
         background:
-          radial-gradient(ellipse 100% 70% at 50% 100%, rgba(130, 200, 175, 0.28) 0%, transparent 58%),
-          radial-gradient(ellipse 68% 55% at 18% 92%, rgba(110, 170, 215, 0.22) 0%, transparent 52%),
-          radial-gradient(ellipse 62% 50% at 82% 88%, rgba(160, 150, 205, 0.18) 0%, transparent 48%),
+          radial-gradient(ellipse 100% 70% at 50% 100%, rgba(130, 200, 175, 0.22) 0%, transparent 58%),
+          radial-gradient(ellipse 68% 55% at 18% 92%, rgba(110, 170, 215, 0.16) 0%, transparent 52%),
+          radial-gradient(ellipse 62% 50% at 82% 88%, rgba(160, 150, 205, 0.12) 0%, transparent 48%),
           linear-gradient(
             180deg,
-            rgba(240, 236, 230, 0.7) 0%,
-            rgba(240, 236, 230, 0.2) 18%,
-            transparent 50%
+            rgba(240, 236, 230, 0.55) 0%,
+            rgba(240, 236, 230, 0.15) 30%,
+            transparent 60%
           );
-        filter: blur(56px);
-        transform: scaleY(1.04);
+        filter: blur(36px);
+        transform: scaleY(1.02);
         transform-origin: bottom center;
       }
       #services > .mx-auto,
@@ -669,21 +833,6 @@
         z-index: 1;
       }
       @media (min-width: 640px) {
-        #services {
-          margin-top: 0;
-          padding-top: 10rem;
-          padding-bottom: 7rem;
-          background: linear-gradient(
-            180deg,
-            #f0ece6 0%,
-            #b8c0b8 3rem,
-            #8f9892 5.5rem,
-            #5c6360 8.5rem,
-            #343638 11.5rem,
-            #141416 14.5rem,
-            #000 18rem
-          );
-        }
         #contact {
           margin-top: -14rem;
           padding-top: 20rem;
@@ -699,9 +848,9 @@
           );
         }
         #services::before {
-          top: -8rem;
-          height: 18rem;
-          filter: blur(64px);
+          top: -3.5rem;
+          height: 9rem;
+          filter: blur(44px);
         }
       }
       #services h2,
@@ -815,25 +964,117 @@
       #hero-scroll-hint {
         animation: hero-scroll-pulse 2s ease-in-out infinite;
       }
+      /* Hero video stays inside #hero — never covers Services */
+      #hero {
+        top: 0;
+        height: 100svh;
+        margin-top: 0;
+        padding-top: calc(5rem + env(safe-area-inset-top, 0px));
+        background: #000;
+      }
+      /* Mobile: sticky dive with locked svh (no iOS chrome jitter) */
+      @media (max-width: 639px) {
+        #hero-scroll-stage {
+          /* Longer first section so About isn't already on screen */
+          height: 220svh !important;
+        }
+        #hero {
+          position: sticky !important;
+          top: 0 !important;
+          height: 100svh !important;
+          max-height: 100svh;
+          overflow: hidden;
+        }
+        #about {
+          margin-top: -100svh !important;
+          /* Before JS runs: keep About fully below the first viewport */
+          transform: translate3d(0, 55vh, 0);
+          opacity: 0.35;
+        }
+        .hero-video {
+          position: absolute;
+          inset: 0;
+          top: 0;
+          height: 100%;
+          transform: translateZ(0);
+        }
+        .hero-video__poster {
+          object-position: center center;
+          transform: translateZ(0);
+          opacity: 1;
+          z-index: 1;
+        }
+        /* Mobile: still image only — no video decode/download */
+        .hero-video__media {
+          display: none !important;
+        }
+        /* Section enter transitions */
+        .reveal-on-scroll {
+          opacity: 0;
+          transform: translate3d(0, 28px, 0);
+          transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+            transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .reveal-on-scroll.is-inview {
+          opacity: 1;
+          transform: none;
+        }
+      }
+      @media (min-width: 640px) {
+        .reveal-on-scroll {
+          opacity: 1;
+          transform: none;
+        }
+      }
+      @media (min-width: 640px) {
+        #hero {
+          top: 0;
+          height: 100vh;
+          padding-top: 0;
+        }
+        @supports (height: 100dvh) {
+          #hero {
+            height: 100dvh;
+          }
+        }
+      }
       .hero-video {
         position: absolute;
         inset: 0;
         z-index: 0;
         overflow: hidden;
-        background-color: #1c1917;
+        background-color: #000;
+        pointer-events: none;
       }
-      .hero-video__media {
+      .hero-video__poster {
         position: absolute;
         inset: 0;
         z-index: 0;
         width: 100%;
         height: 100%;
         object-fit: cover;
+        object-position: center top;
+        display: block;
+        background-color: #000;
+      }
+      .hero-video__media {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center top;
+        opacity: 0;
+        transition: opacity 0.55s ease;
+      }
+      .hero-video__media.is-ready {
+        opacity: 1;
       }
       .hero-video__overlay {
         position: absolute;
         inset: 0;
-        z-index: 1;
+        z-index: 2;
         background:
           linear-gradient(180deg, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0.4) 45%, rgba(0, 0, 0, 0.65) 100%);
       }
@@ -842,7 +1083,7 @@
         left: 0;
         right: 0;
         bottom: 0;
-        z-index: 2;
+        z-index: 3;
         height: 12rem;
         background: linear-gradient(to top, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
       }
@@ -864,7 +1105,7 @@
         will-change: transform;
       }
       .hero-mesh__blob--beige {
-        left: -12%;
+        left: 0;
         top: 8%;
         width: min(52vw, 520px);
         height: min(52vw, 520px);
@@ -1234,15 +1475,38 @@
         background: rgba(255, 255, 255, 0.92);
       }
     </style>
-    <link rel="stylesheet" href="css/cookie-consent.css" />
+    <link rel="stylesheet" href="css/cookie-consent.css" media="print" onload="this.media='all'" />
+    <noscript><link rel="stylesheet" href="css/cookie-consent.css" /></noscript>
+    <script>
+      // Kill hero video ASAP on mobile (before it can start loading)
+      if (window.matchMedia('(max-width: 639px)').matches) {
+        document.addEventListener(
+          'DOMContentLoaded',
+          function () {
+            document.querySelectorAll('.hero-video__media').forEach(function (video) {
+              video.pause();
+              video.removeAttribute('src');
+              video.querySelectorAll('source').forEach(function (s) {
+                s.remove();
+              });
+              try {
+                video.load();
+              } catch (e) {}
+              video.remove();
+            });
+          },
+          { once: true }
+        );
+      }
+    </script>
   </head>
-  <body class="overflow-x-hidden bg-stone-50 font-sans text-slate-ink antialiased">
+  <body class="font-sans text-slate-ink antialiased">
     <!-- 1. Navigation -->
     <header
       id="home"
       class="fixed inset-x-0 top-0 z-[100] bg-transparent"
     >
-      <nav class="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 lg:px-8">
+      <nav class="mx-auto flex max-w-7xl items-center justify-between py-2 sm:py-4">
         <a
           href="#home"
           class="site-logo-wrap transition-opacity hover:opacity-80"
@@ -1254,6 +1518,8 @@
             class="site-logo"
             width="369"
             height="240"
+            decoding="async"
+            fetchpriority="low"
           />
         </a>
 
@@ -1276,7 +1542,7 @@
             <a
               href="#portfolio"
               class="nav-link text-sm font-medium"
-              >Portfolio</a
+              >Referenzen</a
             >
           </li>
           <li>
@@ -1320,7 +1586,7 @@
         <ul class="flex flex-col gap-4">
           <li><a href="#home" class="mobile-link block text-sm font-medium">Home</a></li>
           <li><a href="#services" class="mobile-link block text-sm font-medium">Services</a></li>
-          <li><a href="#portfolio" class="mobile-link block text-sm font-medium">Portfolio</a></li>
+          <li><a href="#portfolio" class="mobile-link block text-sm font-medium">Referenzen</a></li>
           <li><a href="#faq" class="mobile-link block text-sm font-medium">FAQ</a></li>
           <li><a href="ueber-uns.html" class="mobile-link block text-sm font-medium">Über uns</a></li>
           <li>
@@ -1340,53 +1606,72 @@
       <div id="hero-scroll-stage" class="relative h-[200vh]">
         <section
           id="hero"
-          class="sticky top-0 z-10 flex h-screen items-center overflow-hidden px-5 sm:px-8"
+          class="sticky z-10 flex items-center overflow-hidden px-5 pb-8 sm:px-8 sm:pb-0"
         >
-          <div class="hero-video pointer-events-none absolute inset-0" aria-hidden="true">
+          <div class="hero-video pointer-events-none" aria-hidden="true">
+            <picture>
+              <source media="(max-width: 639px)" srcset="images/hero-poster-mobile.jpg" type="image/jpeg" />
+              <img
+                class="hero-video__poster"
+                src="images/hero-poster.jpg"
+                alt=""
+                width="960"
+                height="508"
+                decoding="async"
+                fetchpriority="high"
+              />
+            </picture>
             <video
+              id="hero-bg-video"
               class="hero-video__media"
-              autoplay
               muted
               loop
               playsinline
-              preload="auto"
-              src="images/hero section backround.mp4"
-            ></video>
+              webkit-playsinline
+              preload="none"
+              poster="images/hero-poster.jpg"
+            >
+              <source
+                src="images/hero-section-background-web.mp4"
+                type="video/mp4"
+                media="(min-width: 640px)"
+              />
+            </video>
             <div class="hero-video__overlay"></div>
             <div class="hero-video__fade"></div>
           </div>
 
           <div id="hero-content" class="relative z-10 mx-auto w-full max-w-7xl">
             <div class="max-w-3xl">
-              <p class="mb-5 text-xs font-semibold uppercase tracking-[0.2em] text-white/70">
+              <p class="mb-4 text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-white/70 sm:mb-5 sm:text-xs">
                 Premium Webdesign Agentur
               </p>
               <h1
-                class="text-4xl font-extrabold leading-[1.08] tracking-tight text-white sm:text-5xl lg:text-6xl"
+                class="text-[1.85rem] font-extrabold leading-[1.1] tracking-tight text-white sm:text-5xl lg:text-6xl"
               >
                 Webdesign, auf das Sie sich verlassen können
               </h1>
-              <p class="mt-6 max-w-2xl text-lg leading-relaxed text-white sm:text-xl">
+              <p class="mt-4 max-w-2xl text-[0.95rem] leading-relaxed text-white sm:mt-6 sm:text-xl">
                 Wir gestalten digitale Erlebnisse, die Vertrauen aufbauen, Ihre Marke stärken und
                 Besucher in Kunden verwandeln — mit Liebe zum Detail und Fokus auf messbare
                 Ergebnisse.
               </p>
-              <div class="mt-10 flex flex-wrap items-center gap-4 sm:gap-5">
+              <div class="mt-7 flex flex-col items-stretch gap-3 sm:mt-10 sm:flex-row sm:flex-wrap sm:items-center sm:gap-5">
                 <a
                   href="projekt.html"
-                  class="inline-flex rounded-full bg-accent px-8 py-4 text-base font-bold text-white shadow-soft transition-all hover:bg-accent-hover hover:shadow-card active:scale-[0.98] sm:px-9 sm:py-4 sm:text-lg"
+                  class="inline-flex items-center justify-center rounded-full bg-accent px-7 py-3.5 text-sm font-bold text-white shadow-soft transition-all hover:bg-accent-hover hover:shadow-card active:scale-[0.98] sm:px-9 sm:py-4 sm:text-lg"
                 >
                   Projekt starten
                 </a>
                 <a
                   href="#portfolio"
-                  class="inline-flex rounded-full border border-white/35 bg-white/10 px-7 py-3.5 text-sm font-semibold text-white backdrop-blur-sm transition-all hover:border-white/55 hover:bg-white/15 sm:px-8 sm:py-4 sm:text-base"
+                  class="inline-flex items-center justify-center rounded-full border border-white/35 bg-white/10 px-7 py-3.5 text-sm font-semibold text-white backdrop-blur-sm transition-all hover:border-white/55 hover:bg-white/15 sm:px-8 sm:py-4 sm:text-base"
                 >
-                  Portfolio ansehen
+                  Referenzen anfragen
                 </a>
                 <a
                   href="#services"
-                  class="group inline-flex items-center gap-2 px-1 text-sm font-semibold text-white/85 transition-colors hover:text-white sm:text-base"
+                  class="group inline-flex items-center justify-center gap-2 px-1 py-1 text-sm font-semibold text-white/85 transition-colors hover:text-white sm:justify-start sm:text-base"
                 >
                   Services
                   <span
@@ -1415,7 +1700,7 @@
       <!-- 3. About / Why Choose Us -->
       <section
         id="about"
-        class="section-mesh relative z-20 -mt-[100vh] rounded-t-[2rem] px-5 pb-28 sm:px-8 sm:pb-36 sm:rounded-t-[2.5rem]"
+        class="section-mesh relative z-10 -mt-[100vh] rounded-t-[2rem] px-5 pb-8 sm:px-8 sm:pb-16 sm:rounded-t-[2.5rem]"
       >
         <div class="about-marquee" role="region" aria-label="Webdesign und KI-Entwicklung">
           <div class="about-marquee__viewport">
@@ -1510,9 +1795,9 @@
             </aside>
           </div>
 
-          <div class="mt-20 grid gap-12 sm:grid-cols-2 sm:gap-14 lg:grid-cols-3 lg:gap-16">
+          <div class="mt-12 grid gap-10 sm:mt-20 sm:grid-cols-2 sm:gap-14 lg:grid-cols-3 lg:gap-16">
             <div class="relative max-w-sm">
-              <div class="about-feature-card-spacer min-h-[7.5rem]" aria-hidden="true"></div>
+              <div class="about-feature-card-spacer" aria-hidden="true"></div>
               <article class="about-feature-card about-feature-card--1 max-w-sm">
                 <h3 class="font-serif text-[2.25rem] leading-[1.1] tracking-tight text-slate-ink sm:text-[2.65rem]">
                   Professional Team
@@ -1525,7 +1810,7 @@
             </div>
 
             <div class="relative max-w-sm">
-              <div class="about-feature-card-spacer min-h-[7.5rem]" aria-hidden="true"></div>
+              <div class="about-feature-card-spacer" aria-hidden="true"></div>
               <article class="about-feature-card about-feature-card--2 max-w-sm">
                 <h3 class="font-mono text-lg font-medium uppercase tracking-[0.14em] text-accent sm:text-xl">
                   Custom Code
@@ -1538,7 +1823,7 @@
             </div>
 
             <div class="relative max-w-sm sm:col-span-2 lg:col-span-1">
-              <div class="about-feature-card-spacer min-h-[7rem]" aria-hidden="true"></div>
+              <div class="about-feature-card-spacer" aria-hidden="true"></div>
               <article class="about-feature-card about-feature-card--3 max-w-sm">
                 <h3 class="font-display text-[1.875rem] font-bold uppercase leading-none tracking-[-0.02em] text-slate-ink sm:text-[2.125rem]">
                   Fast Delivery
@@ -1555,10 +1840,10 @@
 
       <!-- 4–5. Services + Portfolio (card swipe) -->
       <div class="portfolio-stack">
-      <section id="services" class="px-5 sm:px-8">
+      <section id="services" class="relative z-20 px-5 sm:px-8">
         <div class="mx-auto max-w-7xl">
-          <div class="mb-14 max-w-2xl">
-            <p class="services-label mb-4 text-xs font-semibold uppercase tracking-[0.2em]">
+          <div class="mb-8 max-w-2xl reveal-on-scroll sm:mb-12">
+            <p class="services-label mb-3 text-xs font-semibold uppercase tracking-[0.2em] sm:mb-4">
               Unsere Leistungen
             </p>
             <h2 class="text-3xl font-bold tracking-tight sm:text-4xl">
@@ -1603,7 +1888,7 @@
               </button>
             </div>
 
-            <div class="min-h-[320px]">
+            <div class="min-h-[240px] sm:min-h-[320px]">
               <div
                 id="panel-websites"
                 role="tabpanel"
@@ -1703,127 +1988,33 @@
         </div>
       </section>
 
-      <!-- 5. Portfolio -->
-      <section id="portfolio" class="section-mesh px-5 py-20 sm:px-8 sm:py-28">
-        <div class="mx-auto max-w-7xl">
-          <div class="mb-14 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <p class="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-accent-light">
-                Ausgewählte Arbeiten
-              </p>
-              <h2 class="text-3xl font-bold tracking-tight text-slate-ink sm:text-4xl">
-                Must-See Projects
-              </h2>
-            </div>
-            <p class="max-w-md text-sm leading-relaxed text-slate-muted">
-              Eine Auswahl unserer Projekte — von Markenauftritten bis zu performanten Online-Shops.
-            </p>
-          </div>
-
-          <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-            <article class="group">
-              <div class="overflow-hidden rounded-2xl bg-stone-200 shadow-soft">
-                <div
-                  class="aspect-[4/5] overflow-hidden transition-transform duration-500 ease-out group-hover:scale-105"
-                >
-                  <img
-                    src="images/handy-clean.png"
-                    alt="Nordlicht Consulting Handy Mockup"
-                    class="h-full w-full object-cover object-center"
-                    loading="lazy"
-                  />
-                </div>
-              </div>
-              <div class="mt-5">
-                <p class="text-xs font-semibold uppercase tracking-wider text-accent-light">
-                  Corporate
-                </p>
-                <h3 class="mt-1 text-lg font-bold text-slate-ink">Nordlicht Consulting</h3>
-                <p class="mt-2 text-sm text-slate-muted">Markenwebsite & Lead-Generierung</p>
-              </div>
-            </article>
-
-            <article class="group">
-              <div class="overflow-hidden rounded-2xl bg-stone-200 shadow-soft">
-                <div
-                  class="aspect-[4/5] overflow-hidden transition-transform duration-500 ease-out group-hover:scale-105"
-                >
-                  <img
-                    src="images/tablet.png"
-                    alt="Atelier Forma Tablet Mockup"
-                    class="h-full w-full object-cover object-center"
-                    loading="lazy"
-                  />
-                </div>
-              </div>
-              <div class="mt-5">
-                <p class="text-xs font-semibold uppercase tracking-wider text-accent-light">
-                  E-Commerce
-                </p>
-                <h3 class="mt-1 text-lg font-bold text-slate-ink">Atelier Forma</h3>
-                <p class="mt-2 text-sm text-slate-muted">Premium Shop & Produktstory</p>
-              </div>
-            </article>
-
-            <article class="group">
-              <div class="overflow-hidden rounded-2xl bg-stone-200 shadow-soft">
-                <div
-                  class="aspect-[4/5] overflow-hidden transition-transform duration-500 ease-out group-hover:scale-105"
-                >
-                  <img
-                    src="images/laptop.png"
-                    alt="FlowMetrics Laptop Mockup"
-                    class="h-full w-full object-cover object-center"
-                    loading="lazy"
-                  />
-                </div>
-              </div>
-              <div class="mt-5">
-                <p class="text-xs font-semibold uppercase tracking-wider text-accent-light">
-                  SaaS
-                </p>
-                <h3 class="mt-1 text-lg font-bold text-slate-ink">FlowMetrics</h3>
-                <p class="mt-2 text-sm text-slate-muted">Landing Page & Conversion Funnel</p>
-              </div>
-            </article>
-
-            <article class="group">
-              <a
-                href="https://www.herzschlagimmobilie.de/"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="block"
-              >
-                <div class="overflow-hidden rounded-2xl bg-stone-200 shadow-soft">
-                  <div
-                    class="aspect-[4/5] overflow-hidden transition-transform duration-500 ease-out group-hover:scale-105"
-                  >
-                    <img
-                      src="images/herzschlag immobilie .png"
-                      alt="Herzschlag Immobilien Website"
-                      class="h-full w-full object-cover object-center"
-                      loading="lazy"
-                    />
-                  </div>
-                </div>
-              </a>
-              <div class="mt-5">
-                <p class="text-xs font-semibold uppercase tracking-wider text-accent-light">
-                  Immobilien
-                </p>
-                <h3 class="mt-1 text-lg font-bold text-slate-ink">
-                  <a
-                    href="https://www.herzschlagimmobilie.de/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="transition-colors hover:text-accent"
-                  >
-                    Herzschlag Immobilien
-                  </a>
-                </h3>
-                <p class="mt-2 text-sm text-slate-muted">Exposé-Plattform & Markenauftritt</p>
-              </div>
-            </article>
+      <!-- 5. Portfolio / Referenzen -->
+      <section id="portfolio" class="section-mesh px-5 sm:px-8">
+        <div class="mx-auto max-w-3xl py-6 text-center reveal-on-scroll sm:py-10">
+          <p class="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-accent-light">
+            Referenzen
+          </p>
+          <h2 class="text-3xl font-bold tracking-tight text-slate-ink sm:text-4xl">
+            Arbeiten auf Anfrage
+          </h2>
+          <p class="mx-auto mt-5 max-w-xl text-base leading-relaxed text-slate-muted sm:text-lg">
+            Aus Vertraulichkeit und auf Wunsch unserer Kunden zeigen wir ausgewählte Projekte nicht
+            öffentlich. Gerne stellen wir passende Referenzen persönlich vor — abgestimmt auf Ihre
+            Branche und Anforderungen.
+          </p>
+          <div class="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4">
+            <a
+              href="projekt.html"
+              class="inline-flex items-center justify-center rounded-full bg-accent px-8 py-3.5 text-sm font-bold text-white shadow-soft transition-all hover:bg-accent-hover hover:shadow-card active:scale-[0.98] sm:text-base"
+            >
+              Referenzen anfragen
+            </a>
+            <a
+              href="mailto:arndsgn@arndsgn.com?subject=Referenzen%20anfragen"
+              class="inline-flex items-center justify-center px-2 py-2 text-sm font-semibold text-slate-ink transition-colors hover:text-accent sm:text-base"
+            >
+              Per E-Mail anfragen →
+            </a>
           </div>
         </div>
       </section>
@@ -1832,7 +2023,7 @@
       <!-- Projekt CTA -->
       <section id="projekt-cta" class="projekt-cta section-mesh px-5 sm:px-8" aria-labelledby="projekt-cta-title">
         <div class="mx-auto max-w-5xl">
-          <div class="projekt-cta__inner">
+          <div class="projekt-cta__inner reveal-on-scroll">
             <p class="projekt-cta__label">Nächster Schritt</p>
             <h2 id="projekt-cta-title" class="projekt-cta__title">
               Bereit, Ihr Projekt zu starten?
@@ -1861,7 +2052,7 @@
       <!-- 6. FAQ -->
       <section id="faq" class="section-mesh px-5 pb-40 pt-20 sm:px-8 sm:pb-52 sm:pt-28">
         <div class="mx-auto max-w-3xl">
-          <div class="mb-12 text-center">
+          <div class="mb-12 text-center reveal-on-scroll">
             <p class="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-accent-light">
               Häufige Fragen
             </p>
@@ -2026,7 +2217,7 @@
                 <a
                   href="#portfolio"
                   class="text-sm text-white/80 transition-colors hover:text-white"
-                  >Portfolio</a
+                  >Referenzen</a
                 >
               </li>
               <li>
@@ -2261,7 +2452,10 @@
           header.classList.toggle('is-scrolled', !inHero && !overDark);
           header.classList.toggle('is-over-dark', !inHero && overDark);
 
-          if (currentScrollY <= 24) {
+          const isMobile = window.matchMedia('(max-width: 639px)').matches;
+          if (isMobile) {
+            header.classList.remove('is-hidden');
+          } else if (currentScrollY <= 24) {
             header.classList.remove('is-hidden');
           } else if (currentScrollY > lastScrollY + 8) {
             header.classList.add('is-hidden');
@@ -2338,21 +2532,61 @@
         updateCards();
       })();
 
-      // Autoplay background videos
+      // Autoplay background videos — desktop only; mobile uses still poster
       (function initAutoplayVideos() {
+        const isMobile = window.matchMedia('(max-width: 639px)').matches;
+
         document.querySelectorAll('.hero-video__media').forEach((video) => {
+          if (isMobile) {
+            video.pause();
+            video.removeAttribute('src');
+            video.querySelectorAll('source').forEach((source) => source.remove());
+            video.load();
+            video.remove();
+            return;
+          }
+
+          video.muted = true;
+          video.defaultMuted = true;
+          video.playsInline = true;
+          video.preload = 'auto';
+          video.setAttribute('muted', '');
+          video.setAttribute('playsinline', '');
+          video.setAttribute('webkit-playsinline', '');
+
+          const markReady = () => {
+            video.classList.add('is-ready');
+          };
+
           const playVideo = () => {
             video.muted = true;
-            const playPromise = video.play();
-            if (playPromise !== undefined) {
-              playPromise.catch(() => {});
+            const attempt = video.play();
+            if (attempt && typeof attempt.then === 'function') {
+              attempt
+                .then(markReady)
+                .catch(() => {});
+            } else if (!video.paused) {
+              markReady();
             }
           };
 
-          if (video.readyState >= 2) {
+          video.addEventListener('playing', markReady);
+          video.addEventListener('loadeddata', playVideo, { once: true });
+          video.addEventListener('canplay', playVideo, { once: true });
+
+          const unlock = () => {
             playVideo();
-          } else {
-            video.addEventListener('loadeddata', playVideo, { once: true });
+            window.removeEventListener('touchstart', unlock);
+            window.removeEventListener('click', unlock);
+          };
+          window.addEventListener('touchstart', unlock, { once: true, passive: true });
+          window.addEventListener('click', unlock, { once: true });
+
+          if (video.readyState >= 2) playVideo();
+          else {
+            try {
+              video.load();
+            } catch (_) {}
           }
         });
       })();
@@ -2372,6 +2606,7 @@
 
         if (!stage || !heroContent || !about) return;
 
+        const isMobile = window.matchMedia('(max-width: 639px)').matches;
         const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
         function withAboutAtRest(callback) {
@@ -2644,25 +2879,36 @@
 
           const progress = easeOutCubic(clamp(-stage.getBoundingClientRect().top / scrollRange, 0, 1));
 
+          // Softer motion on mobile; About starts fully below the fold
+          const yMove = isMobile ? -progress * 36 : -progress * 80;
+          const blurAmt = isMobile ? progress * 2.5 : progress * 5;
+          const aboutLift = isMobile ? (1 - progress) * 55 : (1 - progress) * 38;
+
           heroContent.style.opacity = String(clamp(1 - progress * 1.2, 0, 1));
-          heroContent.style.transform = `translate3d(0, ${-progress * 80}px, 0) scale(${1 - progress * 0.08})`;
-          heroContent.style.filter = `blur(${progress * 5}px)`;
+          heroContent.style.transform = `translate3d(0, ${yMove}px, 0) scale(${1 - progress * (isMobile ? 0.04 : 0.08)})`;
+          heroContent.style.filter = `blur(${blurAmt}px)`;
 
-          about.style.transform = `translate3d(0, ${(1 - progress) * 38}vh, 0) scale(${0.9 + progress * 0.1})`;
-          about.style.borderRadius = `${32 - progress * 32}px ${32 - progress * 32}px 0 0`;
-          about.style.opacity = String(0.55 + progress * 0.45);
+          about.style.transform = `translate3d(0, ${aboutLift}vh, 0) scale(${0.92 + progress * 0.08})`;
+          about.style.borderRadius = `${(isMobile ? 24 : 32) - progress * (isMobile ? 24 : 32)}px ${(isMobile ? 24 : 32) - progress * (isMobile ? 24 : 32)}px 0 0`;
+          about.style.opacity = String(isMobile ? 0.35 + progress * 0.65 : 0.55 + progress * 0.45);
           about.style.boxShadow = 'none';
+          about.style.pointerEvents = progress < 0.12 ? 'none' : '';
 
-          if (card1) {
-            updateCard1HeroEnter(progress);
-          }
-
-          if (card2) {
-            updateCard2HeroEnter(progress);
-          }
-
-          if (card3) {
-            updateCard3HeroEnter(progress);
+          if (isMobile) {
+            // Mobile: no fixed fly-in cards — scroll-reveal handles them
+            [card1, card2, card3].forEach((card) => {
+              if (!card) return;
+              card.classList.remove('is-hero-fixed', 'is-over-hero');
+              card.style.position = '';
+              card.style.left = '';
+              card.style.top = '';
+              card.style.width = '';
+              card.style.transform = '';
+            });
+          } else {
+            if (card1) updateCard1HeroEnter(progress);
+            if (card2) updateCard2HeroEnter(progress);
+            if (card3) updateCard3HeroEnter(progress);
           }
 
           if (scrollHint) {
@@ -2774,6 +3020,35 @@
             });
           }
         }
+      })();
+
+      // Mobile section enter transitions
+      (function initRevealOnScroll() {
+        if (!window.matchMedia('(max-width: 639px)').matches) return;
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          document.querySelectorAll('.reveal-on-scroll').forEach((el) => el.classList.add('is-inview'));
+          return;
+        }
+
+        const items = document.querySelectorAll('.reveal-on-scroll');
+        if (!items.length || !('IntersectionObserver' in window)) {
+          items.forEach((el) => el.classList.add('is-inview'));
+          return;
+        }
+
+        const io = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('is-inview');
+                io.unobserve(entry.target);
+              }
+            });
+          },
+          { rootMargin: '0px 0px -8% 0px', threshold: 0.12 }
+        );
+
+        items.forEach((el) => io.observe(el));
       })();
 
       (function initBackToTop() {
