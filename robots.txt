@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://arndsgn.com/sitemap.xml
