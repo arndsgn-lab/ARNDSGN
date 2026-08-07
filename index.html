@@ -820,15 +820,17 @@
         z-index: 21;
         min-height: 0 !important;
         margin-top: 0;
-        padding-top: 3rem;
+        padding-top: 8rem;
         padding-bottom: 3.5rem;
         background-color: #000;
         background-image: linear-gradient(
           180deg,
           #f0ece6 0%,
-          #8f9892 1.25rem,
-          #343638 2.75rem,
-          #000 4.5rem
+          #c8cbc5 2.5rem,
+          #7a807c 5rem,
+          #3a3c3b 7.5rem,
+          #121212 10rem,
+          #000 12rem
         );
         color: #fff;
         opacity: 1 !important;
@@ -858,14 +860,16 @@
       }
       @media (min-width: 640px) {
         #services {
-          padding-top: 4rem;
+          padding-top: 10rem;
           padding-bottom: 4.5rem;
           background-image: linear-gradient(
             180deg,
             #f0ece6 0%,
-            #8f9892 1.75rem,
-            #343638 3.5rem,
-            #000 5.5rem
+            #c8cbc5 3rem,
+            #7a807c 6rem,
+            #3a3c3b 9rem,
+            #121212 12rem,
+            #000 14.5rem
           );
         }
         #portfolio {
@@ -898,25 +902,25 @@
       #services::before {
         content: '';
         position: absolute;
-        top: -2.5rem;
+        top: -1.5rem;
         left: 0;
         right: 0;
         width: 100%;
-        height: 7rem;
+        height: 11rem;
         z-index: 0;
         pointer-events: none;
         background:
-          radial-gradient(ellipse 100% 70% at 50% 100%, rgba(130, 200, 175, 0.22) 0%, transparent 58%),
-          radial-gradient(ellipse 68% 55% at 18% 92%, rgba(110, 170, 215, 0.16) 0%, transparent 52%),
-          radial-gradient(ellipse 62% 50% at 82% 88%, rgba(160, 150, 205, 0.12) 0%, transparent 48%),
+          radial-gradient(ellipse 100% 75% at 50% 100%, rgba(130, 200, 175, 0.1) 0%, transparent 62%),
+          radial-gradient(ellipse 68% 55% at 18% 92%, rgba(110, 170, 215, 0.07) 0%, transparent 55%),
+          radial-gradient(ellipse 62% 50% at 82% 88%, rgba(160, 150, 205, 0.05) 0%, transparent 50%),
           linear-gradient(
             180deg,
-            rgba(240, 236, 230, 0.55) 0%,
-            rgba(240, 236, 230, 0.15) 30%,
-            transparent 60%
+            rgba(240, 236, 230, 0.28) 0%,
+            rgba(240, 236, 230, 0.08) 35%,
+            transparent 70%
           );
-        filter: blur(36px);
-        transform: scaleY(1.02);
+        filter: blur(48px);
+        transform: scaleY(1.05);
         transform-origin: bottom center;
       }
       #contact > .mx-auto {
