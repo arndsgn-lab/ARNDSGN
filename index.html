@@ -266,7 +266,26 @@
           will-change: auto !important;
         }
         .section-mesh::after {
+          display: none !important;
           animation: none !important;
+          filter: none !important;
+        }
+        #services::before {
+          filter: none !important;
+          transform: none !important;
+          background:
+            linear-gradient(
+              180deg,
+              rgba(240, 236, 230, 0.55) 0%,
+              rgba(240, 236, 230, 0.12) 42%,
+              transparent 78%
+            );
+        }
+        #services .tab-panel li > span.rounded-full {
+          animation: none !important;
+        }
+        .about-marquee__track {
+          will-change: auto;
         }
       }
       #home,
@@ -488,12 +507,22 @@
         inset: -15%;
         z-index: 0;
         pointer-events: none;
-        opacity: 0.55;
-        filter: blur(72px);
+        opacity: 0.45;
+        filter: blur(40px);
         background:
           radial-gradient(circle at 30% 40%, rgba(255, 214, 198, 0.55), transparent 58%),
           radial-gradient(circle at 70% 60%, rgba(198, 228, 245, 0.45), transparent 56%);
         animation: section-mesh-drift 26s ease-in-out infinite;
+        will-change: transform;
+        contain: paint;
+      }
+      @media (max-width: 1023px) {
+        .section-mesh::after {
+          animation: none;
+          filter: none;
+          opacity: 0.35;
+          inset: 0;
+        }
       }
       .section-mesh > * {
         position: relative;
@@ -944,9 +973,10 @@
             rgba(240, 236, 230, 0.08) 35%,
             transparent 70%
           );
-        filter: blur(48px);
-        transform: scaleY(1.05);
+        filter: blur(28px);
+        transform: translateZ(0);
         transform-origin: bottom center;
+        contain: paint;
       }
       #contact > .mx-auto {
         position: relative;
@@ -970,7 +1000,7 @@
         #services::before {
           top: -3.5rem;
           height: 9rem;
-          filter: blur(44px);
+          filter: blur(28px);
         }
       }
       #services h2,
@@ -1094,11 +1124,14 @@
         }
       }
       #hero-content {
-        will-change: transform, opacity, filter;
+        will-change: transform, opacity;
+        transform: translateZ(0);
+        backface-visibility: hidden;
       }
       #about {
-        will-change: transform, opacity, border-radius;
+        will-change: transform, opacity;
         transform-origin: center top;
+        backface-visibility: hidden;
       }
       @keyframes hero-scroll-pulse {
         0%,
@@ -1214,6 +1247,8 @@
         overflow: hidden;
         background-color: #000;
         pointer-events: none;
+        transform: translateZ(0);
+        contain: strict;
       }
       .hero-video__poster {
         position: absolute;
@@ -3655,19 +3690,26 @@
         if (!header || !hero) return;
 
         let lastScrollY = window.scrollY;
+        let ticking = false;
+        let stageHeight = 0;
+
+        function measure() {
+          stageHeight = stage ? stage.offsetHeight : 0;
+        }
 
         function updateHeader() {
+          ticking = false;
           const navHeight = header.offsetHeight || 72;
           const currentScrollY = window.scrollY;
+          const viewH = window.innerHeight;
 
-          // Logo nur ganz oben im Hero-Stage (nicht während Sticky-Dive)
           let inHeroTop = currentScrollY <= 24;
-          if (stage) {
-            const range = Math.max(1, stage.offsetHeight - window.innerHeight);
+          if (stage && stageHeight > viewH) {
+            const range = stageHeight - viewH;
             const progress = Math.min(1, Math.max(0, -stage.getBoundingClientRect().top / range));
             inHeroTop = progress < 0.04;
           } else {
-            inHeroTop = hero.getBoundingClientRect().bottom > window.innerHeight * 0.85;
+            inHeroTop = hero.getBoundingClientRect().bottom > viewH * 0.85;
           }
 
           const heroBottom = hero.getBoundingClientRect().bottom;
@@ -3675,10 +3717,13 @@
 
           let overDark = false;
           if (pastHero) {
-            overDark = darkSections.some((section) => {
-              const rect = section.getBoundingClientRect();
-              return rect.top <= navHeight && rect.bottom > navHeight;
-            });
+            for (let i = 0; i < darkSections.length; i++) {
+              const rect = darkSections[i].getBoundingClientRect();
+              if (rect.top <= navHeight && rect.bottom > navHeight) {
+                overDark = true;
+                break;
+              }
+            }
           }
 
           header.classList.toggle('is-in-hero', inHeroTop);
@@ -3699,8 +3744,19 @@
           lastScrollY = currentScrollY;
         }
 
-        window.addEventListener('scroll', updateHeader, { passive: true });
-        window.addEventListener('resize', updateHeader, { passive: true });
+        function onScroll() {
+          if (!ticking) {
+            ticking = true;
+            requestAnimationFrame(updateHeader);
+          }
+        }
+
+        measure();
+        window.addEventListener('scroll', onScroll, { passive: true });
+        window.addEventListener('resize', () => {
+          measure();
+          onScroll();
+        }, { passive: true });
         updateHeader();
       })();
 
@@ -3778,6 +3834,12 @@
         if (reducedMotion) return;
 
         let ticking = false;
+        let scrollRange = 0;
+        let lastProgress = -1;
+
+        function measure() {
+          scrollRange = stage.offsetHeight - window.innerHeight;
+        }
 
         function clamp(value, min, max) {
           return Math.min(max, Math.max(min, value));
@@ -3789,24 +3851,25 @@
 
         function updateHeroDive() {
           ticking = false;
-
-          const scrollRange = stage.offsetHeight - window.innerHeight;
           if (scrollRange <= 0) return;
 
-          const progress = easeOutCubic(clamp(-stage.getBoundingClientRect().top / scrollRange, 0, 1));
+          const raw = clamp(-stage.getBoundingClientRect().top / scrollRange, 0, 1);
+          // Skip tiny updates to cut style thrash
+          if (Math.abs(raw - lastProgress) < 0.004 && raw !== 0 && raw !== 1) return;
+          lastProgress = raw;
 
+          const progress = easeOutCubic(raw);
           const yMove = isMobile ? -progress * 36 : -progress * 80;
-          const blurAmt = isMobile ? progress * 2.5 : progress * 5;
           const aboutLift = (1 - progress) * 100;
+          const scale = isMobile ? 1 : 1 - progress * 0.08;
+          const aboutScale = isMobile ? 1 : 0.92 + progress * 0.08;
 
           heroContent.style.opacity = String(clamp(1 - progress * 1.2, 0, 1));
-          heroContent.style.transform = `translate3d(0, ${yMove}px, 0) scale(${1 - progress * (isMobile ? 0.04 : 0.08)})`;
-          heroContent.style.filter = `blur(${blurAmt}px)`;
+          heroContent.style.transform = `translate3d(0, ${yMove}px, 0) scale(${scale})`;
+          // Avoid filter:blur during scroll — major jank source on mobile GPUs
 
-          about.style.transform = `translate3d(0, ${aboutLift}vh, 0) scale(${0.92 + progress * 0.08})`;
-          about.style.borderRadius = '0';
+          about.style.transform = `translate3d(0, ${aboutLift}vh, 0) scale(${aboutScale})`;
           about.style.opacity = String(clamp(progress * 1.35, 0, 1));
-          about.style.boxShadow = 'none';
           about.style.pointerEvents = progress < 0.12 ? 'none' : '';
 
           if (scrollHint) {
@@ -3821,47 +3884,24 @@
           }
         }
 
+        measure();
         window.addEventListener('scroll', onScroll, { passive: true });
-        window.addEventListener('resize', onScroll, { passive: true });
+        window.addEventListener(
+          'resize',
+          () => {
+            measure();
+            lastProgress = -1;
+            onScroll();
+          },
+          { passive: true }
+        );
         updateHeroDive();
       })();
 
-      // Portfolio card swipe — only services → portfolio
+      // Portfolio stack depth unused in CSS — skip scroll work
       (function initPortfolioStack() {
         const services = document.getElementById('services');
-        const portfolio = document.getElementById('portfolio');
-        if (!services || !portfolio) return;
-
-        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-          services.style.setProperty('--stack-depth', '0');
-          return;
-        }
-
-        let ticking = false;
-
-        function clamp(value, min, max) {
-          return Math.min(max, Math.max(min, value));
-        }
-
-        function updatePortfolioStack() {
-          ticking = false;
-          const viewport = window.innerHeight;
-          const portfolioTop = portfolio.getBoundingClientRect().top;
-          const raw = clamp((viewport - portfolioTop) / viewport, 0, 1);
-          const eased = 1 - Math.pow(1 - raw, 3);
-          services.style.setProperty('--stack-depth', eased.toFixed(4));
-        }
-
-        function onScroll() {
-          if (!ticking) {
-            ticking = true;
-            requestAnimationFrame(updatePortfolioStack);
-          }
-        }
-
-        window.addEventListener('scroll', onScroll, { passive: true });
-        window.addEventListener('resize', onScroll, { passive: true });
-        updatePortfolioStack();
+        if (services) services.style.setProperty('--stack-depth', '0');
       })();
 
       // Section anchor navigation
@@ -3954,8 +3994,10 @@
         if (!button) return;
 
         const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        let ticking = false;
 
         function updateBackToTop() {
+          ticking = false;
           const visible = window.scrollY > 480;
           button.classList.toggle('is-visible', visible);
           button.hidden = !visible;
@@ -3965,7 +4007,16 @@
           window.scrollTo({ top: 0, behavior: reducedMotion ? 'auto' : 'smooth' });
         });
 
-        window.addEventListener('scroll', updateBackToTop, { passive: true });
+        window.addEventListener(
+          'scroll',
+          () => {
+            if (!ticking) {
+              ticking = true;
+              requestAnimationFrame(updateBackToTop);
+            }
+          },
+          { passive: true }
+        );
         updateBackToTop();
       })();
 
@@ -3974,7 +4025,10 @@
         const contact = document.getElementById('contact');
         if (!cta || !window.matchMedia('(max-width: 639px)').matches) return;
 
+        let ticking = false;
+
         function update() {
+          ticking = false;
           const pastHero = window.scrollY > window.innerHeight * 0.55;
           let nearFooter = false;
           if (contact) {
@@ -3984,7 +4038,16 @@
           cta.classList.toggle('is-hidden', !pastHero || nearFooter);
         }
 
-        window.addEventListener('scroll', update, { passive: true });
+        window.addEventListener(
+          'scroll',
+          () => {
+            if (!ticking) {
+              ticking = true;
+              requestAnimationFrame(update);
+            }
+          },
+          { passive: true }
+        );
         window.addEventListener('resize', update, { passive: true });
         update();
       })();
