@@ -2,7 +2,10 @@
 <html lang="de" class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#1a3a34" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <link rel="icon" type="image/png" sizes="512x512" href="images/favicon-512.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16.png" />
@@ -69,6 +72,9 @@
         backdrop-filter: blur(12px);
         border-bottom: 1px solid rgba(28, 25, 23, 0.08);
         box-shadow: 0 4px 24px rgba(28, 25, 23, 0.06);
+        padding-top: max(16px, env(safe-area-inset-top, 0px));
+        padding-left: env(safe-area-inset-left, 0px);
+        padding-right: env(safe-area-inset-right, 0px);
       }
       #home nav {
         overflow: visible;
@@ -118,17 +124,18 @@
       .page-hero-stage {
         position: relative;
         height: 200vh;
-        margin-top: -4.75rem;
+        height: 200dvh;
+        margin-top: calc(-4.75rem - max(16px, env(safe-area-inset-top, 0px)));
         background-color: #f6faf8;
       }
       @media (min-width: 640px) {
         .page-hero-stage {
-          margin-top: -6rem;
+          margin-top: calc(-6rem - max(16px, env(safe-area-inset-top, 0px)));
         }
       }
       @media (min-width: 1024px) {
         .page-hero-stage {
-          margin-top: -7rem;
+          margin-top: calc(-7rem - max(16px, env(safe-area-inset-top, 0px)));
         }
       }
       .page-hero {
@@ -139,11 +146,14 @@
         align-items: center;
         justify-content: center;
         box-sizing: border-box;
-        min-height: 100svh;
-        height: 100svh;
+        min-height: 100vh;
+        height: 100vh;
+        min-height: 100dvh;
+        height: 100dvh;
         overflow: hidden;
         isolation: isolate;
-        padding: 4.75rem 1rem 3rem;
+        padding: calc(4.75rem + max(16px, env(safe-area-inset-top, 0px))) 1rem
+          max(3rem, env(safe-area-inset-bottom, 0px));
         background:
           radial-gradient(ellipse 78% 52% at 8% 0%, rgba(45, 90, 80, 0.12), transparent 54%),
           radial-gradient(ellipse 68% 48% at 92% 24%, rgba(26, 58, 52, 0.08), transparent 50%),
@@ -196,7 +206,7 @@
         justify-content: center;
         width: 100%;
         max-width: 52rem;
-        min-height: calc(100svh - 7.75rem);
+        min-height: calc(100dvh - 7.75rem);
         margin: 0 auto;
         text-align: center;
         transform-origin: center center;
@@ -204,12 +214,12 @@
       }
       @media (min-width: 640px) {
         .page-hero__content {
-          min-height: calc(100svh - 9.5rem);
+          min-height: calc(100dvh - 9.5rem);
         }
       }
       @media (min-width: 1024px) {
         .page-hero__content {
-          min-height: calc(100svh - 11rem);
+          min-height: calc(100dvh - 11rem);
         }
       }
       .page-hero__inner {
@@ -463,8 +473,10 @@
         justify-content: center;
         box-sizing: border-box;
         width: 100%;
-        min-height: 100svh;
-        height: 100svh;
+        min-height: 100vh;
+        height: 100vh;
+        min-height: 100dvh;
+        height: 100dvh;
         padding: 5.5rem 1.25rem 4rem;
         background:
           radial-gradient(ellipse 78% 52% at 8% 0%, rgba(45, 90, 80, 0.1), transparent 54%),
@@ -695,8 +707,8 @@
       }
       .back-to-top {
         position: fixed;
-        right: 1.25rem;
-        bottom: 1.25rem;
+        right: max(1.25rem, env(safe-area-inset-right, 0px));
+        bottom: max(1.25rem, env(safe-area-inset-bottom, 0px));
         z-index: 90;
         display: flex;
         align-items: center;
@@ -747,7 +759,24 @@
           transition: none !important;
         }
       }
-    </style>
+    
+      .page-main {
+        padding-top: calc(4.75rem + max(16px, env(safe-area-inset-top, 0px)));
+        padding-left: env(safe-area-inset-left, 0px);
+        padding-right: env(safe-area-inset-right, 0px);
+        padding-bottom: max(0px, env(safe-area-inset-bottom, 0px));
+      }
+      @media (min-width: 640px) {
+        .page-main {
+          padding-top: calc(6rem + max(16px, env(safe-area-inset-top, 0px)));
+        }
+      }
+      @media (min-width: 1024px) {
+        .page-main {
+          padding-top: calc(7rem + max(16px, env(safe-area-inset-top, 0px)));
+        }
+      }
+</style>
     <link rel="stylesheet" href="css/cookie-consent.css" />
   </head>
   <body class="overflow-x-clip bg-stone-50 font-sans text-slate-ink antialiased">
@@ -797,7 +826,7 @@
       </div>
     </header>
 
-    <main class="pt-[4.75rem] sm:pt-24 lg:pt-28">
+    <main class="page-main">
       <!-- Hero — scroll stage: reinzoomen, dann Ablauf -->
       <div class="page-hero-stage">
         <section class="page-hero" aria-labelledby="page-hero-title">

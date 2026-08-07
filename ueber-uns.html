@@ -2,7 +2,10 @@
 <html lang="de" class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#1a3a34" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <link rel="icon" type="image/png" sizes="512x512" href="images/favicon-512.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16.png" />
@@ -54,6 +57,9 @@
         -webkit-backdrop-filter: saturate(180%) blur(20px);
         border-bottom: 1px solid rgba(0, 0, 0, 0.08);
         box-shadow: none;
+        padding-top: max(16px, env(safe-area-inset-top, 0px));
+        padding-left: env(safe-area-inset-left, 0px);
+        padding-right: env(safe-area-inset-right, 0px);
       }
       #home nav ul a {
         font-size: 0.8125rem;
@@ -126,7 +132,7 @@
       }
       .wip-page {
         display: flex;
-        min-height: calc(100svh - 4.75rem);
+        min-height: calc(100dvh - 4.75rem);
         align-items: center;
         justify-content: center;
         padding: 2rem 1.25rem 4rem;
@@ -134,13 +140,13 @@
       }
       @media (min-width: 640px) {
         .wip-page {
-          min-height: calc(100svh - 6rem);
+          min-height: calc(100dvh - 6rem);
           padding: 3rem 2rem 5rem;
         }
       }
       @media (min-width: 1024px) {
         .wip-page {
-          min-height: calc(100svh - 7rem);
+          min-height: calc(100dvh - 7rem);
         }
       }
       .wip-content {
@@ -256,7 +262,24 @@
       .site-footer__link:hover {
         text-decoration: underline;
       }
-    </style>
+    
+      .page-main {
+        padding-top: calc(4.75rem + max(16px, env(safe-area-inset-top, 0px)));
+        padding-left: env(safe-area-inset-left, 0px);
+        padding-right: env(safe-area-inset-right, 0px);
+        padding-bottom: max(0px, env(safe-area-inset-bottom, 0px));
+      }
+      @media (min-width: 640px) {
+        .page-main {
+          padding-top: calc(6rem + max(16px, env(safe-area-inset-top, 0px)));
+        }
+      }
+      @media (min-width: 1024px) {
+        .page-main {
+          padding-top: calc(7rem + max(16px, env(safe-area-inset-top, 0px)));
+        }
+      }
+</style>
     <link rel="stylesheet" href="css/cookie-consent.css" />
   </head>
   <body class="overflow-x-hidden bg-[#fbfbfd] font-sans text-[#1d1d1f] antialiased">
@@ -276,7 +299,7 @@
       </nav>
     </header>
 
-    <main class="pt-[4.75rem] sm:pt-24 lg:pt-28">
+    <main class="page-main">
       <section class="wip-page" aria-labelledby="wip-title">
         <div class="wip-content">
           <p class="wip-badge"><span class="wip-badge__dot" aria-hidden="true"></span> In Bearbeitung</p>
