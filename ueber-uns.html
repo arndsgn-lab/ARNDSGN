@@ -85,40 +85,43 @@
       #home .site-logo-wrap {
         position: relative;
         flex-shrink: 0;
-        width: 2.75rem;
-        height: 2rem;
+        width: 3.25rem;
+        height: 2.5rem;
       }
       #home .site-logo {
         position: absolute;
-        left: -2.25rem;
+        left: -1.75rem;
         top: 50%;
-        height: 7.5rem;
+        height: 5.25rem;
         width: auto;
         max-width: none;
-        transform: translateY(calc(-50% + 1.1rem));
+        transform: translateY(calc(-50% + 0.85rem));
         object-fit: contain;
         display: block;
+        /* Markengrün #1a3a34 */
+        filter: brightness(0) saturate(100%) invert(16%) sepia(28%) saturate(1200%)
+          hue-rotate(118deg) brightness(0.92) contrast(1.05);
       }
       @media (min-width: 640px) {
         #home .site-logo-wrap {
-          width: 3.25rem;
-          height: 2.25rem;
+          width: 3.75rem;
+          height: 2.75rem;
         }
         #home .site-logo {
-          left: -3rem;
-          height: 10rem;
-          transform: translateY(calc(-50% + 1.5rem));
+          left: -2.25rem;
+          height: 6.75rem;
+          transform: translateY(calc(-50% + 1.1rem));
         }
       }
       @media (min-width: 1024px) {
         #home .site-logo-wrap {
-          width: 3.875rem;
-          height: 2.5rem;
+          width: 4.5rem;
+          height: 3rem;
         }
         #home .site-logo {
-          left: -5rem;
-          height: 15rem;
-          transform: translateY(calc(-50% + 2.5rem));
+          left: -3rem;
+          height: 9rem;
+          transform: translateY(calc(-50% + 1.35rem));
         }
       }
       .wip-page {
@@ -297,6 +300,8 @@
           <button type="button" data-cookie-settings class="cookie-settings-link site-footer__link">
             Cookie-Einstellungen
           </button>
+          <a href="impressum.html" class="site-footer__link">Impressum</a>
+          <a href="datenschutz.html" class="site-footer__link">Datenschutz</a>
           <a href="index.html" class="site-footer__link">Zurück zur Startseite</a>
         </div>
       </div>

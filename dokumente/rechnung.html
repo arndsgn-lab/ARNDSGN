@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Rechnung — ARNDSGN</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --accent: #1a3a34;
+        --ink: #1a1a1a;
+        --muted: #5c5c5c;
+        --line: #cfcfcf;
+        --line-soft: #e8e8e8;
+        --paper: #ffffff;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Source Sans 3", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-size: 10.5pt;
+        line-height: 1.45;
+        color: var(--ink);
+        background: #d8d8d8;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .toolbar {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.75rem 1.25rem;
+        background: #f7f7f7;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .toolbar p {
+        margin: 0;
+        font-size: 0.8125rem;
+        color: var(--muted);
+      }
+
+      .toolbar button {
+        border: 1px solid var(--accent);
+        border-radius: 0;
+        background: var(--accent);
+        color: #fff;
+        font: inherit;
+        font-size: 0.8125rem;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        padding: 0.55rem 1.1rem;
+        cursor: pointer;
+      }
+
+      .toolbar button:hover {
+        background: #142e29;
+      }
+
+      .sheet {
+        width: 210mm;
+        min-height: 297mm;
+        margin: 1.25rem auto;
+        padding: 18mm 18mm 16mm;
+        background: var(--paper);
+        box-shadow: 0 2px 24px rgba(0, 0, 0, 0.12);
+      }
+
+      .fill {
+        display: inline-block;
+        min-width: 5ch;
+        min-height: 1.15em;
+        padding: 0 0.1em;
+        border-bottom: 1px solid transparent;
+        outline: none;
+        color: var(--ink);
+        white-space: pre-wrap;
+      }
+
+      .fill:empty {
+        border-bottom-color: var(--line);
+        min-width: 10ch;
+      }
+
+      .fill:empty::before {
+        content: attr(data-hint);
+        color: #9a9a9a;
+        font-weight: 400;
+      }
+
+      .fill:focus {
+        border-bottom-color: var(--accent);
+        background: rgba(26, 58, 52, 0.03);
+      }
+
+      .fill--block {
+        display: block;
+        width: 100%;
+        min-height: 1.35em;
+      }
+
+      .fill--wide {
+        min-width: 14ch;
+      }
+
+      .fill--money {
+        min-width: 8ch;
+        text-align: right;
+      }
+
+      .letterhead {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 2rem;
+        padding-bottom: 1.1rem;
+        border-bottom: 1px solid var(--accent);
+      }
+
+      .brand {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+
+      .brand img {
+        height: 72px;
+        width: auto;
+        display: block;
+        margin-top: 0.15rem;
+      }
+
+      .brand-meta {
+        font-size: 0.8125rem;
+        line-height: 1.5;
+        color: var(--muted);
+        padding-top: 0.2rem;
+      }
+
+      .brand-meta .name {
+        display: block;
+        margin-bottom: 0.35rem;
+        font-family: "Cormorant Garamond", Georgia, serif;
+        font-size: 1.35rem;
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--accent);
+        line-height: 1.1;
+      }
+
+      .doc-title {
+        text-align: right;
+        min-width: 42%;
+      }
+
+      .doc-title h1 {
+        margin: 0;
+        font-family: "Cormorant Garamond", Georgia, serif;
+        font-size: 2.35rem;
+        font-weight: 600;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--accent);
+        line-height: 1;
+      }
+
+      .doc-meta {
+        margin: 0.85rem 0 0;
+        font-size: 0.8125rem;
+        color: var(--ink);
+        line-height: 1.7;
+      }
+
+      .doc-meta .k {
+        display: inline-block;
+        min-width: 7.5rem;
+        color: var(--muted);
+      }
+
+      .parties {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2.5rem;
+        margin-top: 1.75rem;
+      }
+
+      .party h2 {
+        margin: 0 0 0.55rem;
+        padding-bottom: 0.35rem;
+        border-bottom: 1px solid var(--line-soft);
+        font-size: 0.68rem;
+        font-weight: 600;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--accent);
+      }
+
+      .party-lines {
+        display: grid;
+        gap: 0.28rem;
+        font-size: 0.9rem;
+        line-height: 1.45;
+      }
+
+      .party p {
+        margin: 0;
+        font-size: 0.9rem;
+        line-height: 1.55;
+      }
+
+      .items {
+        width: 100%;
+        margin-top: 2rem;
+        border-collapse: collapse;
+        font-size: 0.875rem;
+      }
+
+      .items th {
+        padding: 0.55rem 0.4rem;
+        border-bottom: 1.5px solid var(--accent);
+        font-size: 0.68rem;
+        font-weight: 600;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        text-align: left;
+        color: var(--accent);
+        background: transparent;
+      }
+
+      .items th:nth-child(1) {
+        width: 7%;
+      }
+
+      .items th:nth-child(3),
+      .items th:nth-child(4),
+      .items th:nth-child(5) {
+        text-align: right;
+      }
+
+      .items td {
+        padding: 0.7rem 0.4rem;
+        border-bottom: 1px solid var(--line-soft);
+        vertical-align: top;
+      }
+
+      .items td:nth-child(3),
+      .items td:nth-child(4),
+      .items td:nth-child(5) {
+        text-align: right;
+      }
+
+      .totals {
+        margin-top: 0.35rem;
+        margin-left: auto;
+        width: min(100%, 260px);
+      }
+
+      .totals-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 0.4rem 0;
+        font-size: 0.875rem;
+        border-bottom: 1px solid var(--line-soft);
+      }
+
+      .totals-row span:first-child {
+        color: var(--muted);
+      }
+
+      .totals-row--grand {
+        margin-top: 0.15rem;
+        padding: 0.65rem 0;
+        border-bottom: 1.5px solid var(--accent);
+        border-top: 1.5px solid var(--accent);
+        font-family: "Cormorant Garamond", Georgia, serif;
+        font-size: 1.2rem;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        color: var(--accent);
+      }
+
+      .totals-row--grand span:first-child {
+        color: var(--accent);
+      }
+
+      .notes {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2.5rem;
+        margin-top: 2rem;
+      }
+
+      .notes h2 {
+        margin: 0 0 0.55rem;
+        padding-bottom: 0.35rem;
+        border-bottom: 1px solid var(--line-soft);
+        font-size: 0.68rem;
+        font-weight: 600;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--accent);
+      }
+
+      .notes .label {
+        display: block;
+        margin-top: 0.45rem;
+        margin-bottom: 0.1rem;
+        font-size: 0.68rem;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      .notes .label:first-child {
+        margin-top: 0;
+      }
+
+      .legal {
+        margin-top: 1.75rem;
+        padding-top: 0.85rem;
+        border-top: 1px solid var(--line-soft);
+        font-size: 0.7rem;
+        line-height: 1.5;
+        color: var(--muted);
+      }
+
+      .footer-bar {
+        margin-top: 1rem;
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        font-size: 0.68rem;
+        letter-spacing: 0.04em;
+        color: var(--muted);
+      }
+
+      @media print {
+        body {
+          background: #fff;
+        }
+
+        .toolbar {
+          display: none !important;
+        }
+
+        .sheet {
+          width: auto;
+          min-height: auto;
+          margin: 0;
+          padding: 0;
+          box-shadow: none;
+        }
+
+        .fill:empty::before {
+          content: "";
+        }
+
+        .fill:empty {
+          border-bottom: 1px solid #c8c8c8;
+          min-width: 9ch;
+        }
+
+        @page {
+          size: A4;
+          margin: 14mm;
+        }
+      }
+
+      @media (max-width: 860px) {
+        .sheet {
+          width: auto;
+          margin: 0;
+          box-shadow: none;
+        }
+
+        .letterhead,
+        .parties,
+        .notes {
+          grid-template-columns: 1fr;
+          flex-direction: column;
+        }
+
+        .doc-title {
+          text-align: left;
+          min-width: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="toolbar">
+      <p>Felder anklicken und ausfüllen — anschließend als PDF speichern.</p>
+      <button type="button" onclick="window.print()">PDF speichern / Drucken</button>
+    </div>
+
+    <main class="sheet">
+      <header class="letterhead">
+        <div class="brand">
+          <img src="logo-rechnung.png" alt="ARNDSGN" width="74" height="72" />
+          <div class="brand-meta">
+            <span class="name">ARNDSGN</span>
+            Arian Allef<br />
+            Westerwaldstraße 6<br />
+            56244 Ewighausen<br />
+            Deutschland
+          </div>
+        </div>
+        <div class="doc-title">
+          <h1>Rechnung</h1>
+          <p class="doc-meta">
+            <span class="k">Rechnungsnr.</span>
+            <span class="fill fill--wide" contenteditable="true" data-hint="2026-001"></span><br />
+            <span class="k">Rechnungsdatum</span>
+            <span class="fill fill--wide" contenteditable="true" data-hint="TT.MM.JJJJ"></span><br />
+            <span class="k">Leistungsdatum</span>
+            <span class="fill fill--wide" contenteditable="true" data-hint="TT.MM.JJJJ"></span>
+          </p>
+        </div>
+      </header>
+
+      <div class="parties">
+        <section class="party">
+          <h2>Rechnungsempfänger</h2>
+          <div class="party-lines">
+            <span class="fill fill--block" contenteditable="true" data-hint="Name / Firma"></span>
+            <span class="fill fill--block" contenteditable="true" data-hint="Ansprechpartner"></span>
+            <span class="fill fill--block" contenteditable="true" data-hint="Straße und Hausnummer"></span>
+            <span class="fill fill--block" contenteditable="true" data-hint="PLZ und Ort"></span>
+            <span class="fill fill--block" contenteditable="true" data-hint="USt-IdNr. (falls vorhanden)"></span>
+          </div>
+        </section>
+
+        <section class="party">
+          <h2>Absender</h2>
+          <p>
+            ARNDSGN · Arian Allef<br />
+            Westerwaldstraße 6<br />
+            56244 Ewighausen<br />
+            arndsgn@arndsgn.com<br />
+            +49 151 175553093
+          </p>
+        </section>
+      </div>
+
+      <table class="items">
+        <thead>
+          <tr>
+            <th>Pos.</th>
+            <th>Bezeichnung der Leistung</th>
+            <th>Menge</th>
+            <th>Einzelpreis</th>
+            <th>Betrag</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td><span class="fill fill--block" contenteditable="true" data-hint="Leistungsbeschreibung"></span></td>
+            <td><span class="fill fill--money" contenteditable="true" data-hint="1"></span></td>
+            <td><span class="fill fill--money" contenteditable="true" data-hint="0,00 €"></span></td>
+            <td><span class="fill fill--money" contenteditable="true" data-hint="0,00 €"></span></td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td><span class="fill fill--block" contenteditable="true" data-hint=""></span></td>
+            <td><span class="fill fill--money" contenteditable="true" data-hint=""></span></td>
+            <td><span class="fill fill--money" contenteditable="true" data-hint=""></span></td>
+            <td><span class="fill fill--money" contenteditable="true" data-hint=""></span></td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td><span class="fill fill--block" contenteditable="true" data-hint=""></span></td>
+            <td><span class="fill fill--money" contenteditable="true" data-hint=""></span></td>
+            <td><span class="fill fill--money" contenteditable="true" data-hint=""></span></td>
+            <td><span class="fill fill--money" contenteditable="true" data-hint=""></span></td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td><span class="fill fill--block" contenteditable="true" data-hint=""></span></td>
+            <td><span class="fill fill--money" contenteditable="true" data-hint=""></span></td>
+            <td><span class="fill fill--money" contenteditable="true" data-hint=""></span></td>
+            <td><span class="fill fill--money" contenteditable="true" data-hint=""></span></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="totals">
+        <div class="totals-row">
+          <span>Zwischensumme</span>
+          <span class="fill fill--money" contenteditable="true" data-hint="0,00 €"></span>
+        </div>
+        <div class="totals-row">
+          <span>Umsatzsteuer</span>
+          <span>0,00 € *</span>
+        </div>
+        <div class="totals-row totals-row--grand">
+          <span>Rechnungsbetrag</span>
+          <span class="fill fill--money" contenteditable="true" data-hint="0,00 €"></span>
+        </div>
+      </div>
+
+      <div class="notes">
+        <section>
+          <h2>Zahlungsbedingungen</h2>
+          <span class="label">Zahlungsziel</span>
+          <span class="fill fill--block" contenteditable="true" data-hint="14 Tage netto"></span>
+          <span class="label">Kontoinhaber</span>
+          <span class="fill fill--block" contenteditable="true" data-hint="Arian Allef"></span>
+          <span class="label">IBAN</span>
+          <span class="fill fill--block" contenteditable="true" data-hint="DE00 0000 0000 0000 0000 00"></span>
+          <span class="label">BIC</span>
+          <span class="fill fill--block" contenteditable="true" data-hint=""></span>
+          <span class="label">Verwendungszweck</span>
+          <span class="fill fill--block" contenteditable="true" data-hint="Rechnungsnummer"></span>
+        </section>
+
+        <section>
+          <h2>Anmerkungen</h2>
+          <span class="fill fill--block" contenteditable="true" data-hint="Optional"></span>
+          <span class="fill fill--block" contenteditable="true" data-hint=""></span>
+          <span class="fill fill--block" contenteditable="true" data-hint=""></span>
+          <span class="fill fill--block" contenteditable="true" data-hint=""></span>
+        </section>
+      </div>
+
+      <p class="legal">
+        * Als Kleinunternehmer im Sinne von § 19 UStG wird keine Umsatzsteuer berechnet.
+      </p>
+
+      <div class="footer-bar">
+        <span>ARNDSGN · arndsgn.com</span>
+        <span>Seite 1 von 1</span>
+      </div>
+    </main>
+  </body>
+</html>
