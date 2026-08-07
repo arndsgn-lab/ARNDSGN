@@ -3727,65 +3727,60 @@
           }
         }
 
-        function easeOutCubic(t) {
-          return 1 - Math.pow(1 - t, 3);
-        }
-
         function updateDive(stageTop) {
           if (reducedMotionDive) return;
 
           const range = stageHeight - viewH;
           if (range <= 0) return;
 
-          // Outside dive range — snap once and skip work
-          if (stageTop >= 0) {
-            if (lastDive !== 0) {
-              lastDive = 0;
-              docEl.style.setProperty('--dive', '0');
-              docEl.style.setProperty('--dive-y', '0px');
-              docEl.style.setProperty('--about-y', viewH + 'px');
-              docEl.classList.remove('is-diving', 'is-dive-done');
-              about.classList.remove('is-interactive');
-              diving = false;
-            }
-            return;
-          }
-          if (stageTop <= -range) {
-            if (lastDive !== 1) {
-              lastDive = 1;
-              docEl.style.setProperty('--dive', '1');
-              docEl.style.setProperty('--dive-y', isMobile ? '-36px' : '-80px');
-              docEl.style.setProperty('--about-y', '0px');
-              docEl.classList.remove('is-diving');
-              docEl.classList.add('is-dive-done');
-              about.classList.add('is-interactive');
-              diving = false;
-              if (marqueeTrack) marqueeTrack.classList.remove('is-paused');
-            }
-            return;
+          // Linear progress so dive reverses cleanly when scrolling back up
+          let raw = (-stageTop) / range;
+          if (raw < 0) raw = 0;
+          else if (raw > 1) raw = 1;
+
+          // Skip only microscopic changes (keep reverse scroll responsive)
+          if (lastDive >= 0 && Math.abs(raw - lastDive) < 0.003) {
+            if (raw > 0 && raw < 1) return;
+            if (raw === lastDive) return;
           }
 
-          const raw = Math.min(1, Math.max(0, -stageTop / range));
-          if (Math.abs(raw - lastDive) < (isMobile ? 0.012 : 0.006)) return;
+          const wasDone = lastDive >= 0.999;
+          const wasStart = lastDive <= 0.001 && lastDive >= 0;
           lastDive = raw;
 
-          const progress = easeOutCubic(raw);
-          const yMove = (isMobile ? -36 : -80) * progress;
-          const aboutY = (1 - progress) * viewH;
+          const yMove = (isMobile ? -36 : -80) * raw;
+          const aboutY = (1 - raw) * viewH;
 
-          docEl.style.setProperty('--dive', progress.toFixed(4));
+          docEl.style.setProperty('--dive', raw.toFixed(4));
           docEl.style.setProperty('--dive-y', yMove.toFixed(2) + 'px');
           docEl.style.setProperty('--about-y', aboutY.toFixed(2) + 'px');
 
-          if (!diving) {
+          if (raw <= 0) {
+            docEl.classList.remove('is-diving', 'is-dive-done');
+            about.classList.remove('is-interactive');
+            diving = false;
+            if (marqueeTrack) marqueeTrack.classList.add('is-paused');
+            return;
+          }
+
+          if (raw >= 1) {
+            docEl.classList.remove('is-diving');
+            docEl.classList.add('is-dive-done');
+            about.classList.add('is-interactive');
+            diving = false;
+            if (marqueeTrack) marqueeTrack.classList.remove('is-paused');
+            return;
+          }
+
+          // In the middle — scrolling up or down
+          if (!diving || wasDone || wasStart) {
             docEl.classList.add('is-diving');
             docEl.classList.remove('is-dive-done');
             diving = true;
           }
-          about.classList.toggle('is-interactive', progress >= 0.12);
-
+          about.classList.toggle('is-interactive', raw >= 0.12);
           if (marqueeTrack) {
-            marqueeTrack.classList.toggle('is-paused', progress < 0.35);
+            marqueeTrack.classList.toggle('is-paused', raw < 0.35);
           }
         }
 
