@@ -1,0 +1,260 @@
+/* projekt.html — motion layer only (layout / type / color unchanged) */
+
+/* -------------------------------------------------------------------------- */
+/* 1. Scroll reveals                                                          */
+/* -------------------------------------------------------------------------- */
+.reveal-up {
+  opacity: 0;
+  transform: translate3d(0, 30px, 0);
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+
+.reveal-up.is-revealed {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  will-change: auto;
+}
+
+.reveal-delay-1 { transition-delay: 0.08s; }
+.reveal-delay-2 { transition-delay: 0.16s; }
+.reveal-delay-3 { transition-delay: 0.24s; }
+.reveal-delay-4 { transition-delay: 0.32s; }
+
+/* -------------------------------------------------------------------------- */
+/* 2. Micro-interactions                                                      */
+/* -------------------------------------------------------------------------- */
+.nav-link {
+  position: relative;
+  transition: color 0.3s ease, transform 0.3s ease, opacity 0.3s ease;
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -0.2rem;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.3s ease;
+  opacity: 0.55;
+}
+
+.nav-link:hover {
+  transform: translateY(-1px);
+}
+
+.nav-link:hover::after,
+.nav-link.is-current::after {
+  transform: scaleX(1);
+}
+
+#home a.rounded-full,
+#mobile-menu a.rounded-full,
+.project-form__submit,
+.call-book__primary,
+.back-to-top,
+.anfrage-tabs__btn,
+.call-cal__nav-btn,
+.call-cal__day:not(:disabled),
+.call-cal__slot {
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease,
+    background-color 0.3s ease,
+    background 0.3s ease,
+    border-color 0.3s ease,
+    color 0.3s ease,
+    opacity 0.3s ease;
+}
+
+#home a.rounded-full:hover,
+#mobile-menu a.rounded-full:hover,
+.project-form__submit:hover,
+.call-book__primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+
+#home a.rounded-full:active,
+#mobile-menu a.rounded-full:active,
+.project-form__submit:active,
+.call-book__primary:active:not(:disabled),
+.anfrage-tabs__btn:active {
+  transform: translateY(0);
+}
+
+.anfrage-tabs__btn:hover:not(.is-active) {
+  transform: translateY(-1px);
+  color: rgba(255, 255, 255, 0.92);
+}
+
+#project-form input,
+#project-form select,
+#project-form textarea,
+#call-form input,
+#call-form select {
+  transition:
+    border-color 0.3s ease,
+    box-shadow 0.3s ease,
+    background-color 0.3s ease,
+    transform 0.3s ease;
+}
+
+#project-form input:focus,
+#project-form select:focus,
+#project-form textarea:focus,
+#call-form input:focus,
+#call-form select:focus {
+  transform: translateY(-1px);
+}
+
+#menu-toggle {
+  transition: transform 0.3s ease, color 0.3s ease, background-color 0.3s ease;
+}
+
+#menu-toggle:hover {
+  transform: translateY(-1px);
+}
+
+footer a {
+  transition: color 0.3s ease, transform 0.3s ease, opacity 0.3s ease;
+}
+
+footer a:hover {
+  transform: translateY(-1px);
+}
+
+[data-anfrage-intro] a {
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+[data-anfrage-intro] a:hover {
+  transform: translateY(-1px);
+}
+
+/* -------------------------------------------------------------------------- */
+/* 3. Sticky navbar glassmorphism (after hero)                                */
+/* -------------------------------------------------------------------------- */
+#home {
+  transition:
+    background-color 0.35s ease,
+    border-color 0.35s ease,
+    box-shadow 0.35s ease,
+    backdrop-filter 0.35s ease,
+    -webkit-backdrop-filter 0.35s ease;
+}
+
+#home.is-scrolled {
+  background: rgba(250, 250, 249, 0.72) !important;
+  backdrop-filter: blur(12px) saturate(140%);
+  -webkit-backdrop-filter: blur(12px) saturate(140%);
+  border-bottom: 1px solid rgba(28, 25, 23, 0.08);
+  box-shadow: 0 8px 28px rgba(28, 25, 23, 0.06);
+}
+
+#home.is-scrolled nav {
+  background: transparent !important;
+}
+
+#home.is-over-dark {
+  background: rgba(12, 28, 24, 0.62) !important;
+  backdrop-filter: blur(12px) saturate(140%);
+  -webkit-backdrop-filter: blur(12px) saturate(140%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.18);
+}
+
+#home.is-over-dark nav {
+  background: transparent !important;
+}
+
+#home.is-in-hero {
+  background: transparent !important;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-bottom: none;
+  box-shadow: none;
+}
+
+#home.is-in-hero,
+#home.is-in-hero nav {
+  background: transparent !important;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 4. Marquee — reserved (no banner on this page)                             */
+/* -------------------------------------------------------------------------- */
+.marquee {
+  overflow: hidden;
+  width: 100%;
+}
+
+.marquee__track {
+  display: flex;
+  width: max-content;
+  gap: 2.5rem;
+  animation: projekt-marquee 28s linear infinite;
+}
+
+.marquee__track:hover {
+  animation-play-state: paused;
+}
+
+@keyframes projekt-marquee {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-50%, 0, 0); }
+}
+
+/* -------------------------------------------------------------------------- */
+/* Reduced motion                                                             */
+/* -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .reveal-up,
+  .reveal-up.is-revealed {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .nav-link,
+  .nav-link::after,
+  #home a.rounded-full,
+  #mobile-menu a.rounded-full,
+  .project-form__submit,
+  .call-book__primary,
+  .back-to-top,
+  .anfrage-tabs__btn,
+  .call-cal__nav-btn,
+  .call-cal__day,
+  .call-cal__slot,
+  #project-form input,
+  #project-form select,
+  #project-form textarea,
+  #call-form input,
+  #call-form select,
+  #menu-toggle,
+  footer a,
+  [data-anfrage-intro] a,
+  #home {
+    transition: none !important;
+  }
+
+  .nav-link:hover,
+  #home a.rounded-full:hover,
+  #mobile-menu a.rounded-full:hover,
+  .project-form__submit:hover,
+  .call-book__primary:hover:not(:disabled),
+  footer a:hover,
+  [data-anfrage-intro] a:hover {
+    transform: none;
+  }
+
+  .marquee__track {
+    animation: none;
+  }
+}

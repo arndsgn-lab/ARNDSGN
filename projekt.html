@@ -10,28 +10,28 @@
     <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png" />
-    <title>Projekt starten — Webdesign Anfrage | ARNDSGN Westerwald &amp; Region</title>
+    <title>Projekt starten — Webdesign Anfrage | ARNDESIGN Westerwald &amp; Region</title>
     <meta
       name="description"
-      content="Starten Sie Ihr Webdesign-Projekt mit ARNDSGN — Westerwald, Koblenz, Frankfurt, Köln und Düsseldorf. Kurzes Formular, Rückmeldung in der Regel innerhalb eines Werktags."
+      content="Starten Sie Ihr Webdesign-Projekt mit ARNDESIGN — Westerwald, Koblenz, Frankfurt, Köln und Düsseldorf. Kurzes Formular, Rückmeldung in der Regel innerhalb eines Werktags."
     />
     <link rel="canonical" href="https://arndsgn.com/projekt.html" />
     <meta name="robots" content="index, follow" />
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="ARNDSGN" />
+    <meta property="og:site_name" content="ARNDESIGN" />
     <meta property="og:locale" content="de_DE" />
-    <meta property="og:title" content="Projekt starten — Unverbindliche Anfrage | ARNDSGN" />
+    <meta property="og:title" content="Projekt starten — Unverbindliche Anfrage | ARNDESIGN" />
     <meta property="og:description" content="Kurzes Formular, Rückmeldung in der Regel innerhalb eines Werktags — transparentes Webdesign-Angebot." />
     <meta property="og:url" content="https://arndsgn.com/projekt.html" />
     <meta property="og:image" content="https://arndsgn.com/images/og-image.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="ARNDSGN — Projekt starten" />
+    <meta property="og:image:alt" content="ARNDESIGN — Projekt starten" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Projekt starten — ARNDSGN" />
+    <meta name="twitter:title" content="Projekt starten — ARNDESIGN" />
     <meta name="twitter:description" content="Kurzes Formular, Rückmeldung in der Regel innerhalb eines Werktags — transparentes Webdesign-Angebot." />
     <meta name="twitter:image" content="https://arndsgn.com/images/og-image.png" />
-    <meta name="twitter:image:alt" content="ARNDSGN — Projekt starten" />
+    <meta name="twitter:image:alt" content="ARNDESIGN — Projekt starten" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -68,13 +68,44 @@
     </script>
     <style>
       #home {
-        background: rgba(250, 250, 249, 0.92);
-        backdrop-filter: blur(12px);
-        border-bottom: 1px solid rgba(28, 25, 23, 0.08);
-        box-shadow: 0 4px 24px rgba(28, 25, 23, 0.06);
+        background: transparent;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        border-bottom: none;
+        box-shadow: none;
         padding-top: max(16px, env(safe-area-inset-top, 0px));
         padding-left: env(safe-area-inset-left, 0px);
         padding-right: env(safe-area-inset-right, 0px);
+        transition:
+          background-color 0.35s ease,
+          border-color 0.35s ease,
+          box-shadow 0.35s ease,
+          backdrop-filter 0.35s ease,
+          -webkit-backdrop-filter 0.35s ease;
+      }
+      #home,
+      #home nav {
+        background: transparent;
+      }
+      #home .nav-link {
+        color: rgba(28, 25, 23, 0.62);
+        transition: color 0.25s ease;
+      }
+      #home .nav-link:hover {
+        color: #1c1917;
+      }
+      #home .nav-link.is-current {
+        color: #1a3a34;
+      }
+      #home.is-over-dark .nav-link {
+        color: rgba(255, 255, 255, 0.78);
+      }
+      #home.is-over-dark .nav-link:hover,
+      #home.is-over-dark .nav-link.is-current {
+        color: #fff;
+      }
+      #home.is-over-dark #menu-toggle {
+        color: #fff;
       }
       #home nav {
         overflow: visible;
@@ -84,6 +115,15 @@
         flex-shrink: 0;
         width: 3.25rem;
         height: 2.5rem;
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+      }
+      #home.is-in-hero .site-logo-wrap {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
       }
       #home .site-logo {
         position: absolute;
@@ -95,9 +135,16 @@
         transform: translateY(calc(-50% + 0.85rem));
         object-fit: contain;
         display: block;
+        opacity: 0 !important;
+        visibility: hidden;
         /* Markengrün #1a3a34 */
         filter: brightness(0) saturate(100%) invert(16%) sepia(28%) saturate(1200%)
           hue-rotate(118deg) brightness(0.92) contrast(1.05);
+        transition: opacity 0.3s ease, visibility 0.3s ease, filter 0.3s ease;
+      }
+      #home.is-in-hero .site-logo {
+        opacity: 1 !important;
+        visibility: visible;
       }
       @media (min-width: 640px) {
         #home .site-logo-wrap {
@@ -705,6 +752,409 @@
       #project-form #form-error {
         color: #fecaca;
       }
+      .anfrage-tabs {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+        padding: 0.35rem;
+        border-radius: 9999px;
+        background: rgba(0, 0, 0, 0.28);
+        border: 1px solid rgba(90, 160, 140, 0.28);
+      }
+      .anfrage-tabs__btn {
+        border: 0;
+        border-radius: 9999px;
+        background: transparent;
+        padding: 0.75rem 0.85rem;
+        font-size: 0.8125rem;
+        font-weight: 700;
+        color: rgba(255, 255, 255, 0.65);
+        cursor: pointer;
+        transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+      }
+      .anfrage-tabs__btn.is-active {
+        background: rgba(255, 255, 255, 0.94);
+        color: #1a3a34;
+        box-shadow:
+          0 0 14px rgba(50, 120, 95, 0.35),
+          0 6px 18px rgba(0, 0, 0, 0.18);
+      }
+      .anfrage-panel[hidden] {
+        display: none !important;
+      }
+      #call-book {
+        position: relative;
+        isolation: isolate;
+        overflow: visible;
+        border: 1px solid rgba(90, 160, 140, 0.45);
+        border-radius: 1.5rem;
+        background: rgba(12, 28, 24, 0.55);
+        backdrop-filter: blur(28px) saturate(140%);
+        -webkit-backdrop-filter: blur(28px) saturate(140%);
+        box-shadow:
+          0 0 0 1px rgba(40, 80, 70, 0.35),
+          inset 0 0 32px rgba(20, 50, 42, 0.45),
+          0 0 22px rgba(40, 120, 95, 0.35),
+          0 0 55px rgba(30, 90, 70, 0.4),
+          0 0 100px rgba(20, 60, 50, 0.35),
+          0 24px 70px rgba(0, 0, 0, 0.45);
+        padding: 1.25rem;
+      }
+      @media (min-width: 640px) {
+        #call-book {
+          padding: 2rem;
+        }
+      }
+      #call-book::before {
+        content: "";
+        position: absolute;
+        inset: -1px;
+        border-radius: inherit;
+        pointer-events: none;
+        z-index: 0;
+        background: linear-gradient(
+          135deg,
+          rgba(70, 140, 120, 0.25) 0%,
+          transparent 40%,
+          transparent 60%,
+          rgba(40, 90, 75, 0.2) 100%
+        );
+        opacity: 0.8;
+      }
+      #call-book > * {
+        position: relative;
+        z-index: 1;
+      }
+      .call-book__eyebrow {
+        margin: 0 0 0.5rem;
+        font-size: 0.6875rem;
+        font-weight: 700;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.55);
+      }
+      .call-book__title {
+        margin: 0;
+        font-size: 1.35rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        color: #fff;
+      }
+      .call-book__text {
+        margin: 0.65rem 0 0;
+        font-size: 0.9375rem;
+        line-height: 1.55;
+        color: rgba(255, 255, 255, 0.72);
+      }
+      .call-book__points {
+        margin: 1.15rem 0 0;
+        padding: 0;
+        list-style: none;
+        display: grid;
+        gap: 0.55rem;
+      }
+      .call-book__points li {
+        display: flex;
+        align-items: center;
+        gap: 0.55rem;
+        font-size: 0.875rem;
+        color: rgba(255, 255, 255, 0.82);
+      }
+      .call-book__points li::before {
+        content: "";
+        width: 0.45rem;
+        height: 0.45rem;
+        border-radius: 50%;
+        background: rgba(140, 220, 180, 0.9);
+        box-shadow: 0 0 10px rgba(80, 180, 140, 0.55);
+        flex-shrink: 0;
+      }
+      .call-book__primary {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.55rem;
+        width: 100%;
+        border-radius: 9999px;
+        border: 1px solid rgba(80, 140, 120, 0.5);
+        background: rgba(255, 255, 255, 0.94);
+        padding: 1rem 1.35rem;
+        font-size: 0.9rem;
+        font-weight: 700;
+        color: #1a3a34;
+        cursor: pointer;
+        box-shadow:
+          0 0 14px rgba(50, 120, 95, 0.4),
+          0 0 32px rgba(30, 80, 65, 0.3),
+          0 8px 24px rgba(0, 0, 0, 0.22);
+        transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, opacity 0.2s ease;
+      }
+      .call-book__primary:hover:not(:disabled) {
+        background: #fff;
+        transform: translateY(-1px);
+        box-shadow:
+          0 0 18px rgba(60, 140, 110, 0.5),
+          0 0 40px rgba(40, 100, 80, 0.35),
+          0 10px 28px rgba(0, 0, 0, 0.25);
+      }
+      .call-book__primary:disabled {
+        opacity: 0.55;
+        cursor: not-allowed;
+      }
+      .call-book__note {
+        margin: 1rem 0 0;
+        font-size: 0.75rem;
+        line-height: 1.45;
+        color: rgba(255, 255, 255, 0.5);
+        text-align: center;
+      }
+      .call-cal {
+        margin-top: 1.1rem;
+        display: grid;
+        gap: 1rem;
+      }
+      @media (min-width: 720px) {
+        .call-cal {
+          grid-template-columns: minmax(0, 1.35fr) minmax(12rem, 0.75fr);
+          gap: 1rem;
+          align-items: stretch;
+        }
+        .call-cal__summary {
+          grid-column: 1 / -1;
+        }
+      }
+      .call-cal__month {
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 1.15rem;
+        background: rgba(0, 0, 0, 0.22);
+        padding: 0.9rem 0.95rem 1rem;
+        min-width: 0;
+      }
+      .call-cal__nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
+        margin-bottom: 0.65rem;
+      }
+      .call-cal__nav-label {
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: #fff;
+        letter-spacing: -0.01em;
+      }
+      .call-cal__nav-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.15rem;
+        height: 2.15rem;
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        border-radius: 9999px;
+        background: rgba(255, 255, 255, 0.05);
+        color: #fff;
+        cursor: pointer;
+        transition: background 0.15s ease, border-color 0.15s ease;
+      }
+      .call-cal__nav-btn:hover:not(:disabled) {
+        background: rgba(255, 255, 255, 0.12);
+        border-color: rgba(255, 255, 255, 0.3);
+      }
+      .call-cal__nav-btn:disabled {
+        opacity: 0.35;
+        cursor: not-allowed;
+      }
+      .call-cal__weekdays,
+      .call-cal__grid {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 0.3rem;
+      }
+      .call-cal__weekdays span {
+        text-align: center;
+        font-size: 0.68rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.4);
+        padding: 0.2rem 0 0.35rem;
+      }
+      .call-cal__day {
+        aspect-ratio: 1;
+        min-height: 0;
+        border: 0;
+        border-radius: 0.65rem;
+        background: transparent;
+        color: rgba(255, 255, 255, 0.88);
+        font-size: 0.8125rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+      }
+      .call-cal__day:hover:not(:disabled):not(.is-selected) {
+        background: rgba(255, 255, 255, 0.1);
+      }
+      .call-cal__day.is-outside,
+      .call-cal__day:disabled {
+        color: rgba(255, 255, 255, 0.22);
+        cursor: default;
+      }
+      .call-cal__day.is-today:not(.is-selected) {
+        box-shadow: inset 0 0 0 1px rgba(140, 220, 180, 0.55);
+      }
+      .call-cal__day.is-selected {
+        background: rgba(255, 255, 255, 0.95);
+        color: #1a3a34;
+        box-shadow: 0 0 14px rgba(50, 120, 95, 0.4);
+      }
+      .call-cal__times {
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 1.15rem;
+        background: rgba(0, 0, 0, 0.22);
+        padding: 0.9rem 0.95rem;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+      }
+      .call-cal__times-label {
+        margin: 0 0 0.65rem;
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.5);
+      }
+      .call-cal__times-hint {
+        margin: 0;
+        font-size: 0.8125rem;
+        line-height: 1.45;
+        color: rgba(255, 255, 255, 0.5);
+      }
+      .call-cal__slots {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.4rem;
+        flex: 1;
+        align-content: start;
+      }
+      @media (min-width: 720px) {
+        .call-cal__slots {
+          grid-template-columns: 1fr;
+        }
+      }
+      @media (max-width: 419px) {
+        .call-cal__day {
+          font-size: 0.75rem;
+        }
+      }
+      .call-cal__slot {
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        border-radius: 0.7rem;
+        background: rgba(255, 255, 255, 0.04);
+        padding: 0.65rem 0.4rem;
+        font-size: 0.8125rem;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.88);
+        cursor: pointer;
+        transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+      }
+      .call-cal__slot:hover:not(.is-selected) {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: rgba(255, 255, 255, 0.28);
+      }
+      .call-cal__slot.is-selected {
+        background: rgba(255, 255, 255, 0.95);
+        border-color: transparent;
+        color: #1a3a34;
+      }
+      .call-cal__summary {
+        margin: 0;
+        padding: 0.75rem 0.9rem;
+        border-radius: 0.85rem;
+        background: rgba(80, 160, 130, 0.14);
+        border: 1px solid rgba(110, 190, 155, 0.28);
+        font-size: 0.875rem;
+        color: rgba(255, 255, 255, 0.88);
+      }
+      .call-cal__summary strong {
+        color: #fff;
+        font-weight: 700;
+      }
+      .call-cal__summary[hidden] {
+        display: none !important;
+      }
+      /* Call buchen: Querformat über volle Breite */
+      #anfrage.is-call-mode > [data-anfrage-grid] {
+        grid-template-columns: 1fr;
+        max-width: 72rem;
+        gap: 1.25rem;
+      }
+      #anfrage.is-call-mode [data-anfrage-intro] {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: end;
+        justify-content: space-between;
+        gap: 1rem 2rem;
+      }
+      #anfrage.is-call-mode [data-anfrage-intro] > .mt-4,
+      #anfrage.is-call-mode [data-anfrage-intro] > p.mt-4 {
+        max-width: 36rem;
+        margin-top: 0.65rem;
+      }
+      #anfrage.is-call-mode [data-anfrage-intro] ul {
+        margin-top: 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem 1.5rem;
+      }
+      #anfrage.is-call-mode [data-anfrage-intro] ul li {
+        margin: 0;
+      }
+      #anfrage.is-call-mode #call-book {
+        padding: 1.15rem 1.25rem 1.35rem;
+      }
+      @media (min-width: 640px) {
+        #anfrage.is-call-mode #call-book {
+          padding: 1.35rem 1.5rem 1.5rem;
+        }
+      }
+      #anfrage.is-call-mode .call-book__title {
+        font-size: 1.2rem;
+      }
+      #anfrage.is-call-mode .call-book__text {
+        margin-top: 0.4rem;
+        max-width: 40rem;
+      }
+      #anfrage.is-call-mode #call-form {
+        display: grid;
+        gap: 1rem;
+      }
+      @media (min-width: 900px) {
+        #anfrage.is-call-mode #call-form {
+          grid-template-columns: minmax(0, 1.55fr) minmax(16rem, 0.9fr);
+          align-items: start;
+        }
+        #anfrage.is-call-mode .call-cal {
+          margin-top: 0;
+          grid-column: 1;
+        }
+        #anfrage.is-call-mode .call-form-fields {
+          grid-column: 2;
+          display: grid;
+          gap: 0.85rem;
+          align-content: start;
+        }
+        #anfrage.is-call-mode .call-form-fields .sm\:grid-cols-2 {
+          grid-template-columns: 1fr;
+        }
+        #anfrage.is-call-mode .call-form-fields .sm\:col-span-2 {
+          grid-column: auto;
+        }
+        #anfrage.is-call-mode .call-book__primary {
+          margin-top: 0.25rem;
+        }
+      }
       .back-to-top {
         position: fixed;
         right: max(1.25rem, env(safe-area-inset-right, 0px));
@@ -778,19 +1228,21 @@
       }
 </style>
     <link rel="stylesheet" href="css/cookie-consent.css" />
+    <link rel="stylesheet" href="css/projekt-motion.css" />
   </head>
   <body class="overflow-x-clip bg-stone-50 font-sans text-slate-ink antialiased">
-    <header id="home" class="fixed inset-x-0 top-0 z-[100]">
+    <header id="home" class="fixed inset-x-0 top-0 z-[100] is-in-hero">
       <nav class="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 lg:px-8">
-        <a href="index.html" class="site-logo-wrap transition-opacity hover:opacity-80" aria-label="ARNDSGN Home">
-          <img src="images/logo-nav.png" alt="ARNDSGN" class="site-logo" width="369" height="240" />
+        <a href="index.html" class="site-logo-wrap" aria-label="ARNDESIGN Home">
+          <img src="images/logo-nav.png" alt="ARNDESIGN" class="site-logo" width="369" height="240" />
         </a>
         <ul class="hidden items-center gap-6 lg:gap-8 lg:flex">
-          <li><a href="index.html" class="text-sm font-medium text-slate-muted transition-colors hover:text-slate-ink">Home</a></li>
-          <li><a href="index.html#services" class="text-sm font-medium text-slate-muted transition-colors hover:text-slate-ink">Services</a></li>
-          <li><a href="index.html#portfolio" class="text-sm font-medium text-slate-muted transition-colors hover:text-slate-ink">Portfolio</a></li>
-          <li><a href="index.html#faq" class="text-sm font-medium text-slate-muted transition-colors hover:text-slate-ink">FAQ</a></li>
-          <li><a href="projekt.html" class="text-sm font-medium text-accent transition-colors hover:text-accent-hover">Projekt starten</a></li>
+          <li><a href="index.html" class="nav-link text-sm font-medium">Home</a></li>
+          <li><a href="index.html#services" class="nav-link text-sm font-medium">Services</a></li>
+          <li><a href="index.html#portfolio" class="nav-link text-sm font-medium">Portfolio</a></li>
+          <li><a href="index.html#faq" class="nav-link text-sm font-medium">FAQ</a></li>
+          <li><a href="#anfrage" class="nav-link text-sm font-medium">Kontakt</a></li>
+          <li><a href="projekt.html" class="nav-link is-current text-sm font-medium">Projekt starten</a></li>
         </ul>
         <div class="flex items-center gap-3">
           <a
@@ -818,6 +1270,7 @@
           <li><a href="index.html#services" class="block text-sm font-medium">Services</a></li>
           <li><a href="index.html#portfolio" class="block text-sm font-medium">Portfolio</a></li>
           <li><a href="index.html#faq" class="block text-sm font-medium">FAQ</a></li>
+          <li><a href="#anfrage" class="block text-sm font-medium">Kontakt</a></li>
           <li><a href="projekt.html" class="block text-sm font-medium text-accent">Projekt starten</a></li>
           <li>
             <a href="#anfrage" class="mt-2 inline-flex rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-white">Anfrage senden</a>
@@ -848,17 +1301,17 @@
 
       <!-- Process -->
       <section id="ablauf" class="px-4 pt-16 sm:px-8 sm:pt-24 lg:pt-28">
-        <header class="process-intro mx-auto max-w-6xl">
-          <p class="process-intro__eyebrow">Ablauf</p>
-          <h2 class="process-intro__title">Vier Schritte bis online.</h2>
-          <p class="process-intro__lead">
+        <header class="process-intro mx-auto max-w-6xl reveal-up">
+          <p class="process-intro__eyebrow reveal-up reveal-delay-1">Ablauf</p>
+          <h2 class="process-intro__title reveal-up reveal-delay-2">Vier Schritte bis online.</h2>
+          <p class="process-intro__lead reveal-up reveal-delay-3">
             Weniger Meetings, mehr Klarheit. Sie wissen jederzeit, wo Ihr Projekt steht —
             und was als Nächstes kommt.
           </p>
-          <p class="process-intro__note">4 Schritte · 6–10 Wochen · feste Ansprechperson</p>
+          <p class="process-intro__note reveal-up reveal-delay-4">4 Schritte · 6–10 Wochen · feste Ansprechperson</p>
         </header>
 
-        <div class="process-stage" data-process-stage>
+        <div class="process-stage reveal-up reveal-delay-2" data-process-stage>
           <div class="process-sticky">
             <div class="process-progress" data-process-progress role="tablist" aria-label="Projektschritte"></div>
             <div class="process-viewport" data-process-viewport>
@@ -910,30 +1363,73 @@
 
       <!-- Contact Form -->
       <section id="anfrage" class="px-4 pb-14 text-white sm:px-8 sm:pb-20 lg:pb-28">
-        <div class="mx-auto grid max-w-6xl min-w-0 gap-10 md:grid-cols-2 md:gap-12 lg:gap-20">
-          <div class="min-w-0">
-            <p class="mb-3 text-[0.6875rem] font-semibold uppercase tracking-[0.2em] text-white/50 sm:mb-4 sm:text-xs">Kontakt</p>
-            <h2 class="text-2xl font-bold tracking-tight sm:text-3xl lg:text-4xl">Projekt anfragen</h2>
-            <p class="mt-4 text-sm leading-relaxed text-white/75 sm:mt-5 sm:text-base">
-              Erzählen Sie uns kurz von Ihrem Vorhaben. Wir melden uns innerhalb von 24 Stunden mit einem
-              unverbindlichen Vorschlag für das nächste Gespräch.
+        <div class="mx-auto grid max-w-6xl min-w-0 gap-10 md:grid-cols-2 md:gap-12 lg:gap-20" data-anfrage-grid>
+          <div class="min-w-0 reveal-up" data-anfrage-intro>
+            <p class="mb-3 text-[0.6875rem] font-semibold uppercase tracking-[0.2em] text-white/50 sm:mb-4 sm:text-xs reveal-up reveal-delay-1">Kontakt</p>
+            <h2 class="text-2xl font-bold tracking-tight sm:text-3xl lg:text-4xl reveal-up reveal-delay-2">Projekt anfragen</h2>
+            <p class="mt-4 text-sm leading-relaxed text-white/75 sm:mt-5 sm:text-base reveal-up reveal-delay-3">
+              Nachricht senden oder direkt einen Call buchen — wir melden uns schnell mit einer klaren
+              Einschätzung zum nächsten Schritt.
             </p>
-            <ul class="mt-8 space-y-3 text-sm text-white/70 sm:mt-10 sm:space-y-4">
+            <ul class="mt-8 space-y-3 text-sm text-white/70 sm:mt-10 sm:space-y-4 reveal-up reveal-delay-4">
               <li class="flex items-start gap-3 sm:items-center">
-                <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/10 text-sm text-white sm:h-8 sm:w-8">@</span>
+                <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/10 sm:h-8 sm:w-8" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="18" height="18" xmlns="http://www.w3.org/2000/svg">
+                    <path fill="#4285F4" d="M3 5.5A2.5 2.5 0 0 1 5.5 3H7v8.8L3 8.9V5.5Z"/>
+                    <path fill="#34A853" d="M21 5.5A2.5 2.5 0 0 0 18.5 3H17v8.8l4-2.9V5.5Z"/>
+                    <path fill="#FBBC04" d="M3 8.9V18.5A2.5 2.5 0 0 0 5.5 21H7V11.8L3 8.9Z"/>
+                    <path fill="#EA4335" d="M17 11.8V21h1.5a2.5 2.5 0 0 0 2.5-2.5V8.9l-4 2.9Z"/>
+                    <path fill="#C5221F" d="M7 3h10v8.8L12 15.5 7 11.8V3Z"/>
+                    <path fill="#fff" d="M7 3.8v7.6L12 14.7l5-3.3V3.8H7Z"/>
+                    <path fill="#EA4335" d="M7 3.8 12 8.9l5-5.1H7Z"/>
+                  </svg>
+                </span>
                 <a href="mailto:arndsgn@arndsgn.com" class="break-all pt-1 transition-colors hover:text-white sm:pt-0 sm:break-normal">arndsgn@arndsgn.com</a>
               </li>
               <li class="flex items-center gap-3">
-                <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/10 text-sm text-white sm:h-8 sm:w-8">☎</span>
-                <a href="tel:+49151175553093" class="transition-colors hover:text-white">+49 151175553093</a>
-              </li>
-              <li class="flex items-center gap-3">
-                <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/10 text-sm text-white sm:h-8 sm:w-8">⌖</span>
-                <span>Westerwald · Koblenz · Frankfurt · Köln · Düsseldorf</span>
+                <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/10 sm:h-8 sm:w-8" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="18" height="18" xmlns="http://www.w3.org/2000/svg" fill="#25D366">
+                    <path d="M19.05 4.91A9.82 9.82 0 0 0 12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.87 9.87 0 0 0 4.79 1.22h.01c5.45 0 9.9-4.45 9.9-9.9 0-2.65-1.03-5.14-2.9-7.03Zm-7 15.24h-.01a8.2 8.2 0 0 1-4.18-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24a8.2 8.2 0 0 1 5.83 2.42 8.2 8.2 0 0 1 2.41 5.83c0 4.54-3.7 8.23-8.25 8.23Zm4.52-6.16c-.25-.12-1.47-.72-1.7-.8-.23-.09-.39-.12-.56.12-.16.25-.64.8-.78.96-.14.17-.29.19-.54.06-.25-.12-1.05-.39-2-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.14.16-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.4-.42-.56-.42h-.48c-.17 0-.43.06-.66.31-.22.25-.86.85-.86 2.07s.89 2.4 1.01 2.56c.12.17 1.75 2.67 4.23 3.74 1.49.64 1.89.7 2.56.59.39-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.14-1.18-.06-.1-.23-.17-.48-.29Z"/>
+                  </svg>
+                </span>
+                <a href="https://wa.me/49151175553093" target="_blank" rel="noopener noreferrer" class="transition-colors hover:text-white">+49 151175553093</a>
               </li>
             </ul>
           </div>
 
+          <div class="min-w-0 reveal-up reveal-delay-2">
+            <div class="anfrage-tabs" role="tablist" aria-label="Kontaktweg wählen">
+              <button
+                type="button"
+                class="anfrage-tabs__btn is-active"
+                role="tab"
+                id="tab-message"
+                aria-selected="true"
+                aria-controls="panel-message"
+                data-anfrage-tab="message"
+              >
+                Nachricht senden
+              </button>
+              <button
+                type="button"
+                class="anfrage-tabs__btn"
+                role="tab"
+                id="tab-call"
+                aria-selected="false"
+                aria-controls="panel-call"
+                data-anfrage-tab="call"
+              >
+                Call buchen
+              </button>
+            </div>
+
+            <div
+              id="panel-message"
+              class="anfrage-panel"
+              role="tabpanel"
+              aria-labelledby="tab-message"
+              data-anfrage-panel="message"
+            >
           <form id="project-form" class="min-w-0 p-5 sm:p-8" novalidate>
             <input type="text" name="_honey" class="hidden" tabindex="-1" autocomplete="off" aria-hidden="true" />
             <div class="grid gap-4 sm:grid-cols-2 sm:gap-5">
@@ -1025,14 +1521,97 @@
               <a href="mailto:arndsgn@arndsgn.com" class="underline">arndsgn@arndsgn.com</a>.
             </p>
           </form>
+            </div>
+
+            <div
+              id="panel-call"
+              class="anfrage-panel"
+              role="tabpanel"
+              aria-labelledby="tab-call"
+              data-anfrage-panel="call"
+              hidden
+            >
+              <div id="call-book">
+                <p class="call-book__eyebrow">Direkttermin</p>
+                <h3 class="call-book__title">20 Minuten Kennenlern-Call</h3>
+                <p class="call-book__text">
+                  Tag und Uhrzeit wählen — unverbindlich per Telefon oder Video. Wir bestätigen den Termin
+                  per E-Mail.
+                </p>
+
+                <form id="call-form" class="grid gap-4" novalidate>
+                  <input type="text" name="_honey" class="hidden" tabindex="-1" autocomplete="off" aria-hidden="true" />
+                  <input type="hidden" id="call-date" name="call-date" required value="" />
+                  <input type="hidden" id="call-time" name="call-time" required value="" />
+
+                  <div class="call-cal" data-call-calendar>
+                    <div class="call-cal__month">
+                      <div class="call-cal__nav">
+                        <button type="button" class="call-cal__nav-btn" data-cal-prev aria-label="Vorheriger Monat">
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M15 18l-6-6 6-6"/></svg>
+                        </button>
+                        <p class="call-cal__nav-label" data-cal-label>Monat</p>
+                        <button type="button" class="call-cal__nav-btn" data-cal-next aria-label="Nächster Monat">
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9 18l6-6-6-6"/></svg>
+                        </button>
+                      </div>
+                      <div class="call-cal__weekdays" aria-hidden="true">
+                        <span>Mo</span><span>Di</span><span>Mi</span><span>Do</span><span>Fr</span><span>Sa</span><span>So</span>
+                      </div>
+                      <div class="call-cal__grid" data-cal-grid role="grid" aria-label="Datum wählen"></div>
+                    </div>
+
+                    <div class="call-cal__times">
+                      <p class="call-cal__times-label">Uhrzeit</p>
+                      <p class="call-cal__times-hint" data-cal-times-hint>Zuerst einen Werktag wählen.</p>
+                      <div class="call-cal__slots" data-cal-slots hidden></div>
+                    </div>
+
+                    <p class="call-cal__summary" data-cal-summary hidden></p>
+                  </div>
+
+                  <div class="call-form-fields grid gap-4">
+                  <div class="grid gap-4 sm:grid-cols-2">
+                    <div class="form-field">
+                      <label for="call-name" class="mb-1.5 block text-xs font-semibold uppercase tracking-wider">Name *</label>
+                      <input id="call-name" name="name" type="text" required autocomplete="name" class="w-full min-w-0 rounded-xl px-4 py-3.5 outline-none sm:py-3" placeholder="Ihr Name" />
+                    </div>
+                    <div class="form-field">
+                      <label for="call-email" class="mb-1.5 block text-xs font-semibold uppercase tracking-wider">E-Mail *</label>
+                      <input id="call-email" name="email" type="email" required autocomplete="email" class="w-full min-w-0 rounded-xl px-4 py-3.5 outline-none sm:py-3" placeholder="name@firma.de" />
+                    </div>
+                    <div class="form-field sm:col-span-2">
+                      <label for="call-phone" class="mb-1.5 block text-xs font-semibold uppercase tracking-wider">Telefon *</label>
+                      <input id="call-phone" name="phone" type="tel" required autocomplete="tel" class="w-full min-w-0 rounded-xl px-4 py-3.5 outline-none sm:py-3" placeholder="+49 …" />
+                    </div>
+                  </div>
+
+                  <button type="submit" class="call-book__primary" data-cal-submit disabled>
+                    Call buchen
+                  </button>
+                  <p id="call-success" class="hidden text-sm font-medium" style="color:#b8f0c8" role="status">
+                    Danke! Ihr Terminwunsch ist raus — wir bestätigen den Call per E-Mail.
+                  </p>
+                  <p id="call-error" class="hidden text-sm font-medium" style="color:#fecaca" role="alert">
+                    Senden fehlgeschlagen. Bitte direkt anrufen oder
+                    <a href="mailto:arndsgn@arndsgn.com" class="underline">E-Mail schreiben</a>.
+                  </p>
+                  </div>
+                </form>
+                <p class="call-book__note">
+                  Verfügbar Mo–Fr · Bestätigung in der Regel innerhalb eines Werktags.
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
     </main>
 
-    <footer class="border-t border-white/10 bg-accent px-4 py-8 text-white sm:px-8 sm:py-10">
+    <footer class="border-t border-white/10 bg-accent px-4 py-8 text-white sm:px-8 sm:py-10 reveal-up">
       <div class="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 text-center sm:flex-row sm:text-left">
-        <p class="text-xs text-white/50">© 2026 ARNDSGN. Alle Rechte vorbehalten.</p>
-        <div class="flex flex-wrap items-center justify-center gap-4 sm:justify-end">
+        <p class="text-xs text-white/50 reveal-up reveal-delay-1">© 2026 ARNDESIGN. Alle Rechte vorbehalten.</p>
+        <div class="flex flex-wrap items-center justify-center gap-4 sm:justify-end reveal-up reveal-delay-2">
           <button
             type="button"
             data-cookie-settings
@@ -1057,6 +1636,45 @@
       const menuToggle = document.getElementById('menu-toggle');
       const mobileMenu = document.getElementById('mobile-menu');
 
+      // Transparent header + logo only at hero top
+      (function initHeaderScroll() {
+        const header = document.getElementById('home');
+        const hero = document.querySelector('.page-hero');
+        const stage = document.querySelector('.page-hero-stage');
+        const darkSections = [document.getElementById('anfrage'), document.querySelector('footer')].filter(Boolean);
+        if (!header || !hero) return;
+
+        function updateHeader() {
+          const navHeight = header.offsetHeight || 72;
+
+          let inHeroTop = window.scrollY <= 24;
+          if (stage) {
+            const range = Math.max(1, stage.offsetHeight - window.innerHeight);
+            const progress = Math.min(1, Math.max(0, -stage.getBoundingClientRect().top / range));
+            inHeroTop = progress < 0.04;
+          }
+
+          const heroBottom = hero.getBoundingClientRect().bottom;
+          const pastHero = heroBottom <= navHeight;
+
+          let overDark = false;
+          if (pastHero) {
+            overDark = darkSections.some((section) => {
+              const rect = section.getBoundingClientRect();
+              return rect.top <= navHeight && rect.bottom > navHeight;
+            });
+          }
+
+          header.classList.toggle('is-in-hero', inHeroTop);
+          header.classList.toggle('is-scrolled', pastHero && !overDark);
+          header.classList.toggle('is-over-dark', pastHero && overDark);
+        }
+
+        window.addEventListener('scroll', updateHeader, { passive: true });
+        window.addEventListener('resize', updateHeader, { passive: true });
+        updateHeader();
+      })();
+
       menuToggle.addEventListener('click', () => {
         const isOpen = !mobileMenu.classList.contains('hidden');
         mobileMenu.classList.toggle('hidden');
@@ -1076,6 +1694,275 @@
       const formError = document.getElementById('form-error');
       const submitButton = projectForm.querySelector('button[type="submit"]');
       const defaultSubmitLabel = submitButton.textContent;
+
+      // Anfrage tabs: Nachricht | Call buchen
+      (function initAnfrageTabs() {
+        const tabs = Array.from(document.querySelectorAll('[data-anfrage-tab]'));
+        const panels = Array.from(document.querySelectorAll('[data-anfrage-panel]'));
+        const anfrage = document.getElementById('anfrage');
+        if (!tabs.length || !panels.length) return;
+
+        function activate(id) {
+          tabs.forEach((tab) => {
+            const on = tab.getAttribute('data-anfrage-tab') === id;
+            tab.classList.toggle('is-active', on);
+            tab.setAttribute('aria-selected', on ? 'true' : 'false');
+          });
+          panels.forEach((panel) => {
+            const on = panel.getAttribute('data-anfrage-panel') === id;
+            panel.hidden = !on;
+          });
+          if (anfrage) {
+            anfrage.classList.toggle('is-call-mode', id === 'call');
+          }
+        }
+
+        tabs.forEach((tab) => {
+          tab.addEventListener('click', () => activate(tab.getAttribute('data-anfrage-tab')));
+        });
+
+        if (window.location.hash === '#call' || new URLSearchParams(window.location.search).get('tab') === 'call') {
+          activate('call');
+        }
+      })();
+
+      // Call booking: calendar + form
+      (function initCallForm() {
+        const callForm = document.getElementById('call-form');
+        const root = document.querySelector('[data-call-calendar]');
+        if (!callForm || !root) return;
+
+        const callSuccess = document.getElementById('call-success');
+        const callError = document.getElementById('call-error');
+        const callDate = document.getElementById('call-date');
+        const callTime = document.getElementById('call-time');
+        const callSubmit = callForm.querySelector('[data-cal-submit]');
+        const defaultLabel = callSubmit.textContent;
+        const grid = root.querySelector('[data-cal-grid]');
+        const label = root.querySelector('[data-cal-label]');
+        const prevBtn = root.querySelector('[data-cal-prev]');
+        const nextBtn = root.querySelector('[data-cal-next]');
+        const slotsEl = root.querySelector('[data-cal-slots]');
+        const timesHint = root.querySelector('[data-cal-times-hint]');
+        const summary = root.querySelector('[data-cal-summary]');
+
+        const SLOTS = ['09:00', '10:00', '11:00', '13:00', '14:00', '15:00', '16:00', '17:00'];
+        const MONTHS = [
+          'Januar', 'Februar', 'März', 'April', 'Mai', 'Juni',
+          'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember',
+        ];
+        const WEEKDAYS = ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'];
+
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const maxDate = new Date(today);
+        maxDate.setDate(maxDate.getDate() + 60);
+
+        let viewYear = today.getFullYear();
+        let viewMonth = today.getMonth();
+        let selectedDate = null;
+        let selectedTime = null;
+
+        function pad(n) {
+          return String(n).padStart(2, '0');
+        }
+
+        function toISO(d) {
+          return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+        }
+
+        function isWeekend(d) {
+          const day = d.getDay();
+          return day === 0 || day === 6;
+        }
+
+        function isBookable(d) {
+          const t = new Date(d);
+          t.setHours(0, 0, 0, 0);
+          return t >= today && t <= maxDate && !isWeekend(t);
+        }
+
+        function formatDe(d) {
+          return `${WEEKDAYS[d.getDay()]}, ${pad(d.getDate())}.${pad(d.getMonth() + 1)}.${d.getFullYear()}`;
+        }
+
+        function syncHidden() {
+          callDate.value = selectedDate ? toISO(selectedDate) : '';
+          callTime.value = selectedTime || '';
+          const ready = Boolean(selectedDate && selectedTime);
+          callSubmit.disabled = !ready;
+          if (ready) {
+            summary.hidden = false;
+            summary.innerHTML = `Gewählt: <strong>${formatDe(selectedDate)}</strong> um <strong>${selectedTime}</strong> Uhr`;
+          } else {
+            summary.hidden = true;
+            summary.textContent = '';
+          }
+        }
+
+        function renderTimes() {
+          slotsEl.innerHTML = '';
+          if (!selectedDate) {
+            timesHint.hidden = false;
+            timesHint.textContent = 'Zuerst einen Werktag wählen.';
+            slotsEl.hidden = true;
+            return;
+          }
+          timesHint.hidden = true;
+          slotsEl.hidden = false;
+          SLOTS.forEach((slot) => {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'call-cal__slot' + (selectedTime === slot ? ' is-selected' : '');
+            btn.textContent = slot;
+            btn.setAttribute('aria-pressed', selectedTime === slot ? 'true' : 'false');
+            btn.addEventListener('click', () => {
+              selectedTime = slot;
+              renderTimes();
+              syncHidden();
+            });
+            slotsEl.appendChild(btn);
+          });
+        }
+
+        function renderCalendar() {
+          label.textContent = `${MONTHS[viewMonth]} ${viewYear}`;
+          grid.innerHTML = '';
+
+          const first = new Date(viewYear, viewMonth, 1);
+          const startOffset = (first.getDay() + 6) % 7; // Monday-first
+          const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
+          const prevMonthDays = new Date(viewYear, viewMonth, 0).getDate();
+
+          const minMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+          const maxMonth = new Date(maxDate.getFullYear(), maxDate.getMonth(), 1);
+          const thisMonth = new Date(viewYear, viewMonth, 1);
+          prevBtn.disabled = thisMonth <= minMonth;
+          nextBtn.disabled = thisMonth >= maxMonth;
+
+          for (let i = 0; i < 42; i++) {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'call-cal__day';
+
+            let dayNum;
+            let date;
+            if (i < startOffset) {
+              dayNum = prevMonthDays - startOffset + i + 1;
+              date = new Date(viewYear, viewMonth - 1, dayNum);
+              btn.classList.add('is-outside');
+              btn.disabled = true;
+            } else if (i >= startOffset + daysInMonth) {
+              dayNum = i - startOffset - daysInMonth + 1;
+              date = new Date(viewYear, viewMonth + 1, dayNum);
+              btn.classList.add('is-outside');
+              btn.disabled = true;
+            } else {
+              dayNum = i - startOffset + 1;
+              date = new Date(viewYear, viewMonth, dayNum);
+              const bookable = isBookable(date);
+              btn.disabled = !bookable;
+              if (toISO(date) === toISO(today)) btn.classList.add('is-today');
+              if (selectedDate && toISO(date) === toISO(selectedDate)) btn.classList.add('is-selected');
+              if (bookable) {
+                btn.addEventListener('click', () => {
+                  selectedDate = date;
+                  selectedTime = null;
+                  renderCalendar();
+                  renderTimes();
+                  syncHidden();
+                });
+              }
+            }
+
+            btn.textContent = String(dayNum);
+            btn.setAttribute('aria-label', formatDe(date));
+            grid.appendChild(btn);
+          }
+        }
+
+        prevBtn.addEventListener('click', () => {
+          viewMonth -= 1;
+          if (viewMonth < 0) {
+            viewMonth = 11;
+            viewYear -= 1;
+          }
+          renderCalendar();
+        });
+
+        nextBtn.addEventListener('click', () => {
+          viewMonth += 1;
+          if (viewMonth > 11) {
+            viewMonth = 0;
+            viewYear += 1;
+          }
+          renderCalendar();
+        });
+
+        renderCalendar();
+        renderTimes();
+        syncHidden();
+
+        callForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          if (callSuccess) callSuccess.classList.add('hidden');
+          if (callError) callError.classList.add('hidden');
+
+          if (!selectedDate || !selectedTime) {
+            timesHint.hidden = false;
+            timesHint.textContent = 'Bitte Tag und Uhrzeit im Kalender wählen.';
+            return;
+          }
+
+          if (!callForm.checkValidity()) {
+            callForm.reportValidity();
+            return;
+          }
+
+          const honey = callForm.querySelector('[name="_honey"]');
+          if (honey && honey.value) return;
+
+          const data = new FormData(callForm);
+          const payload = {
+            _subject: 'ARNDESIGN — Call-Buchung',
+            _template: 'table',
+            _captcha: 'false',
+            typ: 'Call-Buchung',
+            name: String(data.get('name') || '').trim(),
+            email: String(data.get('email') || '').trim(),
+            phone: String(data.get('phone') || '').trim(),
+            wunschdatum: formatDe(selectedDate),
+            uhrzeit: selectedTime,
+          };
+
+          callSubmit.disabled = true;
+          callSubmit.textContent = 'Wird gesendet…';
+
+          try {
+            const res = await fetch(`https://formsubmit.co/ajax/${FORM_EMAIL}`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+              },
+              body: JSON.stringify(payload),
+            });
+            if (!res.ok) throw new Error('send failed');
+            callForm.reset();
+            selectedDate = null;
+            selectedTime = null;
+            renderCalendar();
+            renderTimes();
+            syncHidden();
+            callSuccess?.classList.remove('hidden');
+          } catch (err) {
+            callError?.classList.remove('hidden');
+            syncHidden();
+          } finally {
+            callSubmit.textContent = defaultLabel;
+          }
+        });
+      })();
 
       const projectTypeLabels = {
         starter: 'Starter (2.995 €)',
@@ -1317,5 +2204,6 @@
       })();
     </script>
     <script src="js/cookie-consent.js" defer></script>
+    <script src="js/projekt-motion.js" defer></script>
   </body>
 </html>

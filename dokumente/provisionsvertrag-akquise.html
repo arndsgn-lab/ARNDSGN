@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Provisionsvertrag Neukundenakquise — ARNDESIGN</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --accent: #1a3a34;
+        --ink: #1a1a1a;
+        --muted: #5c5c5c;
+        --line: #cfcfcf;
+        --line-soft: #e8e8e8;
+        --paper: #ffffff;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Source Sans 3", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-size: 10pt;
+        line-height: 1.45;
+        color: var(--ink);
+        background: #d8d8d8;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .toolbar {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.75rem 1.25rem;
+        background: #f7f7f7;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .toolbar p {
+        margin: 0;
+        font-size: 0.8125rem;
+        color: var(--muted);
+        max-width: 42rem;
+      }
+
+      .toolbar button {
+        border: 1px solid var(--accent);
+        border-radius: 0;
+        background: var(--accent);
+        color: #fff;
+        font: inherit;
+        font-size: 0.8125rem;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        padding: 0.55rem 1.1rem;
+        cursor: pointer;
+      }
+
+      .toolbar button:hover {
+        background: #142e29;
+      }
+
+      .sheet {
+        width: 210mm;
+        min-height: 297mm;
+        margin: 1.25rem auto;
+        padding: 16mm 18mm 14mm;
+        background: var(--paper);
+        box-shadow: 0 2px 24px rgba(0, 0, 0, 0.12);
+      }
+
+      .fill {
+        display: inline-block;
+        min-width: 5ch;
+        min-height: 1.15em;
+        padding: 0 0.1em;
+        border-bottom: 1px solid transparent;
+        outline: none;
+        color: var(--ink);
+        white-space: pre-wrap;
+      }
+
+      .fill:empty {
+        border-bottom-color: var(--line);
+        min-width: 10ch;
+      }
+
+      .fill:empty::before {
+        content: attr(data-hint);
+        color: #9a9a9a;
+        font-weight: 400;
+      }
+
+      .fill:focus {
+        border-bottom-color: var(--accent);
+        background: rgba(26, 58, 52, 0.03);
+      }
+
+      .fill--block {
+        display: block;
+        width: 100%;
+        min-height: 1.35em;
+      }
+
+      .fill--wide {
+        min-width: 14ch;
+      }
+
+      .letterhead {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid var(--accent);
+      }
+
+      .brand {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+
+      .brand img {
+        height: 64px;
+        width: auto;
+        display: block;
+        margin-top: 0.15rem;
+      }
+
+      .brand-meta {
+        font-size: 0.8125rem;
+        line-height: 1.5;
+        color: var(--muted);
+        padding-top: 0.15rem;
+      }
+
+      .brand-meta .name {
+        display: block;
+        margin-bottom: 0.3rem;
+        font-family: "Cormorant Garamond", Georgia, serif;
+        font-size: 1.25rem;
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--accent);
+        line-height: 1.1;
+      }
+
+      .doc-title {
+        text-align: right;
+        min-width: 46%;
+      }
+
+      .doc-title h1 {
+        margin: 0;
+        font-family: "Cormorant Garamond", Georgia, serif;
+        font-size: 1.85rem;
+        font-weight: 600;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--accent);
+        line-height: 1.05;
+      }
+
+      .doc-title .sub {
+        margin: 0.35rem 0 0;
+        font-size: 0.78rem;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      .doc-meta {
+        margin: 0.7rem 0 0;
+        font-size: 0.8125rem;
+        color: var(--ink);
+        line-height: 1.65;
+      }
+
+      .doc-meta .k {
+        display: inline-block;
+        min-width: 7.5rem;
+        color: var(--muted);
+      }
+
+      .parties {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2.25rem;
+        margin-top: 1.35rem;
+      }
+
+      .party h2,
+      .clause h2,
+      .sign-block h2 {
+        margin: 0 0 0.45rem;
+        padding-bottom: 0.3rem;
+        border-bottom: 1px solid var(--line-soft);
+        font-size: 0.68rem;
+        font-weight: 600;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--accent);
+      }
+
+      .party-lines {
+        display: grid;
+        gap: 0.25rem;
+        font-size: 0.875rem;
+        line-height: 1.45;
+      }
+
+      .party p {
+        margin: 0;
+        font-size: 0.875rem;
+        line-height: 1.5;
+      }
+
+      .intro {
+        margin: 1.25rem 0 0;
+        font-size: 0.875rem;
+        line-height: 1.55;
+        color: var(--ink);
+      }
+
+      .clauses {
+        margin-top: 1.1rem;
+        display: grid;
+        gap: 0.95rem;
+      }
+
+      .clause p {
+        margin: 0.35rem 0 0;
+        font-size: 0.84rem;
+        line-height: 1.5;
+      }
+
+      .clause ul {
+        margin: 0.35rem 0 0;
+        padding-left: 1.15rem;
+        font-size: 0.84rem;
+        line-height: 1.5;
+      }
+
+      .clause li + li {
+        margin-top: 0.2rem;
+      }
+
+      .highlight {
+        margin-top: 0.45rem;
+        padding: 0.65rem 0.8rem;
+        border: 1px solid var(--accent);
+        background: rgba(26, 58, 52, 0.04);
+        font-size: 0.875rem;
+        line-height: 1.5;
+      }
+
+      .highlight strong {
+        color: var(--accent);
+        font-weight: 700;
+      }
+
+      .sign-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2.25rem;
+        margin-top: 1.5rem;
+      }
+
+      .sign-line {
+        margin-top: 2.4rem;
+        border-top: 1px solid var(--ink);
+        padding-top: 0.4rem;
+        font-size: 0.75rem;
+        color: var(--muted);
+        line-height: 1.45;
+      }
+
+      .sign-meta {
+        margin-top: 0.55rem;
+        display: grid;
+        gap: 0.25rem;
+        font-size: 0.8125rem;
+      }
+
+      .legal {
+        margin-top: 1.35rem;
+        padding-top: 0.75rem;
+        border-top: 1px solid var(--line-soft);
+        font-size: 0.68rem;
+        line-height: 1.5;
+        color: var(--muted);
+      }
+
+      .footer-bar {
+        margin-top: 0.85rem;
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        font-size: 0.68rem;
+        letter-spacing: 0.04em;
+        color: var(--muted);
+      }
+
+      @media print {
+        body {
+          background: #fff;
+        }
+
+        .toolbar {
+          display: none !important;
+        }
+
+        .sheet {
+          width: auto;
+          min-height: auto;
+          margin: 0;
+          padding: 0;
+          box-shadow: none;
+        }
+
+        .fill:empty::before {
+          content: "";
+        }
+
+        .fill:empty {
+          border-bottom: 1px solid #c8c8c8;
+          min-width: 9ch;
+        }
+
+        @page {
+          size: A4;
+          margin: 12mm 14mm;
+        }
+      }
+
+      @media (max-width: 860px) {
+        .sheet {
+          width: auto;
+          margin: 0;
+          box-shadow: none;
+        }
+
+        .letterhead,
+        .parties,
+        .sign-grid {
+          grid-template-columns: 1fr;
+          flex-direction: column;
+        }
+
+        .doc-title {
+          text-align: left;
+          min-width: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="toolbar">
+      <p>
+        Felder anklicken und ausfüllen — anschließend als PDF speichern. Vorlage zur Orientierung;
+        bei Bedarf rechtlich prüfen lassen.
+      </p>
+      <button type="button" onclick="window.print()">PDF speichern / Drucken</button>
+    </div>
+
+    <main class="sheet">
+      <header class="letterhead">
+        <div class="brand">
+          <img src="logo-rechnung.png" alt="ARNDESIGN" width="66" height="64" />
+          <div class="brand-meta">
+            <span class="name">ARNDESIGN</span>
+            Arian Allef<br />
+            Westerwaldstraße 6<br />
+            56244 Ewighausen<br />
+            Deutschland
+          </div>
+        </div>
+        <div class="doc-title">
+          <h1>Provisions&shy;vertrag</h1>
+          <p class="sub">Neukundenakquise · Kaltakquise</p>
+          <p class="doc-meta">
+            <span class="k">Vertragsnr.</span>
+            <span class="fill fill--wide" contenteditable="true" data-hint="PV-2026-001"></span><br />
+            <span class="k">Datum</span>
+            <span class="fill fill--wide" contenteditable="true" data-hint="TT.MM.JJJJ"></span><br />
+            <span class="k">Beginn</span>
+            <span class="fill fill--wide" contenteditable="true" data-hint="TT.MM.JJJJ"></span>
+          </p>
+        </div>
+      </header>
+
+      <div class="parties">
+        <section class="party">
+          <h2>Auftraggeber</h2>
+          <p>
+            ARNDESIGN · Arian Allef<br />
+            Westerwaldstraße 6<br />
+            56244 Ewighausen<br />
+            arndsgn@arndsgn.com<br />
+            +49 151 175553093
+          </p>
+        </section>
+
+        <section class="party">
+          <h2>Partner / Akquisiteur</h2>
+          <div class="party-lines">
+            <span class="fill fill--block" contenteditable="true" data-hint="Vor- und Nachname"></span>
+            <span class="fill fill--block" contenteditable="true" data-hint="Straße und Hausnummer"></span>
+            <span class="fill fill--block" contenteditable="true" data-hint="PLZ und Ort"></span>
+            <span class="fill fill--block" contenteditable="true" data-hint="E-Mail"></span>
+            <span class="fill fill--block" contenteditable="true" data-hint="Telefon"></span>
+            <span class="fill fill--block" contenteditable="true" data-hint="Steuernummer / USt-IdNr. (falls vorhanden)"></span>
+          </div>
+        </section>
+      </div>
+
+      <p class="intro">
+        Die Parteien schließen folgenden Vertrag über die provisionsbasierte Gewinnung von
+        Neukunden für den Auftraggeber (nachfolgend „ARNDESIGN“) durch den Partner
+        (nachfolgend „Partner“).
+      </p>
+
+      <div class="clauses">
+        <section class="clause">
+          <h2>§ 1 Gegenstand</h2>
+          <p>
+            Der Partner unterstützt ARNDESIGN bei der <strong>Neukundenakquise</strong>, insbesondere
+            durch Kaltakquise (Telefon, E-Mail, persönlicher Kontakt und vergleichbare Kanäle),
+            mit dem Ziel, qualifizierte Interessenten und Aufträge für Webdesign- und
+            verwandte Leistungen zu gewinnen.
+          </p>
+          <p>
+            Eine Verpflichtung zu einem bestimmten Mindestumsatz oder einer festen
+            Wochen-/Monatsstundenanzahl besteht nicht, sofern nicht gesondert schriftlich vereinbart.
+          </p>
+        </section>
+
+        <section class="clause">
+          <h2>§ 2 Rechtsverhältnis</h2>
+          <p>
+            Der Partner handelt als <strong>selbstständige/r Auftragnehmer/in</strong>. Es wird
+            ausdrücklich kein Arbeitsverhältnis begründet. Der Partner organisiert seine Tätigkeit
+            frei, trägt seine Betriebsmittel selbst und ist für Steuern sowie Sozialversicherung
+            selbst verantwortlich.
+          </p>
+        </section>
+
+        <section class="clause">
+          <h2>§ 3 Provision</h2>
+          <div class="highlight">
+            Für jeden vom Partner nachweislich vermittelten und von ARNDESIGN angenommenen
+            Auftrag beträgt die Provision
+            <strong>15&nbsp;% des Netto-Auftragswerts</strong>
+            (ohne Umsatzsteuer), den der jeweilige Kunde an ARNDESIGN zahlt.
+          </div>
+          <ul>
+            <li>
+              Provisionspflichtig sind nur Aufträge, bei denen der Partner als Ursprung des
+              Kontakts klar dokumentiert ist (z.&nbsp;B. Lead-Übergabe per E-Mail mit Kundendaten).
+            </li>
+            <li>
+              Die Provision entsteht erst, wenn der Kunde die entsprechende Rechnung
+              <strong>vollständig bezahlt</strong> hat. Teilzahlungen lösen anteilige Provision aus.
+            </li>
+            <li>
+              Bei Storno, Rücktritt, Gutschrift oder nicht eingegangener Zahlung entfällt bzw.
+              reduziert sich die Provision entsprechend.
+            </li>
+            <li>
+              Folgeaufträge desselben Kunden innerhalb von
+              <span class="fill" contenteditable="true" data-hint="12"></span>
+              Monaten nach dem Erstauftrag lösen Provision nur aus, wenn dies schriftlich
+              gesondert vereinbart wird — standardmäßig gilt: nur der Erstauftrag.
+            </li>
+          </ul>
+        </section>
+
+        <section class="clause">
+          <h2>§ 4 Abrechnung &amp; Auszahlung</h2>
+          <ul>
+            <li>
+              ARNDESIGN meldet dem Partner monatlich die provisionsrelevanten Zahlungen
+              (bis zum
+              <span class="fill" contenteditable="true" data-hint="10."></span>
+              des Folgemonats).
+            </li>
+            <li>
+              Der Partner stellt eine ordnungsgemäße Rechnung (ggf. mit Hinweis auf §&nbsp;19 UStG).
+            </li>
+            <li>
+              Auszahlung innerhalb von
+              <span class="fill" contenteditable="true" data-hint="14"></span>
+              Tagen nach Eingang der korrekten Provisionsrechnung.
+            </li>
+            <li>
+              Bankverbindung Partner:
+              <span class="fill fill--wide" contenteditable="true" data-hint="IBAN"></span>
+            </li>
+          </ul>
+        </section>
+
+        <section class="clause">
+          <h2>§ 5 Pflichten des Partners</h2>
+          <ul>
+            <li>Seriöse, wahrheitsgemäße Darstellung von ARNDESIGN und Leistungen.</li>
+            <li>Keine verbindlichen Preis- oder Vertragszusagen ohne Freigabe durch ARNDESIGN.</li>
+            <li>Einhaltung geltender Gesetze (u.&nbsp;a. DSGVO, UWG — insbesondere bei Kaltakquise).</li>
+            <li>Saubere Dokumentation von Leads und Übergabe an ARNDESIGN.</li>
+            <li>Keine Nutzung von Kundendaten für eigene Zwecke oder Dritte.</li>
+          </ul>
+        </section>
+
+        <section class="clause">
+          <h2>§ 6 Pflichten von ARNDESIGN</h2>
+          <ul>
+            <li>Bereitstellung aktueller Infos zu Leistungen, Paketen und Ansprechpartnern.</li>
+            <li>Zeitnahe Bearbeitung übergebener Leads.</li>
+            <li>Transparente Provisionsabrechnung gemäß §&nbsp;3 und §&nbsp;4.</li>
+          </ul>
+        </section>
+
+        <section class="clause">
+          <h2>§ 7 Vertraulichkeit</h2>
+          <p>
+            Der Partner behandelt alle Geschäfts-, Preis-, Kunden- und internen Informationen
+            von ARNDESIGN vertraulich — auch nach Vertragsende. Kundendaten dürfen nur für die
+            vereinbarte Akquise verwendet werden.
+          </p>
+        </section>
+
+        <section class="clause">
+          <h2>§ 8 Laufzeit &amp; Kündigung</h2>
+          <p>
+            Der Vertrag beginnt am oben genannten Datum und läuft auf unbestimmte Zeit.
+            Beide Seiten können mit einer Frist von
+            <span class="fill" contenteditable="true" data-hint="14"></span>
+            Tagen zum Monatsende schriftlich (E-Mail genügt) kündigen.
+            Das Recht zur fristlosen Kündigung aus wichtigem Grund bleibt unberührt.
+          </p>
+          <p>
+            Nach Vertragsende bleiben bereits entstandene Provisionsansprüche für bis dahin
+            vermittelte und später bezahlte Aufträge bestehen, sofern die Lead-Zuordnung
+            nachweisbar ist.
+          </p>
+        </section>
+
+        <section class="clause">
+          <h2>§ 9 Schlussbestimmungen</h2>
+          <p>
+            Änderungen bedürfen der Textform (E-Mail ausreichend). Sollte eine Klausel unwirksam
+            sein, bleiben die übrigen Bestimmungen wirksam. Es gilt das Recht der Bundesrepublik
+            Deutschland. Gerichtsstand ist — soweit zulässig —
+            <span class="fill" contenteditable="true" data-hint="Montabaur"></span>.
+          </p>
+        </section>
+      </div>
+
+      <div class="sign-grid">
+        <section class="sign-block">
+          <h2>Auftraggeber</h2>
+          <div class="sign-meta">
+            <span>Ort, Datum:
+              <span class="fill fill--wide" contenteditable="true" data-hint="Ort, TT.MM.JJJJ"></span>
+            </span>
+          </div>
+          <div class="sign-line">
+            Unterschrift ARNDESIGN<br />
+            Arian Allef
+          </div>
+        </section>
+
+        <section class="sign-block">
+          <h2>Partner</h2>
+          <div class="sign-meta">
+            <span>Ort, Datum:
+              <span class="fill fill--wide" contenteditable="true" data-hint="Ort, TT.MM.JJJJ"></span>
+            </span>
+            <span>Name:
+              <span class="fill fill--wide" contenteditable="true" data-hint="Vor- und Nachname"></span>
+            </span>
+          </div>
+          <div class="sign-line">
+            Unterschrift Partner
+          </div>
+        </section>
+      </div>
+
+      <p class="legal">
+        Hinweis: Diese Vorlage dient der praktischen Abwicklung und ersetzt keine individuelle
+        Rechtsberatung. Bei Anstellung (Arbeitsvertrag) statt freier Mitarbeit gelten andere
+        Regelungen — diese Vereinbarung ist auf provisionsbasierte, selbstständige Akquise ausgelegt.
+      </p>
+
+      <div class="footer-bar">
+        <span>ARNDESIGN · arndsgn.com</span>
+        <span>Provisionsvertrag Neukundenakquise</span>
+      </div>
+    </main>
+  </body>
+</html>
