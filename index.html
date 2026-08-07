@@ -1441,59 +1441,73 @@
         width: 1.125rem;
         height: 1.125rem;
       }
-      .lead-bar {
+      .lead-cta {
         display: none;
       }
       @media (max-width: 639px) {
-        .lead-bar {
+        .lead-cta {
           position: fixed;
-          left: 0;
-          right: 0;
-          bottom: 0;
+          left: max(1rem, env(safe-area-inset-left, 0px));
+          bottom: max(1.15rem, env(safe-area-inset-bottom, 0px));
           z-index: 85;
-          display: flex;
-          gap: 0.5rem;
-          padding-top: 0.65rem;
-          padding-bottom: max(16px, env(safe-area-inset-bottom, 0px));
-          padding-left: max(0.85rem, env(safe-area-inset-left, 0px));
-          padding-right: max(0.85rem, env(safe-area-inset-right, 0px));
-          background: rgba(250, 250, 249, 0.94);
-          backdrop-filter: blur(12px);
-          border-top: 1px solid rgba(28, 25, 23, 0.08);
-          box-shadow: 0 -8px 32px rgba(28, 25, 23, 0.08);
-          transition: transform 0.3s ease, opacity 0.3s ease;
-        }
-        .lead-bar.is-hidden {
-          transform: translateY(110%);
-          opacity: 0;
-          pointer-events: none;
-        }
-        .lead-bar__primary,
-        .lead-bar__secondary {
-          flex: 1;
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          min-height: 2.75rem;
+          display: grid;
+          place-items: center;
+          width: 5.25rem;
+          height: 5.25rem;
           border-radius: 9999px;
-          font-size: 0.8125rem;
-          font-weight: 700;
-          text-decoration: none;
-        }
-        .lead-bar__primary {
           background: #1a3a34;
           color: #fff;
+          text-decoration: none;
+          box-shadow:
+            0 10px 28px rgba(26, 58, 52, 0.35),
+            0 0 0 0 rgba(26, 58, 52, 0.35);
+          transition: opacity 0.3s ease, transform 0.3s ease;
         }
-        .lead-bar__secondary {
-          border: 1px solid rgba(28, 25, 23, 0.18);
-          color: #1c1917;
-          background: #fff;
+        .lead-cta.is-hidden {
+          opacity: 0;
+          transform: scale(0.85) translateY(12px);
+          pointer-events: none;
+        }
+        .lead-cta__label {
+          position: relative;
+          z-index: 1;
+          display: block;
+          max-width: 4.1rem;
+          text-align: center;
+          font-size: 0.68rem;
+          font-weight: 700;
+          line-height: 1.2;
+          letter-spacing: 0.01em;
+        }
+        .lead-cta__pulse {
+          position: absolute;
+          inset: 0;
+          border-radius: 9999px;
+          border: 2px solid rgba(26, 58, 52, 0.45);
+          animation: lead-cta-pulse 2.2s ease-out infinite;
+          pointer-events: none;
+        }
+        .lead-cta__pulse--delay {
+          animation-delay: 1.1s;
+        }
+        @keyframes lead-cta-pulse {
+          0% {
+            transform: scale(1);
+            opacity: 0.7;
+          }
+          100% {
+            transform: scale(1.75);
+            opacity: 0;
+          }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .lead-cta__pulse {
+            animation: none;
+            opacity: 0;
+          }
         }
         .back-to-top {
-          bottom: calc(4.75rem + max(16px, env(safe-area-inset-bottom, 0px)));
-        }
-        body.has-lead-bar {
-          padding-bottom: calc(4.75rem + max(16px, env(safe-area-inset-bottom, 0px)));
+          bottom: max(1.25rem, env(safe-area-inset-bottom, 0px));
         }
       }
       #preise.section-mesh {
@@ -3361,10 +3375,16 @@
       </div>
     </dialog>
 
-    <div id="lead-bar" class="lead-bar" role="region" aria-label="Schnellkontakt">
-      <a href="projekt.html" class="lead-bar__primary">Projekt starten</a>
-      <a href="tel:+49151175553093" class="lead-bar__secondary">Anrufen</a>
-    </div>
+    <a
+      id="lead-cta"
+      class="lead-cta is-hidden"
+      href="projekt.html"
+      aria-label="Projekt starten"
+    >
+      <span class="lead-cta__pulse" aria-hidden="true"></span>
+      <span class="lead-cta__pulse lead-cta__pulse--delay" aria-hidden="true"></span>
+      <span class="lead-cta__label">Projekt starten</span>
+    </a>
 
     <button id="back-to-top" type="button" class="back-to-top" aria-label="Nach oben scrollen" hidden>
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
@@ -3919,12 +3939,10 @@
         updateBackToTop();
       })();
 
-      (function initLeadBar() {
-        const bar = document.getElementById('lead-bar');
+      (function initLeadCta() {
+        const cta = document.getElementById('lead-cta');
         const contact = document.getElementById('contact');
-        if (!bar || !window.matchMedia('(max-width: 639px)').matches) return;
-
-        document.body.classList.add('has-lead-bar');
+        if (!cta || !window.matchMedia('(max-width: 639px)').matches) return;
 
         function update() {
           const pastHero = window.scrollY > window.innerHeight * 0.55;
@@ -3933,7 +3951,7 @@
             const rect = contact.getBoundingClientRect();
             nearFooter = rect.top < window.innerHeight - 80;
           }
-          bar.classList.toggle('is-hidden', !pastHero || nearFooter);
+          cta.classList.toggle('is-hidden', !pastHero || nearFooter);
         }
 
         window.addEventListener('scroll', update, { passive: true });
