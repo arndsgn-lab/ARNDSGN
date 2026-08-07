@@ -1124,14 +1124,39 @@
         }
       }
       #hero-content {
-        will-change: transform, opacity;
-        transform: translateZ(0);
+        opacity: max(0, calc(1 - (var(--dive, 0) * 1.2)));
+        transform: translate3d(0, var(--dive-y, 0px), 0);
         backface-visibility: hidden;
       }
       #about {
-        will-change: transform, opacity;
+        position: relative;
+        z-index: 15;
+        isolation: isolate;
+        background-color: #fafaf9;
         transform-origin: center top;
+        transform: translate3d(0, var(--about-y, 100vh), 0);
+        opacity: min(1, calc(var(--dive, 0) * 1.35));
         backface-visibility: hidden;
+        contain: layout paint;
+        pointer-events: none;
+      }
+      #about.is-interactive {
+        pointer-events: auto;
+      }
+      html.is-diving #hero-content,
+      html.is-diving #about {
+        will-change: transform, opacity;
+      }
+      #hero-scroll-hint {
+        opacity: max(0, calc(1 - (var(--dive, 0) * 3)));
+        animation: hero-scroll-pulse 2s ease-in-out infinite;
+      }
+      html.is-diving #hero-scroll-hint,
+      html.is-dive-done #hero-scroll-hint {
+        animation: none;
+      }
+      .about-marquee__track.is-paused {
+        animation-play-state: paused;
       }
       @keyframes hero-scroll-pulse {
         0%,
@@ -1143,9 +1168,6 @@
           transform: translateY(6px);
           opacity: 1;
         }
-      }
-      #hero-scroll-hint {
-        animation: hero-scroll-pulse 2s ease-in-out infinite;
       }
       #hero-scroll-stage {
         position: relative;
@@ -1164,14 +1186,6 @@
         background-color: #fafaf9;
         isolation: isolate;
         overflow: hidden;
-      }
-      #about {
-        position: relative;
-        z-index: 15;
-        isolation: isolate;
-        background-color: #fafaf9;
-        transform: translate3d(0, 100vh, 0);
-        opacity: 0;
       }
       /* Mobile: sticky dive with dynamic viewport height */
       @media (max-width: 639px) {
@@ -1192,10 +1206,12 @@
         #about {
           margin-top: -100vh !important;
           margin-top: -100dvh !important;
-          /* Keep fully below the first viewport until scroll dive starts */
-          transform: translate3d(0, 100vh, 0);
-          opacity: 0;
-          pointer-events: none;
+        }
+        .circular-badge__ring {
+          animation: none !important;
+        }
+        .lead-cta.is-hidden .lead-cta__pulse {
+          animation: none !important;
         }
         .hero-video {
           position: absolute;
@@ -3675,11 +3691,17 @@
         });
       });
 
-      // Header style + auto-hide on scroll
-      (function initHeaderScroll() {
+      // Single scroll orchestrator — one rAF for header, dive, CTA, back-to-top
+      (function initScrollOrchestrator() {
+        const docEl = document.documentElement;
         const header = document.getElementById('home');
         const hero = document.getElementById('hero');
         const stage = document.getElementById('hero-scroll-stage');
+        const about = document.getElementById('about');
+        const backToTop = document.getElementById('back-to-top');
+        const leadCta = document.getElementById('lead-cta');
+        const contact = document.getElementById('contact');
+        const marqueeTrack = document.querySelector('.about-marquee__track');
         const darkSections = [
           document.getElementById('services'),
           document.getElementById('projekt-cta'),
@@ -3687,33 +3709,107 @@
           document.querySelector('footer'),
         ].filter(Boolean);
 
-        if (!header || !hero) return;
-
-        let lastScrollY = window.scrollY;
+        const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const mobileMq = window.matchMedia('(max-width: 639px)');
+        let isMobile = mobileMq.matches;
         let ticking = false;
+        let lastScrollY = window.scrollY;
         let stageHeight = 0;
+        let viewH = window.innerHeight;
+        let lastDive = -1;
+        let diving = false;
+
+        const reducedMotionDive = reducedMotion || !stage || !about;
 
         function measure() {
+          isMobile = mobileMq.matches;
+          viewH = window.innerHeight;
           stageHeight = stage ? stage.offsetHeight : 0;
+          if (!reducedMotionDive) {
+            docEl.style.setProperty('--about-y', viewH + 'px');
+            docEl.style.setProperty('--dive-y', '0px');
+            docEl.style.setProperty('--dive', '0');
+          }
         }
 
-        function updateHeader() {
-          ticking = false;
-          const navHeight = header.offsetHeight || 72;
-          const currentScrollY = window.scrollY;
-          const viewH = window.innerHeight;
+        function easeOutCubic(t) {
+          return 1 - Math.pow(1 - t, 3);
+        }
+
+        function updateDive(stageTop) {
+          if (reducedMotionDive) return;
+
+          const range = stageHeight - viewH;
+          if (range <= 0) return;
+
+          // Outside dive range — snap once and skip work
+          if (stageTop >= 0) {
+            if (lastDive !== 0) {
+              lastDive = 0;
+              docEl.style.setProperty('--dive', '0');
+              docEl.style.setProperty('--dive-y', '0px');
+              docEl.style.setProperty('--about-y', viewH + 'px');
+              docEl.classList.remove('is-diving', 'is-dive-done');
+              about.classList.remove('is-interactive');
+              diving = false;
+            }
+            return;
+          }
+          if (stageTop <= -range) {
+            if (lastDive !== 1) {
+              lastDive = 1;
+              docEl.style.setProperty('--dive', '1');
+              docEl.style.setProperty('--dive-y', isMobile ? '-36px' : '-80px');
+              docEl.style.setProperty('--about-y', '0px');
+              docEl.classList.remove('is-diving');
+              docEl.classList.add('is-dive-done');
+              about.classList.add('is-interactive');
+              diving = false;
+              if (marqueeTrack) marqueeTrack.classList.remove('is-paused');
+            }
+            return;
+          }
+
+          const raw = Math.min(1, Math.max(0, -stageTop / range));
+          if (Math.abs(raw - lastDive) < (isMobile ? 0.012 : 0.006)) return;
+          lastDive = raw;
+
+          const progress = easeOutCubic(raw);
+          const yMove = (isMobile ? -36 : -80) * progress;
+          const aboutY = (1 - progress) * viewH;
+
+          docEl.style.setProperty('--dive', progress.toFixed(4));
+          docEl.style.setProperty('--dive-y', yMove.toFixed(2) + 'px');
+          docEl.style.setProperty('--about-y', aboutY.toFixed(2) + 'px');
+
+          if (!diving) {
+            docEl.classList.add('is-diving');
+            docEl.classList.remove('is-dive-done');
+            diving = true;
+          }
+          about.classList.toggle('is-interactive', progress >= 0.12);
+
+          if (marqueeTrack) {
+            marqueeTrack.classList.toggle('is-paused', progress < 0.35);
+          }
+        }
+
+        function updateHeader(stageTop) {
+          if (!header || !hero) return;
+
+          const navHeight = 72;
+          const currentScrollY = lastScrollY;
 
           let inHeroTop = currentScrollY <= 24;
           if (stage && stageHeight > viewH) {
             const range = stageHeight - viewH;
-            const progress = Math.min(1, Math.max(0, -stage.getBoundingClientRect().top / range));
+            const progress = Math.min(1, Math.max(0, -stageTop / range));
             inHeroTop = progress < 0.04;
           } else {
             inHeroTop = hero.getBoundingClientRect().bottom > viewH * 0.85;
           }
 
-          const heroBottom = hero.getBoundingClientRect().bottom;
-          const pastHero = heroBottom <= navHeight;
+          const pastHero = hero.getBoundingClientRect().bottom <= navHeight;
 
           let overDark = false;
           if (pastHero) {
@@ -3729,35 +3825,83 @@
           header.classList.toggle('is-in-hero', inHeroTop);
           header.classList.toggle('is-scrolled', pastHero && !overDark);
           header.classList.toggle('is-over-dark', pastHero && overDark);
+        }
 
-          const isMobile = window.matchMedia('(max-width: 639px)').matches;
-          if (isMobile) {
-            header.classList.remove('is-hidden');
-          } else if (currentScrollY <= 24) {
-            header.classList.remove('is-hidden');
-          } else if (currentScrollY > lastScrollY + 8) {
-            header.classList.add('is-hidden');
-          } else if (currentScrollY < lastScrollY - 8) {
-            header.classList.remove('is-hidden');
+        let prevScrollY = window.scrollY;
+
+        function updateChrome() {
+          if (!header) return;
+          const currentScrollY = lastScrollY;
+          if (!isMobile) {
+            if (currentScrollY <= 24) {
+              header.classList.remove('is-hidden');
+            } else if (currentScrollY > prevScrollY + 8) {
+              header.classList.add('is-hidden');
+            } else if (currentScrollY < prevScrollY - 8) {
+              header.classList.remove('is-hidden');
+            }
+          }
+          prevScrollY = currentScrollY;
+
+          if (backToTop) {
+            const visible = currentScrollY > 480;
+            backToTop.classList.toggle('is-visible', visible);
+            backToTop.hidden = !visible;
           }
 
-          lastScrollY = currentScrollY;
+          if (leadCta && isMobile) {
+            const pastHero = currentScrollY > viewH * 0.55;
+            let nearFooter = false;
+            if (contact) {
+              nearFooter = contact.getBoundingClientRect().top < viewH - 80;
+            }
+            leadCta.classList.toggle('is-hidden', !pastHero || nearFooter);
+          }
+        }
+
+        function frame() {
+          ticking = false;
+          lastScrollY = window.scrollY;
+          const stageTop = stage ? stage.getBoundingClientRect().top : 0;
+          updateDive(stageTop);
+          updateHeader(stageTop);
+          updateChrome();
         }
 
         function onScroll() {
           if (!ticking) {
             ticking = true;
-            requestAnimationFrame(updateHeader);
+            requestAnimationFrame(frame);
           }
         }
 
         measure();
+        // Start about off-screen / marquee paused until dive progresses
+        if (marqueeTrack) marqueeTrack.classList.add('is-paused');
+        if (reducedMotion && about) {
+          docEl.style.setProperty('--dive', '1');
+          docEl.style.setProperty('--dive-y', '0px');
+          docEl.style.setProperty('--about-y', '0px');
+          about.classList.add('is-interactive');
+        }
+
         window.addEventListener('scroll', onScroll, { passive: true });
-        window.addEventListener('resize', () => {
-          measure();
-          onScroll();
-        }, { passive: true });
-        updateHeader();
+        window.addEventListener(
+          'resize',
+          () => {
+            measure();
+            lastDive = -1;
+            onScroll();
+          },
+          { passive: true }
+        );
+        frame();
+
+        if (backToTop) {
+          backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: reducedMotion ? 'auto' : 'smooth' });
+          });
+        }
       })();
 
       // Autoplay background videos — desktop only; mobile uses still poster
@@ -3777,7 +3921,7 @@
           video.muted = true;
           video.defaultMuted = true;
           video.playsInline = true;
-          video.preload = 'auto';
+          video.preload = 'metadata';
           video.setAttribute('muted', '');
           video.setAttribute('playsinline', '');
           video.setAttribute('webkit-playsinline', '');
@@ -3790,9 +3934,7 @@
             video.muted = true;
             const attempt = video.play();
             if (attempt && typeof attempt.then === 'function') {
-              attempt
-                .then(markReady)
-                .catch(() => {});
+              attempt.then(markReady).catch(() => {});
             } else if (!video.paused) {
               markReady();
             }
@@ -3817,85 +3959,6 @@
             } catch (_) {}
           }
         });
-      })();
-
-      // Hero → About dive-in on scroll
-      (function initHeroDive() {
-        const stage = document.getElementById('hero-scroll-stage');
-        const heroContent = document.getElementById('hero-content');
-        const about = document.getElementById('about');
-        const scrollHint = document.getElementById('hero-scroll-hint');
-
-        if (!stage || !heroContent || !about) return;
-
-        const isMobile = window.matchMedia('(max-width: 639px)').matches;
-        const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-        if (reducedMotion) return;
-
-        let ticking = false;
-        let scrollRange = 0;
-        let lastProgress = -1;
-
-        function measure() {
-          scrollRange = stage.offsetHeight - window.innerHeight;
-        }
-
-        function clamp(value, min, max) {
-          return Math.min(max, Math.max(min, value));
-        }
-
-        function easeOutCubic(t) {
-          return 1 - Math.pow(1 - t, 3);
-        }
-
-        function updateHeroDive() {
-          ticking = false;
-          if (scrollRange <= 0) return;
-
-          const raw = clamp(-stage.getBoundingClientRect().top / scrollRange, 0, 1);
-          // Skip tiny updates to cut style thrash
-          if (Math.abs(raw - lastProgress) < 0.004 && raw !== 0 && raw !== 1) return;
-          lastProgress = raw;
-
-          const progress = easeOutCubic(raw);
-          const yMove = isMobile ? -progress * 36 : -progress * 80;
-          const aboutLift = (1 - progress) * 100;
-          const scale = isMobile ? 1 : 1 - progress * 0.08;
-          const aboutScale = isMobile ? 1 : 0.92 + progress * 0.08;
-
-          heroContent.style.opacity = String(clamp(1 - progress * 1.2, 0, 1));
-          heroContent.style.transform = `translate3d(0, ${yMove}px, 0) scale(${scale})`;
-          // Avoid filter:blur during scroll — major jank source on mobile GPUs
-
-          about.style.transform = `translate3d(0, ${aboutLift}vh, 0) scale(${aboutScale})`;
-          about.style.opacity = String(clamp(progress * 1.35, 0, 1));
-          about.style.pointerEvents = progress < 0.12 ? 'none' : '';
-
-          if (scrollHint) {
-            scrollHint.style.opacity = String(clamp(1 - progress * 3, 0, 1));
-          }
-        }
-
-        function onScroll() {
-          if (!ticking) {
-            ticking = true;
-            requestAnimationFrame(updateHeroDive);
-          }
-        }
-
-        measure();
-        window.addEventListener('scroll', onScroll, { passive: true });
-        window.addEventListener(
-          'resize',
-          () => {
-            measure();
-            lastProgress = -1;
-            onScroll();
-          },
-          { passive: true }
-        );
-        updateHeroDive();
       })();
 
       // Portfolio stack depth unused in CSS — skip scroll work
@@ -3987,69 +4050,6 @@
         );
 
         items.forEach((el) => io.observe(el));
-      })();
-
-      (function initBackToTop() {
-        const button = document.getElementById('back-to-top');
-        if (!button) return;
-
-        const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        let ticking = false;
-
-        function updateBackToTop() {
-          ticking = false;
-          const visible = window.scrollY > 480;
-          button.classList.toggle('is-visible', visible);
-          button.hidden = !visible;
-        }
-
-        button.addEventListener('click', () => {
-          window.scrollTo({ top: 0, behavior: reducedMotion ? 'auto' : 'smooth' });
-        });
-
-        window.addEventListener(
-          'scroll',
-          () => {
-            if (!ticking) {
-              ticking = true;
-              requestAnimationFrame(updateBackToTop);
-            }
-          },
-          { passive: true }
-        );
-        updateBackToTop();
-      })();
-
-      (function initLeadCta() {
-        const cta = document.getElementById('lead-cta');
-        const contact = document.getElementById('contact');
-        if (!cta || !window.matchMedia('(max-width: 639px)').matches) return;
-
-        let ticking = false;
-
-        function update() {
-          ticking = false;
-          const pastHero = window.scrollY > window.innerHeight * 0.55;
-          let nearFooter = false;
-          if (contact) {
-            const rect = contact.getBoundingClientRect();
-            nearFooter = rect.top < window.innerHeight - 80;
-          }
-          cta.classList.toggle('is-hidden', !pastHero || nearFooter);
-        }
-
-        window.addEventListener(
-          'scroll',
-          () => {
-            if (!ticking) {
-              ticking = true;
-              requestAnimationFrame(update);
-            }
-          },
-          { passive: true }
-        );
-        window.addEventListener('resize', update, { passive: true });
-        update();
       })();
     </script>
     <script src="js/cookie-consent.js" defer></script>
