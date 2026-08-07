@@ -214,14 +214,14 @@
       html {
         overflow-x: clip;
         max-width: 100%;
-        background-color: #3a454c;
+        background-color: #000;
         min-height: 100%;
       }
       body {
         overflow-x: clip;
         max-width: 100%;
         position: relative;
-        background-color: #3a454c;
+        background-color: #000;
         margin: 0;
         min-height: 100vh;
         min-height: 100dvh;
@@ -1131,9 +1131,10 @@
         #about {
           margin-top: -100vh !important;
           margin-top: -100dvh !important;
-          /* Before JS runs: keep About fully below the first viewport */
-          transform: translate3d(0, 55vh, 0);
-          opacity: 0.35;
+          /* Keep fully below the first viewport until scroll dive starts */
+          transform: translate3d(0, 100vh, 0);
+          opacity: 0;
+          pointer-events: none;
         }
         .hero-video {
           position: absolute;
@@ -1215,8 +1216,7 @@
         position: absolute;
         inset: 0;
         z-index: 2;
-        background:
-          linear-gradient(180deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.32) 50%, rgba(0, 0, 0, 0.42) 100%);
+        background: rgba(0, 0, 0, 0.38);
       }
       .hero-mesh {
         background-color: #fafaf9;
@@ -3745,7 +3745,7 @@
 
           const yMove = isMobile ? -progress * 36 : -progress * 80;
           const blurAmt = isMobile ? progress * 2.5 : progress * 5;
-          const aboutLift = isMobile ? (1 - progress) * 55 : (1 - progress) * 38;
+          const aboutLift = (1 - progress) * 100;
 
           heroContent.style.opacity = String(clamp(1 - progress * 1.2, 0, 1));
           heroContent.style.transform = `translate3d(0, ${yMove}px, 0) scale(${1 - progress * (isMobile ? 0.04 : 0.08)})`;
@@ -3753,7 +3753,7 @@
 
           about.style.transform = `translate3d(0, ${aboutLift}vh, 0) scale(${0.92 + progress * 0.08})`;
           about.style.borderRadius = '0';
-          about.style.opacity = String(isMobile ? 0.35 + progress * 0.65 : 0.55 + progress * 0.45);
+          about.style.opacity = String(clamp(progress * 1.35, 0, 1));
           about.style.boxShadow = 'none';
           about.style.pointerEvents = progress < 0.12 ? 'none' : '';
 
