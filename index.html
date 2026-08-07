@@ -1705,7 +1705,7 @@
           radial-gradient(ellipse 80% 70% at 12% 20%, rgba(45, 90, 80, 0.45), transparent 58%),
           radial-gradient(ellipse 65% 55% at 88% 78%, rgba(255, 255, 255, 0.08), transparent 52%),
           linear-gradient(145deg, #1a3a34 0%, #142e29 48%, #0f2420 100%);
-        padding: 2.5rem 1.75rem 2.75rem;
+        padding: 2.5rem 1.35rem 2.75rem;
         color: #fff;
         box-shadow: none;
         min-height: auto;
@@ -1713,6 +1713,10 @@
         display: grid;
         grid-template-columns: 1fr;
         gap: 0;
+      }
+      .price-card:has(.price-card__badge) .price-card__name,
+      .price-card:has(.price-card__badge) .price-card__label {
+        padding-right: 6.5rem;
       }
       @media (min-width: 768px) {
         .price-card {
@@ -1767,18 +1771,26 @@
       }
       .price-card__name {
         margin: 0;
-        font-size: clamp(2.5rem, 6vw, 3.75rem);
+        max-width: 100%;
+        font-size: clamp(1.85rem, 7.2vw, 3.75rem);
         font-weight: 700;
-        line-height: 0.95;
+        line-height: 1.08;
         letter-spacing: -0.03em;
         color: #fff;
+        overflow-wrap: anywhere;
+        word-break: break-word;
+        hyphens: auto;
       }
       .price-card__price {
         margin-top: 1rem;
-        font-size: clamp(1.85rem, 4vw, 2.5rem);
+        max-width: 100%;
+        font-size: clamp(1.45rem, 5.5vw, 2.5rem);
         font-weight: 700;
         letter-spacing: -0.02em;
+        line-height: 1.15;
         color: #fff;
+        overflow-wrap: anywhere;
+        word-break: break-word;
       }
       @media (min-width: 768px) {
         .price-card__price {
@@ -1791,14 +1803,24 @@
         }
       }
       .price-card__price span {
-        display: inline;
-        margin-left: 0.45rem;
-        font-size: 0.8125rem;
+        display: block;
+        margin-left: 0;
+        margin-top: 0.35rem;
+        font-size: 0.75rem;
         font-weight: 600;
-        letter-spacing: 0.14em;
+        letter-spacing: 0.12em;
         text-transform: uppercase;
         color: rgba(255, 255, 255, 0.5);
         vertical-align: middle;
+      }
+      @media (min-width: 480px) {
+        .price-card__price span {
+          display: inline;
+          margin-left: 0.45rem;
+          margin-top: 0;
+          font-size: 0.8125rem;
+          letter-spacing: 0.14em;
+        }
       }
       @media (min-width: 768px) {
         .price-card__price span {
