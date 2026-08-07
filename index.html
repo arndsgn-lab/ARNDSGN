@@ -4,8 +4,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="theme-color" content="#fafaf9" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#fafaf9" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#fafaf9" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="color-scheme" content="light only" />
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
     <meta name="author" content="ARNDESIGN" />
     <link rel="canonical" href="https://arndsgn.com/" />
@@ -215,6 +218,7 @@
         overflow-x: clip;
         max-width: 100%;
         background-color: #fafaf9;
+        color-scheme: only light;
         min-height: 100%;
       }
       body {
@@ -222,9 +226,30 @@
         max-width: 100%;
         position: relative;
         background-color: #fafaf9;
+        color-scheme: only light;
         margin: 0;
         min-height: 100vh;
         min-height: 100dvh;
+      }
+      /*
+        iOS Safari 26+ tints status/toolbar from sticky/fixed background-color.
+        Keep edge probes + sticky hero CSS bg light; dark media stays on inner layers.
+      */
+      .safari-chrome-tint {
+        position: fixed;
+        left: 0;
+        width: 100%;
+        height: 12px;
+        background-color: #fafaf9;
+        pointer-events: none;
+        /* Behind content — Safari still samples fixed bg for toolbar tint */
+        z-index: 0;
+      }
+      .safari-chrome-tint--top {
+        top: 0;
+      }
+      .safari-chrome-tint--bottom {
+        bottom: 0;
       }
       /* Below-fold: defer layout/paint work */
       #services,
@@ -1102,7 +1127,8 @@
         height: 100dvh;
         margin-top: 0;
         padding-top: calc(5rem + max(16px, env(safe-area-inset-top, 0px)));
-        background: #000;
+        /* Light bg for Safari chrome sampling; dark look comes from .hero-video */
+        background-color: #fafaf9;
         isolation: isolate;
         overflow: hidden;
       }
@@ -1455,7 +1481,9 @@
           width: 5.25rem;
           height: 5.25rem;
           border-radius: 9999px;
-          background: #1a3a34;
+          /* Light bg-color so Safari bottom chrome stays light; green via image */
+          background-color: #fafaf9;
+          background-image: linear-gradient(#1a3a34, #1a3a34);
           color: #fff;
           text-decoration: none;
           box-shadow:
@@ -2179,6 +2207,8 @@
     </script>
   </head>
   <body class="bg-stone-50 font-sans text-slate-ink antialiased">
+    <div class="safari-chrome-tint safari-chrome-tint--top" aria-hidden="true"></div>
+    <div class="safari-chrome-tint safari-chrome-tint--bottom" aria-hidden="true"></div>
     <!-- 1. Navigation -->
     <header
       id="home"
