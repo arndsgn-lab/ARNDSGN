@@ -4,8 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="theme-color" media="(max-width: 639px)" content="#eef3f0" />
+    <meta name="theme-color" media="(min-width: 640px)" content="#000000" />
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
     <meta name="author" content="ARNDESIGN" />
     <link rel="canonical" href="https://arndsgn.com/" />
@@ -231,6 +233,12 @@
         min-height: 100lvh;
         min-height: -webkit-fill-available;
       }
+      @media (max-width: 639px) {
+        html,
+        body {
+          background-color: #eef3f0;
+        }
+      }
       /* Below-fold: defer layout/paint work */
       #services,
       #portfolio,
@@ -313,6 +321,17 @@
       #home #menu-toggle {
         color: #fff;
         transition: color 0.3s ease;
+      }
+      @media (max-width: 639px) {
+        #home.is-in-hero .nav-link {
+          color: rgba(26, 58, 52, 0.72);
+        }
+        #home.is-in-hero .nav-link:hover {
+          color: #1a3a34;
+        }
+        #home.is-in-hero #menu-toggle {
+          color: #1a3a34;
+        }
       }
       /* Transparent nav bar — only link colors adapt */
       #home.is-scrolled {
@@ -1105,7 +1124,9 @@
       }
       #hero-content {
         position: relative;
-        z-index: 2;
+        z-index: 10;
+        flex: 0 1 auto;
+        width: 100%;
         opacity: max(0, calc(1 - (var(--dive, 0) * 1.2)));
         transform: translate3d(0, var(--dive-y, 0px), 0);
         backface-visibility: hidden;
@@ -1143,11 +1164,11 @@
       @keyframes hero-scroll-pulse {
         0%,
         100% {
-          transform: translateY(0);
+          transform: translate3d(-50%, 0, 0);
           opacity: 0.45;
         }
         50% {
-          transform: translateY(6px);
+          transform: translate3d(-50%, 6px, 0);
           opacity: 1;
         }
       }
@@ -1161,6 +1182,10 @@
         top: 0;
         left: 0;
         z-index: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: stretch;
         width: 100%;
         height: 100vh;
         height: 100dvh;
@@ -1168,11 +1193,13 @@
         min-height: 100dvh;
         min-height: -webkit-fill-available;
         margin: 0;
-        padding-top: calc(5rem + env(safe-area-inset-top, 0px));
-        padding-bottom: env(safe-area-inset-bottom, 0px);
+        padding-top: calc(5.5rem + env(safe-area-inset-top, 0px));
+        padding-bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px));
+        box-sizing: border-box;
         background-color: #000;
         isolation: isolate;
         overflow: hidden;
+        color: #fff;
       }
       .hero-video {
         position: absolute;
@@ -1180,9 +1207,17 @@
         z-index: 0;
         width: 100%;
         height: 100%;
+        min-height: 100%;
         overflow: hidden;
         background-color: #000;
         pointer-events: none;
+      }
+      .hero-video picture {
+        position: absolute;
+        inset: 0;
+        display: block;
+        width: 100%;
+        height: 100%;
       }
       .hero-video__poster {
         position: absolute;
@@ -1190,10 +1225,12 @@
         z-index: 0;
         width: 100%;
         height: 100%;
+        max-width: none;
         object-fit: cover;
         object-position: center center;
         display: block;
         background-color: #000;
+        transform: none;
       }
       .hero-video__media {
         position: absolute;
@@ -1201,10 +1238,12 @@
         z-index: 1;
         width: 100%;
         height: 100%;
+        max-width: none;
         object-fit: cover;
         object-position: center center;
         opacity: 0;
         transition: opacity 0.55s ease;
+        transform: none;
       }
       .hero-video__media.is-ready {
         opacity: 1;
@@ -1213,16 +1252,60 @@
         position: absolute;
         inset: 0;
         z-index: 2;
+        width: 100%;
+        height: 100%;
         background: rgba(0, 0, 0, 0.38);
+        pointer-events: none;
+      }
+      #hero-scroll-hint {
+        position: absolute;
+        left: 50%;
+        bottom: max(1.25rem, env(safe-area-inset-bottom, 0px));
+        z-index: 12;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        transform: translate3d(-50%, 0, 0);
+        color: rgba(255, 255, 255, 0.6);
+        pointer-events: none;
       }
       @media (max-width: 639px) {
         #hero-scroll-stage {
-          height: 220vh !important;
-          height: 220dvh !important;
+          height: auto !important;
+          min-height: 100vh;
+          min-height: 100dvh;
+        }
+        /* Large green brand mark — mobile: only while in hero */
+        #home.is-in-hero .site-logo-wrap {
+          width: 6.5rem;
+          height: 5rem;
+          overflow: visible;
+        }
+        #home.is-in-hero .site-logo {
+          left: -2.25rem;
+          height: 10.5rem;
+          max-width: none;
+          transform: translateY(calc(-50% + 2.35rem));
+          filter: brightness(0) saturate(100%) invert(16%) sepia(28%) saturate(1200%)
+            hue-rotate(118deg) brightness(0.92) contrast(1.05);
+        }
+        #home.is-scrolled .site-logo-wrap,
+        #home.is-over-dark .site-logo-wrap,
+        #home:not(.is-in-hero) .site-logo-wrap {
+          opacity: 0 !important;
+          visibility: hidden !important;
+          pointer-events: none !important;
+        }
+        #home.is-scrolled .site-logo,
+        #home.is-over-dark .site-logo,
+        #home:not(.is-in-hero) .site-logo {
+          opacity: 0 !important;
+          visibility: hidden !important;
         }
         #hero {
-          position: sticky !important;
-          top: 0 !important;
+          position: relative !important;
+          top: auto !important;
           height: 100vh !important;
           height: 100dvh !important;
           min-height: 100vh !important;
@@ -1230,22 +1313,85 @@
           min-height: -webkit-fill-available !important;
           max-height: none !important;
           overflow: hidden;
+          justify-content: flex-start !important;
+          padding-top: calc(4.75rem + env(safe-area-inset-top, 0px)) !important;
+          padding-bottom: calc(4.5rem + env(safe-area-inset-bottom, 0px)) !important;
+          background-color: #eef3f0 !important;
+          background-image:
+            radial-gradient(ellipse 90% 55% at 12% 0%, rgba(26, 58, 52, 0.07), transparent 58%),
+            radial-gradient(ellipse 70% 45% at 88% 18%, rgba(45, 90, 80, 0.05), transparent 55%),
+            linear-gradient(180deg, #f4f7f5 0%, #eef3f0 48%, #e8efeb 100%);
+          color: #1a3a34;
+        }
+        .hero-video {
+          display: none !important;
+        }
+        #hero-content {
+          padding-top: 2.35rem;
+          opacity: 1 !important;
+          transform: none !important;
+        }
+        #hero-content .max-w-3xl > p:first-child {
+          margin-bottom: 0.85rem;
+          font-size: 0.78rem;
+          letter-spacing: 0.18em;
+          color: rgba(26, 58, 52, 0.62) !important;
+        }
+        #hero-content h1 {
+          font-size: 2.35rem;
+          line-height: 1.08;
+          letter-spacing: -0.03em;
+          color: #1a3a34 !important;
+        }
+        #hero-content .max-w-3xl > p.mt-4 {
+          margin-top: 1.1rem;
+          font-size: 1.08rem;
+          line-height: 1.55;
+          color: rgba(26, 58, 52, 0.82) !important;
+        }
+        #hero-content .hero-cta-row {
+          margin-top: 1.75rem;
+          gap: 0.7rem;
+          align-items: stretch;
+        }
+        #hero-content .hero-cta-row > a[href='projekt.html'],
+        #hero-content .hero-cta-row > a[href='#portfolio'] {
+          padding-top: 0.95rem;
+          padding-bottom: 0.95rem;
+          font-size: 1rem;
+        }
+        #hero-content .hero-cta-row > a[href='#portfolio'] {
+          border-color: rgba(26, 58, 52, 0.28) !important;
+          background: rgba(26, 58, 52, 0.05) !important;
+          color: #1a3a34 !important;
+          backdrop-filter: none;
+        }
+        #hero-content .hero-cta-row > a[href='#services'] {
+          color: rgba(26, 58, 52, 0.78) !important;
+          font-size: 1rem;
+        }
+        #hero-content .hero-cta-row > a:last-child {
+          align-self: flex-start;
+          justify-content: flex-start;
+          margin-top: 0.25rem;
+          padding-left: 0.15rem;
+        }
+        #hero-scroll-hint {
+          bottom: max(1rem, env(safe-area-inset-bottom, 0px));
+          color: rgba(26, 58, 52, 0.45);
+          opacity: 1;
         }
         #about {
-          margin-top: -100vh !important;
-          margin-top: -100dvh !important;
+          margin-top: 0 !important;
+          transform: none !important;
+          opacity: 1 !important;
+          pointer-events: auto !important;
         }
         .circular-badge__ring {
           animation: none !important;
         }
         .lead-cta.is-hidden .lead-cta__pulse {
           animation: none !important;
-        }
-        .hero-video__media {
-          display: none !important;
-        }
-        .hero-video__poster {
-          object-position: center center;
         }
         .reveal-on-scroll {
           opacity: 0;
@@ -1267,8 +1413,21 @@
           top: 0;
           height: 100vh;
           height: 100dvh;
-          padding-top: 0;
-          padding-bottom: 0;
+          min-height: 100vh;
+          min-height: 100dvh;
+          padding-top: 6.5rem;
+          padding-bottom: 5.5rem;
+        }
+        .hero-video__poster,
+        .hero-video__media {
+          object-fit: cover;
+          object-position: center center;
+        }
+      }
+      @media (min-aspect-ratio: 16/9) {
+        .hero-video__poster,
+        .hero-video__media {
+          object-position: center 48%;
         }
       }
       .hero-mesh {
@@ -2205,6 +2364,141 @@
       #home.is-over-dark .nav-cta:hover {
         background: rgba(255, 255, 255, 0.92);
       }
+      /* Mobile nav popup */
+      .nav-popup {
+        position: fixed;
+        inset: 0;
+        z-index: 200;
+        display: flex;
+        align-items: stretch;
+        justify-content: flex-end;
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transition: opacity 0.28s ease, visibility 0.28s ease;
+      }
+      .nav-popup.is-open {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+      }
+      .nav-popup__backdrop {
+        position: absolute;
+        inset: 0;
+        background: rgba(28, 25, 23, 0.42);
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+        border: 0;
+        padding: 0;
+        cursor: pointer;
+      }
+      .nav-popup__panel {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        width: min(100%, 22rem);
+        height: 100%;
+        max-height: 100dvh;
+        margin: 0;
+        padding:
+          max(1.25rem, env(safe-area-inset-top, 0px))
+          max(1.25rem, env(safe-area-inset-right, 0px))
+          max(1.5rem, env(safe-area-inset-bottom, 0px))
+          1.35rem;
+        background:
+          radial-gradient(ellipse 90% 50% at 100% 0%, rgba(26, 58, 52, 0.06), transparent 55%),
+          linear-gradient(180deg, #fafaf9 0%, #f5f3ef 100%);
+        box-shadow: -12px 0 40px rgba(28, 25, 23, 0.14);
+        transform: translate3d(100%, 0, 0);
+        transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+      .nav-popup.is-open .nav-popup__panel {
+        transform: translate3d(0, 0, 0);
+      }
+      .nav-popup__top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        margin-bottom: 1.75rem;
+      }
+      .nav-popup__label {
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: rgba(26, 58, 52, 0.55);
+      }
+      .nav-popup__close {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.5rem;
+        height: 2.5rem;
+        border: 0;
+        border-radius: 9999px;
+        background: rgba(26, 58, 52, 0.08);
+        color: #1a3a34;
+        cursor: pointer;
+      }
+      .nav-popup__close:hover {
+        background: rgba(26, 58, 52, 0.14);
+      }
+      .nav-popup__list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.15rem;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+      .nav-popup__list a {
+        display: block;
+        padding: 0.95rem 0.35rem;
+        border-bottom: 1px solid rgba(26, 58, 52, 0.1);
+        color: #1a3a34;
+        font-size: 1.2rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        text-decoration: none;
+        transition: color 0.2s ease, padding-left 0.2s ease;
+      }
+      .nav-popup__list a:hover,
+      .nav-popup__list a:focus-visible {
+        color: #142e29;
+        padding-left: 0.45rem;
+        outline: none;
+      }
+      .nav-popup__cta {
+        margin-top: 1.75rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        border-radius: 9999px;
+        background: #1a3a34;
+        color: #fff !important;
+        font-size: 1rem !important;
+        font-weight: 700;
+        padding: 1rem 1.25rem !important;
+        border-bottom: 0 !important;
+        text-decoration: none;
+      }
+      .nav-popup__cta:hover {
+        background: #142e29;
+        padding-left: 1.25rem !important;
+      }
+      body.nav-popup-open {
+        overflow: hidden;
+      }
+      @media (min-width: 768px) {
+        .nav-popup {
+          display: none !important;
+        }
+      }
     </style>
     <link rel="stylesheet" href="css/cookie-consent.css" media="print" onload="this.media='all'" />
     <noscript><link rel="stylesheet" href="css/cookie-consent.css" /></noscript>
@@ -2319,41 +2613,54 @@
             class="inline-flex rounded-lg border border-transparent p-2 md:hidden"
             aria-label="Menü öffnen"
             aria-expanded="false"
+            aria-controls="mobile-menu"
           >
             <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
               <path id="menu-icon-open" stroke-linecap="round" d="M4 7h16M4 12h16M4 17h16" />
+              <path id="menu-icon-close" class="hidden" stroke-linecap="round" d="M6 6l12 12M18 6L6 18" />
             </svg>
           </button>
         </div>
       </nav>
-
-      <div id="mobile-menu" class="hidden border-t border-stone-200 bg-stone-50 px-5 py-4 md:hidden">
-        <ul class="flex flex-col gap-4">
-          <li><a href="#hero" class="mobile-link block text-sm font-medium">Home</a></li>
-          <li><a href="#services" class="mobile-link block text-sm font-medium">Services</a></li>
-          <li><a href="#portfolio" class="mobile-link block text-sm font-medium">Referenzen</a></li>
-          <li><a href="#preise" class="mobile-link block text-sm font-medium">Preise</a></li>
-          <li><a href="#faq" class="mobile-link block text-sm font-medium">FAQ</a></li>
-          <li><a href="ueber-uns.html" class="mobile-link block text-sm font-medium">Über uns</a></li>
-          <li><a href="projekt.html#anfrage" class="mobile-link block text-sm font-medium">Kontakt</a></li>
-          <li>
-            <a
-              href="projekt.html"
-              class="mobile-link mt-2 inline-flex rounded-full bg-accent px-6 py-3 text-base font-bold text-white"
-            >
-              Projekt starten
-            </a>
-          </li>
-        </ul>
-      </div>
     </header>
+
+    <div
+      id="mobile-menu"
+      class="nav-popup md:hidden"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="nav-popup-title"
+      hidden
+    >
+      <button type="button" class="nav-popup__backdrop" data-nav-popup-close aria-label="Menü schließen"></button>
+      <div class="nav-popup__panel">
+        <div class="nav-popup__top">
+          <p id="nav-popup-title" class="nav-popup__label">Navigation</p>
+          <button type="button" class="nav-popup__close" data-nav-popup-close aria-label="Menü schließen">
+            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" d="M6 6l12 12M18 6L6 18" />
+            </svg>
+          </button>
+        </div>
+        <ul class="nav-popup__list">
+          <li><a href="#hero" class="mobile-link">Home</a></li>
+          <li><a href="#services" class="mobile-link">Services</a></li>
+          <li><a href="#portfolio" class="mobile-link">Referenzen</a></li>
+          <li><a href="#preise" class="mobile-link">Preise</a></li>
+          <li><a href="#faq" class="mobile-link">FAQ</a></li>
+          <li><a href="ueber-uns.html" class="mobile-link">Über uns</a></li>
+          <li><a href="projekt.html#anfrage" class="mobile-link">Kontakt</a></li>
+        </ul>
+        <a href="projekt.html" class="mobile-link nav-popup__cta">Projekt starten</a>
+      </div>
+    </div>
 
     <main>
       <!-- 2. Hero — scroll stage: rein in Section 2 tauchen -->
       <div id="hero-scroll-stage" class="relative h-[200vh] h-[200dvh]">
         <section
           id="hero"
-          class="sticky z-[1] flex items-center overflow-hidden px-5 pb-8 sm:px-8 sm:pb-0"
+          class="relative z-[1] overflow-hidden px-5 sm:sticky sm:px-8"
         >
           <div class="hero-video pointer-events-none" aria-hidden="true">
             <picture>
@@ -2397,11 +2704,11 @@
               >
                 Webdesign, auf das Sie sich verlassen können
               </h1>
-              <p class="mt-4 max-w-2xl text-[0.95rem] leading-relaxed text-white sm:mt-6 sm:text-xl">
+              <p class="mt-4 max-w-2xl text-[0.95rem] leading-relaxed text-white/95 sm:mt-6 sm:text-xl">
                 Wir gestalten digitale Erlebnisse, die Vertrauen aufbauen und Besucher in Kunden
                 verwandeln — persönlich unterwegs im Westerwald, Koblenz, Frankfurt, Köln und Düsseldorf.
               </p>
-              <div class="mt-7 flex flex-col items-stretch gap-3 sm:mt-10 sm:flex-row sm:flex-wrap sm:items-center sm:gap-5">
+              <div class="hero-cta-row mt-7 flex flex-col items-stretch gap-3 sm:mt-10 sm:flex-row sm:flex-wrap sm:items-center sm:gap-5">
                 <a
                   href="projekt.html"
                   class="inline-flex items-center justify-center rounded-full bg-accent px-7 py-3.5 text-sm font-bold text-white shadow-soft transition-all hover:bg-accent-hover hover:shadow-card active:scale-[0.98] sm:px-9 sm:py-4 sm:text-lg"
@@ -2416,7 +2723,7 @@
                 </a>
                 <a
                   href="#services"
-                  class="group inline-flex items-center justify-center gap-2 px-1 py-1 text-sm font-semibold text-white/85 transition-colors hover:text-white sm:justify-start sm:text-base"
+                  class="group inline-flex items-center justify-start gap-2 self-start px-1 py-1 text-sm font-semibold text-white/85 transition-colors hover:text-white sm:text-base"
                 >
                   Services
                   <span
@@ -2431,7 +2738,6 @@
 
           <div
             id="hero-scroll-hint"
-            class="pointer-events-none absolute bottom-8 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-2 text-white/60"
             aria-hidden="true"
           >
             <span class="text-[0.65rem] font-semibold uppercase tracking-[0.22em]">Scroll</span>
@@ -3464,22 +3770,42 @@
         }
       });
 
-      // Mobile menu
+      // Mobile menu popup
       const menuToggle = document.getElementById('menu-toggle');
       const mobileMenu = document.getElementById('mobile-menu');
+      const menuIconOpen = document.getElementById('menu-icon-open');
+      const menuIconClose = document.getElementById('menu-icon-close');
 
-      menuToggle.addEventListener('click', () => {
-        const isOpen = !mobileMenu.classList.contains('hidden');
-        mobileMenu.classList.toggle('hidden');
-        menuToggle.setAttribute('aria-expanded', String(!isOpen));
-      });
+      function setNavPopupOpen(open) {
+        if (!menuToggle || !mobileMenu) return;
+        mobileMenu.classList.toggle('is-open', open);
+        mobileMenu.hidden = !open;
+        menuToggle.setAttribute('aria-expanded', String(open));
+        menuToggle.setAttribute('aria-label', open ? 'Menü schließen' : 'Menü öffnen');
+        document.body.classList.toggle('nav-popup-open', open);
+        if (menuIconOpen) menuIconOpen.classList.toggle('hidden', open);
+        if (menuIconClose) menuIconClose.classList.toggle('hidden', !open);
+      }
 
-      document.querySelectorAll('.mobile-link').forEach((link) => {
-        link.addEventListener('click', () => {
-          mobileMenu.classList.add('hidden');
-          menuToggle.setAttribute('aria-expanded', 'false');
+      if (menuToggle && mobileMenu) {
+        menuToggle.addEventListener('click', () => {
+          setNavPopupOpen(!mobileMenu.classList.contains('is-open'));
         });
-      });
+
+        mobileMenu.querySelectorAll('[data-nav-popup-close]').forEach((el) => {
+          el.addEventListener('click', () => setNavPopupOpen(false));
+        });
+
+        document.querySelectorAll('.mobile-link').forEach((link) => {
+          link.addEventListener('click', () => setNavPopupOpen(false));
+        });
+
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && mobileMenu.classList.contains('is-open')) {
+            setNavPopupOpen(false);
+          }
+        });
+      }
 
       // Services tabs
       const tabButtons = document.querySelectorAll('.tab-btn');
@@ -3697,7 +4023,7 @@
           isMobile = mobileMq.matches;
           viewH = window.innerHeight;
           stageHeight = stage ? stage.offsetHeight : 0;
-          if (!reducedMotionDive) {
+          if (!reducedMotionDive && !isMobile) {
             docEl.style.setProperty('--about-y', viewH + 'px');
             docEl.style.setProperty('--dive-y', '0px');
             docEl.style.setProperty('--dive', '0');
@@ -3706,6 +4032,20 @@
 
         function updateDive(stageTop) {
           if (reducedMotionDive) return;
+          // Mobile: fixed hero — no dive overlay animation
+          if (isMobile) {
+            if (lastDive !== 1) {
+              lastDive = 1;
+              docEl.style.setProperty('--dive', '1');
+              docEl.style.setProperty('--dive-y', '0px');
+              docEl.style.setProperty('--about-y', '0px');
+              docEl.classList.remove('is-diving');
+              docEl.classList.add('is-dive-done');
+              about.classList.add('is-interactive');
+              if (marqueeTrack) marqueeTrack.classList.remove('is-paused');
+            }
+            return;
+          }
 
           const range = stageHeight - viewH;
           if (range <= 0) return;
@@ -3766,17 +4106,21 @@
 
           const navHeight = 72;
           const currentScrollY = lastScrollY;
+          const heroRect = hero.getBoundingClientRect();
 
-          let inHeroTop = currentScrollY <= 24;
-          if (stage && stageHeight > viewH) {
+          let inHeroTop;
+          if (isMobile) {
+            // Logo only at the very top of the hero — hide as soon as scrolling starts
+            inHeroTop = currentScrollY <= 8;
+          } else if (stage && stageHeight > viewH) {
             const range = stageHeight - viewH;
             const progress = Math.min(1, Math.max(0, -stageTop / range));
             inHeroTop = progress < 0.04;
           } else {
-            inHeroTop = hero.getBoundingClientRect().bottom > viewH * 0.85;
+            inHeroTop = currentScrollY <= 24 || heroRect.bottom > viewH * 0.85;
           }
 
-          const pastHero = hero.getBoundingClientRect().bottom <= navHeight;
+          const pastHero = heroRect.bottom <= navHeight;
 
           let overDark = false;
           if (pastHero) {
@@ -3843,13 +4187,22 @@
         }
 
         measure();
-        // Start about off-screen / marquee paused until dive progresses
+        // Start about off-screen / marquee paused until dive progresses (desktop)
         if (marqueeTrack) marqueeTrack.classList.add('is-paused');
         if (reducedMotion && about) {
           docEl.style.setProperty('--dive', '1');
           docEl.style.setProperty('--dive-y', '0px');
           docEl.style.setProperty('--about-y', '0px');
           about.classList.add('is-interactive');
+        }
+        if (isMobile && about) {
+          docEl.style.setProperty('--dive', '1');
+          docEl.style.setProperty('--dive-y', '0px');
+          docEl.style.setProperty('--about-y', '0px');
+          docEl.classList.add('is-dive-done');
+          about.classList.add('is-interactive');
+          if (marqueeTrack) marqueeTrack.classList.remove('is-paused');
+          lastDive = 1;
         }
 
         window.addEventListener('scroll', onScroll, { passive: true });
