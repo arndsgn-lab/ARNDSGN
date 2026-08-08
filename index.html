@@ -1154,9 +1154,9 @@
       #hero-scroll-stage {
         position: relative;
         z-index: 1;
-        isolation: auto;
+        isolation: isolate;
       }
-      /* Hero section — content only; media is viewport-fixed (see .hero-video) */
+      /* Hero — sticky fullscreen section with absolute media fill */
       #hero {
         top: 0;
         left: 0;
@@ -1166,35 +1166,23 @@
         height: 100dvh;
         min-height: 100vh;
         min-height: 100dvh;
-        min-height: 100lvh;
         min-height: -webkit-fill-available;
-        margin-top: 0;
+        margin: 0;
         padding-top: calc(5rem + env(safe-area-inset-top, 0px));
         padding-bottom: env(safe-area-inset-bottom, 0px);
-        background-color: transparent;
-        overflow: visible;
+        background-color: #000;
+        isolation: isolate;
+        overflow: hidden;
       }
-      /* Viewport-fixed media — must NOT sit under a transformed ancestor */
       .hero-video {
-        position: fixed;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
+        position: absolute;
+        inset: 0;
         z-index: 0;
         width: 100%;
         height: 100%;
-        height: 100dvh;
-        height: 100lvh;
-        min-height: 100%;
-        min-height: -webkit-fill-available;
         overflow: hidden;
         background-color: #000;
         pointer-events: none;
-      }
-      body.is-past-hero .hero-video {
-        opacity: 0;
-        visibility: hidden;
       }
       .hero-video__poster {
         position: absolute;
@@ -1203,8 +1191,9 @@
         width: 100%;
         height: 100%;
         object-fit: cover;
-        object-position: center top;
+        object-position: center center;
         display: block;
+        background-color: #000;
       }
       .hero-video__media {
         position: absolute;
@@ -1213,7 +1202,7 @@
         width: 100%;
         height: 100%;
         object-fit: cover;
-        object-position: center top;
+        object-position: center center;
         opacity: 0;
         transition: opacity 0.55s ease;
       }
@@ -1226,7 +1215,6 @@
         z-index: 2;
         background: rgba(0, 0, 0, 0.38);
       }
-      /* Mobile: sticky dive with dynamic viewport height */
       @media (max-width: 639px) {
         #hero-scroll-stage {
           height: 220vh !important;
@@ -1237,11 +1225,11 @@
           top: 0 !important;
           height: 100vh !important;
           height: 100dvh !important;
-          min-height: 100lvh !important;
+          min-height: 100vh !important;
+          min-height: 100dvh !important;
           min-height: -webkit-fill-available !important;
           max-height: none !important;
-          overflow: visible;
-          background-color: transparent;
+          overflow: hidden;
         }
         #about {
           margin-top: -100vh !important;
@@ -1255,6 +1243,9 @@
         }
         .hero-video__media {
           display: none !important;
+        }
+        .hero-video__poster {
+          object-position: center center;
         }
         .reveal-on-scroll {
           opacity: 0;
@@ -2241,39 +2232,6 @@
     </script>
   </head>
   <body class="font-sans text-slate-ink antialiased">
-    <!-- Full-bleed hero media — outside transformed ancestors so it can sit behind Dynamic Island -->
-    <div class="hero-video pointer-events-none" id="hero-video" aria-hidden="true">
-      <picture>
-        <source media="(max-width: 639px)" srcset="images/hero-poster-mobile.jpg" type="image/jpeg" />
-        <img
-          class="hero-video__poster"
-          src="images/hero-poster.jpg"
-          alt=""
-          width="960"
-          height="508"
-          decoding="async"
-          fetchpriority="high"
-        />
-      </picture>
-      <video
-        id="hero-bg-video"
-        class="hero-video__media"
-        muted
-        loop
-        playsinline
-        webkit-playsinline
-        preload="none"
-        poster="images/hero-poster.jpg"
-      >
-        <source
-          src="images/hero-section-background-web.mp4"
-          type="video/mp4"
-          media="(min-width: 640px)"
-        />
-      </video>
-      <div class="hero-video__overlay"></div>
-    </div>
-
     <!-- 1. Navigation -->
     <header
       id="home"
@@ -2395,8 +2353,40 @@
       <div id="hero-scroll-stage" class="relative h-[200vh] h-[200dvh]">
         <section
           id="hero"
-          class="sticky z-[1] flex items-center px-5 pb-8 sm:px-8 sm:pb-0"
+          class="sticky z-[1] flex items-center overflow-hidden px-5 pb-8 sm:px-8 sm:pb-0"
         >
+          <div class="hero-video pointer-events-none" aria-hidden="true">
+            <picture>
+              <source media="(max-width: 639px)" srcset="images/hero-poster-mobile.jpg" type="image/jpeg" />
+              <img
+                class="hero-video__poster"
+                src="images/hero-poster.jpg"
+                alt=""
+                width="960"
+                height="508"
+                decoding="async"
+                fetchpriority="high"
+              />
+            </picture>
+            <video
+              id="hero-bg-video"
+              class="hero-video__media"
+              muted
+              loop
+              playsinline
+              webkit-playsinline
+              preload="none"
+              poster="images/hero-poster.jpg"
+            >
+              <source
+                src="images/hero-section-background-web.mp4"
+                type="video/mp4"
+                media="(min-width: 640px)"
+              />
+            </video>
+            <div class="hero-video__overlay"></div>
+          </div>
+
           <div id="hero-content" class="relative z-10 mx-auto w-full max-w-7xl">
             <div class="max-w-3xl">
               <p class="mb-4 text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-white/70 sm:mb-5 sm:text-xs">
@@ -3741,13 +3731,11 @@
           docEl.style.setProperty('--dive', raw.toFixed(4));
           docEl.style.setProperty('--dive-y', yMove.toFixed(2) + 'px');
           docEl.style.setProperty('--about-y', aboutY.toFixed(2) + 'px');
-          document.body.classList.toggle('is-past-hero', raw >= 1);
 
           if (raw <= 0) {
             docEl.classList.remove('is-diving', 'is-dive-done');
             about.classList.remove('is-interactive');
             diving = false;
-            document.body.classList.remove('is-past-hero');
             if (marqueeTrack) marqueeTrack.classList.add('is-paused');
             return;
           }
