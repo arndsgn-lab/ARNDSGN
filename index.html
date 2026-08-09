@@ -236,7 +236,8 @@
       @media (max-width: 639px) {
         html,
         body {
-          background-color: #eef3f0;
+          /* Match footer so bottom overscroll isn't white */
+          background-color: #1a3a34;
         }
       }
       /* Below-fold: defer layout/paint work */
@@ -537,30 +538,47 @@
           linear-gradient(
             180deg,
             #fafaf9 0%,
-            #f6f4f1 44%,
-            #f2efe9 72%,
-            #f0ece6 88%,
-            #f4f1ec 100%
+            #f6f4f1 40%,
+            #f4f1ec 68%,
+            #f5f3ef 88%,
+            #f6f4f1 100%
           );
       }
       #preise.section-mesh {
-        background-color: #f4f1ec;
+        background-color: #f6f4f1;
       }
       #preise.section-mesh::before {
         background:
-          radial-gradient(ellipse 78% 56% at 88% 8%, rgba(210, 228, 248, 0.34), transparent 55%),
-          radial-gradient(ellipse 78% 56% at 12% 8%, rgba(210, 228, 248, 0.34), transparent 55%),
-          radial-gradient(ellipse 68% 52% at 12% 68%, rgba(255, 228, 210, 0.28), transparent 54%),
-          radial-gradient(ellipse 68% 52% at 88% 68%, rgba(255, 228, 210, 0.28), transparent 54%),
-          radial-gradient(ellipse 60% 48% at 48% 38%, rgba(220, 245, 230, 0.26), transparent 52%),
-          radial-gradient(ellipse 54% 42% at 82% 82%, rgba(235, 220, 248, 0.22), transparent 48%),
+          radial-gradient(ellipse 78% 56% at 88% 14%, rgba(210, 228, 248, 0.28), transparent 55%),
+          radial-gradient(ellipse 78% 56% at 12% 14%, rgba(210, 228, 248, 0.28), transparent 55%),
+          radial-gradient(ellipse 68% 52% at 12% 72%, rgba(255, 228, 210, 0.28), transparent 54%),
+          radial-gradient(ellipse 68% 52% at 88% 72%, rgba(255, 228, 210, 0.28), transparent 54%),
+          radial-gradient(ellipse 60% 48% at 48% 42%, rgba(220, 245, 230, 0.24), transparent 52%),
+          radial-gradient(ellipse 54% 42% at 82% 78%, rgba(235, 220, 248, 0.2), transparent 48%),
           linear-gradient(
             180deg,
-            #f4f1ec 0%,
-            #f6f4f1 32%,
-            #f7f5f2 62%,
+            #f6f4f1 0%,
+            #f5f3ef 10%,
+            #f4f1ec 28%,
+            #f6f4f1 58%,
+            #f7f5f2 78%,
             #f4f1ec 100%
           );
+      }
+      .portfolio-preise-bridge {
+        height: clamp(2.75rem, 5.5vh, 4.5rem);
+        margin-top: -0.75rem;
+        margin-bottom: -2.75rem;
+        pointer-events: none;
+        position: relative;
+        z-index: 23;
+        background: linear-gradient(
+          180deg,
+          #f4f1ec 0%,
+          #f5f3ef 35%,
+          #f6f4f1 70%,
+          #f6f4f1 100%
+        );
       }
       #faq.section-mesh::before {
         background:
@@ -908,8 +926,9 @@
         border-radius: 1.5rem 1.5rem 0 0;
         box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.14);
         padding-top: 3rem;
-        padding-bottom: 3rem;
-        background-color: #f4f1ec;
+        padding-bottom: 4.25rem;
+        background-color: #f6f4f1;
+        overflow: hidden;
       }
       @media (min-width: 640px) {
         #services {
@@ -929,7 +948,7 @@
           border-radius: 2.5rem 2.5rem 0 0;
           box-shadow: 0 -20px 60px rgba(0, 0, 0, 0.18);
           padding-top: 4rem;
-          padding-bottom: 5rem;
+          padding-bottom: 5.5rem;
         }
       }
       #contact {
@@ -1058,6 +1077,8 @@
         user-select: none;
         -webkit-user-select: none;
         line-height: 0;
+        background-color: #1a3a34;
+        padding-bottom: max(1.5rem, env(safe-area-inset-bottom, 0px));
       }
       .footer-watermark__text {
         display: block;
@@ -1287,8 +1308,6 @@
           height: 10.5rem;
           max-width: none;
           transform: translateY(calc(-50% + 2.35rem));
-          filter: brightness(0) saturate(100%) invert(16%) sepia(28%) saturate(1200%)
-            hue-rotate(118deg) brightness(0.92) contrast(1.05);
         }
         #home.is-scrolled .site-logo-wrap,
         #home.is-over-dark .site-logo-wrap,
@@ -1316,15 +1335,28 @@
           justify-content: flex-start !important;
           padding-top: calc(4.75rem + env(safe-area-inset-top, 0px)) !important;
           padding-bottom: calc(4.5rem + env(safe-area-inset-bottom, 0px)) !important;
-          background-color: #eef3f0 !important;
-          background-image:
-            radial-gradient(ellipse 90% 55% at 12% 0%, rgba(26, 58, 52, 0.07), transparent 58%),
-            radial-gradient(ellipse 70% 45% at 88% 18%, rgba(45, 90, 80, 0.05), transparent 55%),
-            linear-gradient(180deg, #f4f7f5 0%, #eef3f0 48%, #e8efeb 100%);
-          color: #1a3a34;
+          background-color: #0a1210 !important;
+          background-image: none !important;
+          color: #fff;
         }
         .hero-video {
+          display: block !important;
+        }
+        .hero-video__media {
           display: none !important;
+        }
+        .hero-video__poster {
+          object-fit: cover;
+          object-position: center 32%;
+        }
+        .hero-video__overlay {
+          background: linear-gradient(
+            180deg,
+            rgba(8, 16, 14, 0.72) 0%,
+            rgba(8, 16, 14, 0.48) 38%,
+            rgba(8, 16, 14, 0.55) 70%,
+            rgba(8, 16, 14, 0.78) 100%
+          );
         }
         #hero-content {
           padding-top: 2.35rem;
@@ -1335,19 +1367,19 @@
           margin-bottom: 0.85rem;
           font-size: 0.78rem;
           letter-spacing: 0.18em;
-          color: rgba(26, 58, 52, 0.62) !important;
+          color: rgba(255, 255, 255, 0.72) !important;
         }
         #hero-content h1 {
           font-size: 2.35rem;
           line-height: 1.08;
           letter-spacing: -0.03em;
-          color: #1a3a34 !important;
+          color: #fff !important;
         }
         #hero-content .max-w-3xl > p.mt-4 {
           margin-top: 1.1rem;
           font-size: 1.08rem;
           line-height: 1.55;
-          color: rgba(26, 58, 52, 0.82) !important;
+          color: rgba(255, 255, 255, 0.92) !important;
         }
         #hero-content .hero-cta-row {
           margin-top: 1.75rem;
@@ -1361,13 +1393,13 @@
           font-size: 1rem;
         }
         #hero-content .hero-cta-row > a[href='#portfolio'] {
-          border-color: rgba(26, 58, 52, 0.28) !important;
-          background: rgba(26, 58, 52, 0.05) !important;
-          color: #1a3a34 !important;
-          backdrop-filter: none;
+          border-color: rgba(255, 255, 255, 0.35) !important;
+          background: rgba(255, 255, 255, 0.1) !important;
+          color: #fff !important;
+          backdrop-filter: blur(8px);
         }
         #hero-content .hero-cta-row > a[href='#services'] {
-          color: rgba(26, 58, 52, 0.78) !important;
+          color: rgba(255, 255, 255, 0.85) !important;
           font-size: 1rem;
         }
         #hero-content .hero-cta-row > a:last-child {
@@ -1378,7 +1410,7 @@
         }
         #hero-scroll-hint {
           bottom: max(1rem, env(safe-area-inset-bottom, 0px));
-          color: rgba(26, 58, 52, 0.45);
+          color: rgba(255, 255, 255, 0.55);
           opacity: 1;
         }
         #about {
@@ -1724,7 +1756,13 @@
       }
       #preise.section-mesh {
         overflow: visible;
-        margin-top: -1px;
+        margin-top: -2.75rem;
+        padding-top: calc(5rem + 2.75rem);
+      }
+      @media (min-width: 640px) {
+        #preise.section-mesh {
+          padding-top: calc(7rem + 2.75rem);
+        }
       }
       .projekt-cta {
         position: relative;
@@ -2236,13 +2274,15 @@
       }
       .price-compare__table {
         width: 100%;
-        min-width: 44rem;
+        min-width: 52rem;
         border-collapse: collapse;
-        font-size: 0.875rem;
+        font-size: 1.05rem;
+        line-height: 1.45;
+        color: #1c1917;
       }
       .price-compare__table th,
       .price-compare__table td {
-        padding: 0.9rem 0.85rem;
+        padding: 1.1rem 1rem;
         text-align: center;
         border-bottom: 1px solid rgba(28, 25, 23, 0.08);
         vertical-align: middle;
@@ -2254,50 +2294,79 @@
         left: 0;
         z-index: 2;
         background: #f7f5f2;
-        font-weight: 600;
+        font-weight: 650;
+        font-size: 1.05rem;
         color: #1c1917;
-        min-width: 8.5rem;
+        min-width: 10rem;
       }
       .price-compare__table thead th {
         background: #f0ece6;
-        font-size: 0.75rem;
+        font-size: 0.9rem;
         font-weight: 700;
-        letter-spacing: 0.04em;
+        letter-spacing: 0.03em;
         text-transform: uppercase;
         color: #1a3a34;
+        line-height: 1.3;
       }
       .price-compare__table thead th:first-child {
         background: #ebe6df;
       }
       .price-compare__table thead th.is-bestseller {
-        background: #1a3a34;
+        position: relative;
+        z-index: 1;
+        background:
+          radial-gradient(ellipse 90% 120% at 50% 0%, rgba(80, 180, 140, 0.45), transparent 62%),
+          linear-gradient(180deg, #1f4a42 0%, #1a3a34 55%, #142e29 100%);
         color: #fff;
+        border-radius: 0.75rem 0.75rem 0 0;
         box-shadow:
-          0 0 18px rgba(40, 120, 95, 0.35),
-          inset 0 -2px 0 rgba(255, 255, 255, 0.2);
+          0 0 0 1px rgba(110, 190, 160, 0.55),
+          inset 0 0 28px rgba(30, 90, 70, 0.45),
+          0 0 22px rgba(50, 160, 120, 0.5),
+          0 0 48px rgba(40, 140, 105, 0.4),
+          0 0 80px rgba(30, 110, 85, 0.28);
       }
       .price-compare__table td.is-bestseller {
-        background: rgba(26, 58, 52, 0.06);
+        position: relative;
+        z-index: 1;
+        background:
+          radial-gradient(ellipse 80% 70% at 50% 40%, rgba(50, 140, 110, 0.1), transparent 70%),
+          rgba(26, 58, 52, 0.08);
+        box-shadow:
+          inset 1px 0 0 rgba(110, 190, 160, 0.28),
+          inset -1px 0 0 rgba(110, 190, 160, 0.28);
+      }
+      .price-compare__table tr:last-child td.is-bestseller,
+      .price-compare__table .price-compare__cta-row td.is-bestseller {
+        border-radius: 0 0 0.75rem 0.75rem;
+        box-shadow:
+          inset 1px 0 0 rgba(110, 190, 160, 0.28),
+          inset -1px 0 0 rgba(110, 190, 160, 0.28),
+          inset 0 -1px 0 rgba(110, 190, 160, 0.28),
+          0 10px 28px rgba(40, 120, 95, 0.18);
       }
       .price-compare__price {
         display: block;
-        margin-top: 0.25rem;
-        font-size: 0.8rem;
-        font-weight: 600;
+        margin-top: 0.35rem;
+        font-size: 0.95rem;
+        font-weight: 650;
         letter-spacing: 0;
         text-transform: none;
         color: inherit;
-        opacity: 0.75;
+        opacity: 0.9;
       }
       .price-compare__table thead th.is-bestseller .price-compare__price {
-        color: rgba(255, 255, 255, 0.8);
+        color: rgba(255, 255, 255, 0.85);
+        text-shadow: 0 0 18px rgba(110, 190, 160, 0.45);
       }
       .price-compare__yes {
         color: #1a3a34;
         font-weight: 700;
+        font-size: 1.2rem;
       }
       .price-compare__no {
-        color: rgba(28, 25, 23, 0.28);
+        color: rgba(28, 25, 23, 0.4);
+        font-size: 1.05rem;
       }
       .price-compare__cta-row td {
         border-bottom: 0;
@@ -2310,29 +2379,41 @@
         justify-content: center;
         border-radius: 9999px;
         background: #1a3a34;
-        padding: 0.55rem 0.95rem;
-        font-size: 0.75rem;
+        padding: 0.65rem 1.1rem;
+        font-size: 0.875rem;
         font-weight: 700;
         color: #fff;
         white-space: nowrap;
-        transition: transform 0.2s ease, background 0.2s ease;
+        transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
       }
       .price-compare__cta:hover {
         transform: translateY(-1px);
         background: #142e29;
       }
       .price-compare__cta.is-bestseller {
+        border: 1px solid rgba(110, 190, 160, 0.65);
         box-shadow:
-          0 0 14px rgba(50, 120, 95, 0.45),
-          0 0 28px rgba(30, 90, 70, 0.3);
+          0 0 0 1px rgba(50, 120, 95, 0.45),
+          0 0 18px rgba(50, 160, 120, 0.55),
+          0 0 40px rgba(40, 140, 105, 0.4),
+          0 0 70px rgba(30, 110, 85, 0.28);
       }
       @media (min-width: 768px) {
         .price-compare {
           border-radius: 1.75rem;
         }
+        .price-compare__table {
+          font-size: 1.1rem;
+        }
         .price-compare__table th,
         .price-compare__table td {
-          padding: 1rem 1rem;
+          padding: 1.2rem 1.15rem;
+        }
+        .price-compare__table thead th {
+          font-size: 0.95rem;
+        }
+        .price-compare__price {
+          font-size: 1rem;
         }
       }
       .nav-cta {
@@ -2664,7 +2745,7 @@
         >
           <div class="hero-video pointer-events-none" aria-hidden="true">
             <picture>
-              <source media="(max-width: 639px)" srcset="images/hero-poster-mobile.jpg" type="image/jpeg" />
+              <source media="(max-width: 639px)" srcset="images/hero-poster-mobile.jpg" type="image/jpeg" width="1024" height="1536" />
               <img
                 class="hero-video__poster"
                 src="images/hero-poster.jpg"
@@ -3028,8 +3109,10 @@
       </section>
       </div>
 
+      <div class="portfolio-preise-bridge" aria-hidden="true"></div>
+
       <!-- Preise -->
-      <section id="preise" class="section-mesh px-5 py-20 sm:px-8 sm:py-28" aria-labelledby="preise-title">
+      <section id="preise" class="section-mesh px-5 pb-20 sm:px-8 sm:pb-28" aria-labelledby="preise-title">
         <div class="mx-auto max-w-5xl">
           <div class="mb-10 max-w-2xl reveal-on-scroll sm:mb-12">
             <p class="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-accent-light">
