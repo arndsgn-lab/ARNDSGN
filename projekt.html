@@ -9,10 +9,10 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="color-scheme" content="light only" />
-    <link rel="icon" type="image/png" sizes="512x512" href="images/favicon-512.png" />
-    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16.png" />
-    <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="512x512" href="images/favicon-512.png?v=green" />
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png?v=green" />
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16.png?v=green" />
+    <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png?v=green" />
     <title>Projekt starten — Webdesign Anfrage | ARNDESIGN Westerwald &amp; Region</title>
     <meta
       name="description"
@@ -98,6 +98,14 @@
         color: #fff;
         opacity: 0.1;
         transform: translateY(20%);
+      }
+      @media (max-width: 639px) {
+        .footer-watermark__text {
+          font-size: min(13.8vw, 4.15rem);
+          letter-spacing: -0.06em;
+          line-height: 0.82;
+          transform: translateY(10%);
+        }
       }
       #home {
         background: transparent;
@@ -1540,7 +1548,7 @@
             <p class="mb-3 text-[0.6875rem] font-semibold uppercase tracking-[0.2em] text-white/50 sm:mb-4 sm:text-xs reveal-up reveal-delay-1">Kontakt</p>
             <h2 class="text-2xl font-bold tracking-tight sm:text-3xl lg:text-4xl reveal-up reveal-delay-2">Projekt anfragen</h2>
             <p class="mt-4 text-sm leading-relaxed text-white/75 sm:mt-5 sm:text-base reveal-up reveal-delay-3">
-              Nachricht senden oder direkt einen Call buchen — wir melden uns schnell mit einer klaren
+              Nachricht senden oder direkt einen kostenlosen Call buchen — wir melden uns schnell mit einer klaren
               Einschätzung zum nächsten Schritt.
             </p>
             <ul class="mt-8 space-y-3 text-sm text-white/70 sm:mt-10 sm:space-y-4 reveal-up reveal-delay-4">
@@ -1705,10 +1713,10 @@
             >
               <div id="call-book">
                 <p class="call-book__eyebrow">Direkttermin</p>
-                <h3 class="call-book__title">20 Minuten Kennenlern-Call</h3>
+                <h3 class="call-book__title">20 Minuten Kennenlern-Call — kostenlos</h3>
                 <p class="call-book__text">
-                  Tag und Uhrzeit wählen — unverbindlich per Telefon oder Video. Wir bestätigen den Termin
-                  per E-Mail.
+                  Tag und Uhrzeit wählen — unverbindlich und kostenlos per Telefon oder Video. Wir bestätigen
+                  den Termin per E-Mail.
                 </p>
 
                 <form id="call-form" class="grid gap-4" novalidate>
@@ -1771,7 +1779,7 @@
                   </div>
                 </form>
                 <p class="call-book__note">
-                  Verfügbar Mo–Fr · Bestätigung in der Regel innerhalb eines Werktags.
+                  Kostenlos · Verfügbar Mo–Fr · Bestätigung in der Regel innerhalb eines Werktags.
                 </p>
               </div>
             </div>

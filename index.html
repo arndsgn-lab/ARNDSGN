@@ -6,15 +6,15 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="theme-color" media="(max-width: 639px)" content="#eef3f0" />
-    <meta name="theme-color" media="(min-width: 640px)" content="#000000" />
+    <meta name="theme-color" media="(max-width: 639px)" content="#1a3a34" />
+    <meta name="theme-color" media="(min-width: 640px)" content="#1a3a34" />
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
     <meta name="author" content="ARNDESIGN" />
     <link rel="canonical" href="https://arndsgn.com/" />
-    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16.png" />
-    <link rel="icon" type="image/png" sizes="512x512" href="images/favicon-512.png" />
-    <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png?v=green" />
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16.png?v=green" />
+    <link rel="icon" type="image/png" sizes="512x512" href="images/favicon-512.png?v=green" />
+    <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png?v=green" />
     <title>ARNDESIGN — Webdesign Agentur Westerwald, Koblenz, Frankfurt, Köln &amp; Düsseldorf</title>
     <meta
       name="description"
@@ -1096,6 +1096,15 @@
         opacity: 0.12;
         transform: translateY(20%);
       }
+      @media (max-width: 639px) {
+        .footer-watermark__text {
+          /* Fit full wordmark evenly — avoid desktop clamp min clipping letters */
+          font-size: min(13.8vw, 4.15rem);
+          letter-spacing: -0.06em;
+          line-height: 0.82;
+          transform: translateY(10%);
+        }
+      }
       [data-accordion-panel] {
         display: grid;
         grid-template-rows: 0fr;
@@ -1292,22 +1301,38 @@
         pointer-events: none;
       }
       @media (max-width: 639px) {
+        /* Instant dive settle — prevents first-paint jump before JS */
+        html {
+          scroll-behavior: auto;
+          --dive: 1;
+          --dive-y: 0px;
+          --about-y: 0px;
+        }
+        #about {
+          transform: none !important;
+          opacity: 1 !important;
+        }
         #hero-scroll-stage {
           height: auto !important;
           min-height: 100vh;
           min-height: 100dvh;
         }
-        /* Large green brand mark — mobile: only while in hero */
+        /* Brand mark: same crop logic as desktop, scaled — no odd letter framing */
+        #home .site-logo-wrap,
+        #home .site-logo {
+          transition: none !important;
+        }
         #home.is-in-hero .site-logo-wrap {
-          width: 6.5rem;
-          height: 5rem;
+          width: 5.25rem;
+          height: 3.75rem;
           overflow: visible;
         }
         #home.is-in-hero .site-logo {
-          left: -2.25rem;
-          height: 10.5rem;
+          left: -3.15rem;
+          height: 8.75rem;
           max-width: none;
-          transform: translateY(calc(-50% + 2.35rem));
+          transform: translateY(calc(-50% + 1.85rem));
+          filter: brightness(0) invert(1);
         }
         #home.is-scrolled .site-logo-wrap,
         #home.is-over-dark .site-logo-wrap,
@@ -2625,7 +2650,7 @@
             width="369"
             height="240"
             decoding="async"
-            fetchpriority="low"
+            fetchpriority="high"
           />
         </a>
 
